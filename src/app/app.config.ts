@@ -9,12 +9,13 @@ export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes),
     provideHttpClient(),
-    provideAnimations(),
-    provideToastr({
-      timeOut: 3000,
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true,
-    })]
+    // provideAnimations(),
+    // provideToastr({
+    //   timeOut: 3000,
+    //   positionClass: 'toast-bottom-right',
+    //   preventDuplicates: true,
+    // })
+    ]
 };
 function provideAnimations(): import("@angular/core").Provider | import("@angular/core").EnvironmentProviders {
   throw new Error('Function not implemented.');

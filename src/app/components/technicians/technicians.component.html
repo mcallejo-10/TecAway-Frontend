@@ -1,0 +1,29 @@
+<p>technicians works!</p>
+<div class="container container-fluid">
+    <div class="list-technicians d-flex row justify-content-center">
+        @for(technician of technicians; track technician.id) {
+    
+        <div class=" col-md-6 col-sm-12 card-link">
+          <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->
+            <div class="m-2 card card-technician my-2">
+              <div class="row">
+                <div class="col-6">
+                  <div class="card-img" id="img">
+                    <img src="technician.photo" class="img-fluid rounded-start m-0"
+                      onerror="this.src='./assets/placeholder.jpg'" alt="{{technician.name}} image">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card-body px-0">
+                      <p class="card-title" id="name">{{technician.name.toUpperCase()}} </p>
+                      <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
+                      <p class="card-subtitle mb-2" id="title">{{technician.description}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- </a> -->
+        </div>
+        }
+
+</div>

@@ -13,7 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { 
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = '/api/user/';
+    this.myApiUrl = '/user/';
   }
   getUserList(): Observable<User[]> {
     return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');  
