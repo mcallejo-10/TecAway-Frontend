@@ -24,11 +24,11 @@ export class KnowledgeService {
    }
 
     saveKnowledge(knowledge: Knowledge): Observable<any> {
-      return this.http.post(this.myAppUrl + this.myApiUrl, knowledge);
+      return this.http.post<Knowledge>(this.myAppUrl + this.myApiUrl, knowledge);
     }
 
     updateKnowledge(knowledge: Knowledge): Observable<any> {
-      return this.http.put(this.myAppUrl + this.myApiUrl + knowledge.id_knowledge, knowledge);
+      return this.http.put<Knowledge>(this.myAppUrl + this.myApiUrl + knowledge.id_knowledge, knowledge);
     }
 
     deleteKnowledge(id: number): Observable<any> {
