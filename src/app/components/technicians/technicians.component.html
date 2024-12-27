@@ -5,15 +5,15 @@
     
         <div class=" col-12 card-link">
           <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->
-            <div class="m-2 card card-technician my-2">
+            <div class="m-2 card border-warning mb-3 card-technician my-2">
               <div class="row">
-                <div class="col-4">
+                <div class="col-2">
                   <div class="card-img" >
-                    <img src="technician.photo" class="img m-0" onerror="this.src='/assets/img/user_image.png'"
+                    <img src="technician.photo" class="img" onerror="this.src='/assets/img/user_image.png'"
                       alt="{{technician.name}} image">
                   </div>
                 </div>
-                <div class="col-8">
+                <div class="col-10">
                   <div class="card-body px-0">
                       <p class="card-title" id="name">{{technician.name.toUpperCase()}} </p>
                       <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
