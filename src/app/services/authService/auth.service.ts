@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../interfaces/user';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   private myAppUrl: string;
   private myApiUrl: string;
+  isLogged = signal<boolean>(false);
   
   constructor(private http: HttpClient) {  
     this.myAppUrl = environment.endpoint;
@@ -33,6 +34,19 @@ export class AuthService {
 
     logoutUser(): Observable<any> {
       return this.http.get(this.myAppUrl + this.myApiUrl + 'logout');
+    }
+
+    checkEmailExists(email: string): Observable<User[]> {
+      return this.http.get<User[]>(`${this.myApiUrl}/users?email=${email}`);
+    }
+
+    isLoggedIn() {
+      const token = sessionStorage.getItem('authToken');
+      if (token != null) {
+        this.isLogged.set(true);
+      } else {
+        this.isLogged.set(false);
+      }
     }
 }
 
