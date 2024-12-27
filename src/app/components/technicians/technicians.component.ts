@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-technicians',
@@ -10,14 +11,14 @@ import { UserService } from '../../services/userService/user.service';
 })
 export class TechniciansComponent {
 
-  technicians: any = [];
+  technicians: User[] = [];
 
   userService = inject(UserService);
 
   ngOnInit() {
-    this.userService.getUserList().subscribe(data => {
-      this.technicians = data;
-      console.log(this.technicians);
+    this.userService.getUserList().subscribe((res: any) => {
+      this.technicians = res.data;
+      console.log("tecnics", this.technicians);
       
     });
   }

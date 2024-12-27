@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { User } from '../../interfaces/user';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { LoginRequest } from '../../interfaces/login';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,15 @@ export class AuthService {
   
   constructor(private http: HttpClient) {  
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = '/api/auth/';}
+    this.myApiUrl = '/auth/';}
 
+    
     registerUser(user: User): Observable<any> {
       return this.http.post(this.myAppUrl + this.myApiUrl + 'register', user);
     }
 
-    loginUser(user: User): Observable<any> {
-      return this.http.post(this.myAppUrl + this.myApiUrl + 'login', user);
+    loginUser(loginRequest: LoginRequest): Observable<any> {
+      return this.http.post(this.myAppUrl + this.myApiUrl + 'login', loginRequest);
     }
 
     forgotPassword(email: string): Observable<any> {
@@ -34,10 +36,6 @@ export class AuthService {
 
     logoutUser(): Observable<any> {
       return this.http.get(this.myAppUrl + this.myApiUrl + 'logout');
-    }
-
-    checkEmailExists(email: string): Observable<User[]> {
-      return this.http.get<User[]>(`${this.myApiUrl}/users?email=${email}`);
     }
 
     isLoggedIn() {

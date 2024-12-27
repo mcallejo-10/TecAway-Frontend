@@ -1,20 +1,20 @@
 import { Component, effect, inject } from "@angular/core";
+import { AuthService } from "../../services/authService/auth.service";
+import { User } from "../../interfaces/user";
+import { Router} from "@angular/router";
+import { LoginRequest } from "../../interfaces/login";
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../services/authService/auth.service";
-import { User } from "../../interfaces/user";
-import { Router, RouterLink } from "@angular/router";
-import { LoginRequest } from "../../interfaces/login";
+import { UserService } from "../../services/userService/user.service";
 
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
 })
@@ -30,10 +30,9 @@ export class LoginComponent {
   });
 
   private authService = inject(AuthService);
-
+  private userService = inject(UserService);
+  
   constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
     private router: Router
   ) {
     effect(() => {
@@ -43,19 +42,28 @@ export class LoginComponent {
   }
 
   checkEmailLogin() {
-    this.authService.isLoggedIn();
+    this.authService.isLoggedIn();    
     if (this.isLogged == false) {
-      const loginEmail: string =
-        this.loginForm.get("email")?.value?.toLowerCase() || "";
-      this.authService.checkEmailExists(loginEmail).subscribe({
-        next: (users: User[]) => {
-          if (users.length > 0) {
+            
+      const loginEmail: string = this.loginForm.get("email")?.value?.toLowerCase() || "";
+      console.log("loginEmail:", loginEmail);
+      
+      
+      this.userService.checkEmailExists(loginEmail).subscribe({
+        next: (exist) => {
+          console.log("exist:", exist);
+          
+          if (exist == true) {          
             this.userExist = true;
             this.isValidEmail = true;
-          } else {
+            console.log("Usuario existe");
+            
+          } else if (exist == false) {
             this.userExist = false;
             this.isValidEmail = true;
-            this.router.navigate(["/register"]);
+            this.router.navigate(["/"]);
+            console.log("Usuario no existe");
+            
           }
         },
         error: (error: string) => {
@@ -74,9 +82,13 @@ export class LoginComponent {
       email: this.loginForm.get("email")?.value || "",
       password: this.loginForm.get("password")?.value || "",
     };
-    this.authService.login(credentials).subscribe({
+    console.log("credentials", credentials);
+    
+    this.authService.loginUser(credentials).subscribe({
       next: (response) => {
         sessionStorage.setItem("authToken", response.accessToken);
+        console.log("response:", response.accessToken);
+        
         this.authService.isLoggedIn();
         this.router.navigate(["/"]);
       },

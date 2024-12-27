@@ -15,6 +15,12 @@ export class UserService {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/user/';
   }
+
+  checkEmailExists(email: string): Observable<any> {
+    console.log("email:", email);
+    
+    return this.http.post(this.myAppUrl + this.myApiUrl + 'check-email', {email});
+  }
   getUserList(): Observable<User[]> {
     return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');  
   }
