@@ -1,29 +1,72 @@
 <h1>Listado de técnicas</h1>
 <div class="container container-fluid">
-    <div class="technicians-list d-flex row justify-content-center">
-        @for(technician of technicians; track technician.id_user) {
-    
-        <div class=" col-12 card-link">
-          <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->
-            <div class="m-2 card border-warning mb-3 card-technician my-2">
-              <div class="row">
-                <div class="col-2">
-                  <div class="card-img" >
-                    <img src="technician.photo" class="img" onerror="this.src='/assets/img/user_image.png'"
-                      alt="{{technician.name}} image">
-                  </div>
-                </div>
-                <div class="col-10">
-                  <div class="card-body px-0">
-                      <p class="card-title" id="name">{{technician.name.toUpperCase()}} </p>
-                      <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
-                      <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
-                  </div>
-                </div>
+  <div class="row">
+
+    <div class="col-12 col-md-2" id="filter">
+      <div class="filter-section">
+        <h4>Encuentra lo que necesitas</h4>
+        <!-- Aquí puedes agregar los filtros de categorías -->
+      </div>
+      <button class="btn click-btn btn-style506 mt-2">Filtrar</button>
+      <div>
+        <div id="sectionList">
+          <h4>Sección</h4>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Tecinco/a de:</option>
+            @for(section of sectionList; track section.id_section) {
+            <option value="1">{{section.section}}</option>
+            }
+          </select>
+        </div>
+
+      </div>
+      <div id="sectionList">
+        <h4>Sección</h4>
+        <!-- <form [formGroup]="sectionsForm"> -->
+          @for (section of sectionList; track section.id_section) {
+            <div class="form-check">
+              <input 
+                type="checkbox" 
+                class="form-check-input" 
+                 
+                id="{{ 'section-' + section.id_section }}">
+              <label class="form-check-label" [for]="'section-' + section.id_section">
+                {{ section.section }}
+              </label>
+            </div>
+          }
+        <!-- </form> -->
+      </div>
+      
+    </div>
+    <div class="col-12 col-md-10">
+      @for(technician of technicians; track technician.id_user) {
+
+      <div class=" col-12 card-link">
+        <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->
+        <div class="m-2 card border-warning mb-3 card-technician my-2">
+          <div class="row">
+            <div class="col-2">
+              <div class="card-img">
+                <img src="technician.photo" class="img" onerror="this.src='/assets/img/user_image.png'"
+                  alt="{{technician.name}} image">
               </div>
             </div>
-          <!-- </a> -->
+            <div class="col-10">
+              <div class="card-body px-0">
+                <p class="card-title" id="name">{{technician.name.toUpperCase()}} </p>
+                <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
+                <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        }
+        <!-- </a> -->
+      </div>
+      }
 
-</div>
+    </div>
+
+
+
+  </div>

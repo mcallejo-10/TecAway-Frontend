@@ -44,7 +44,7 @@ $jet: #333533ff;
   $btn-color: $eerie-black ;
   position: relative;
   border-color: $btn-color;
-  color: $timberwolf;
+  color: $eerie-black;
   overflow: hidden;
   &::before {
     width: 20%;
@@ -60,6 +60,7 @@ $jet: #333533ff;
   }
   &:hover {
     color: $jet;
+    font-weight: bold;
     &::before {
       width: 100%;
       top: 0;
