@@ -2,61 +2,56 @@
 <div class="container container-fluid">
   <div class="row">
 
-    <div class="col-12 col-md-2" id="filter">
-      <div class="filter-section">
+    <div class="col-12 col-md-3" id="filter">
 
-        <!-- Aquí puedes agregar los filtros de categorías -->
-      </div>
       <button class="btn click-btn btn-style506 mt-2">Filtrar</button>
-
-      <p class="filter-title">Puesto</p>
-      <div id="filter-list">
-        <form [formGroup]="filterForm">
-          @for (section of sectionList; track section.id_section) {
-          @if(section.section != 'General') {
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="{{ 'section-' + section.id_section }}"
-              (change)="getSelectedSections(section.id_section, $event)">
-            <label class="form-check-label" for="'section-' + section.id_section">{{ section.section }}
-            </label>
-          </div>
-          }
-          }
-          <p class="filter-title">Conocimientos generales</p>
-          @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
-          @if(knowledge.section_id == 1)
-          {<div class="form-check">
-            <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-              (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
-            <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
-            </label>
-          </div>}
-          }
-
-        </form>
-      </div>
-      <div id="filtre-knowledges">
-        <p class="filter-title">Conocimientos específicos</p>
-        @for (section of sectionList; track section.id_section) {
-          @if(isCheckedSection(section.id_section)) {
-          <p class="filter-title">{{section.section}}</p>
-         @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
-          @if(knowledge.section_id == section.id_section) {
+      <div class="card filter-card d-none d-md-block">
+        <p class="filter-title">Puesto</p>
+        <div id="filter-list">
+          <form [formGroup]="filterForm">
+            @for (section of sectionList; track section.id_section) {
+            @if(section.section != 'General') {
             <div class="form-check">
-              @if(isCheckedKnowledge(knowledge.id_knowledge)) {
-                <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-                  (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)" checked>
-              } @else {
-                <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-                  (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
+              <input type="checkbox" class="form-check-input" id="{{ 'section-' + section.id_section }}"
+                (change)="getSelectedSections(section.id_section, $event)">
+              <label class="form-check-label" for="'section-' + section.id_section">{{ section.section }}
+              </label>
+            </div>
+            }
+            }
+            <p class="filter-title">Conocimientos generales</p>
+            @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
+            @if(knowledge.section_id == 1)
+            {<div class="form-check">
+              <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
+                (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
+              <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
+              </label>
+            </div>}
+            }
+
+          </form>
+        </div>
+        <div id="filtre-knowledges">
+          <p class="filter-title">Conocimientos específicos</p>
+          @for (section of sectionList; track section.id_section) {
+            @if(isCheckedSection(section.id_section)) {
+            <p class="filter-title">{{section.section}}</p>
+              @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
+                @if(knowledge.section_id == section.id_section) {
+                <div class="form-check">
+  
+                  <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
+                    (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
+                  
+                  <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
+                  </label>
+                </div>
+                }
               }
-            <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
-            </label>
-          </div>
+            }
           }
-        }
-      }
-    }
+        </div>
       </div>
 
     </div>
@@ -64,8 +59,8 @@
 
 
     <!-- LISTADO DE TECNICAS -->
-    <div class="col-12 col-md-10">
-      @for(technician of technicians; track technician.id_user) {
+    <div class="col-12 col-md-9">
+      @for(technician of filtredTechnicians; track technician.id_user) {
 
       <div class=" col-12 card-link">
         <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->

@@ -21,6 +21,7 @@ export class TechniciansComponent {
   filtredTechnicians: User[] = [];
 
   filterForm!: FormGroup;
+  formBuilder = inject(FormBuilder);
 
   userService = inject(UserService);
   filterService = inject(FilterService);
@@ -29,7 +30,6 @@ export class TechniciansComponent {
 
   sectionList: any[] = [];
   knowledgeList: any[] = [];
-  formBuilder = inject(FormBuilder);
   selectedSections: any[] = [];
   setectedKnowledges: any[] = [];
 
@@ -40,10 +40,11 @@ export class TechniciansComponent {
     this.userService.getUserList().subscribe((res: any) => {
       this.technicians = res.data;
       console.log("tecnics", this.technicians);
-      this.filterService.setTechnicianList(this.technicians);      
+      this.filterService.setTechnicianList(this.technicians);
+      this.filtredTechnicians = this.filterService.techniciansFiltred();
     });
-    
-    
+
+
     this.sectionService.getSectionList().subscribe((res: any) => {
       this.sectionService.setSectionList(res.data);
       console.log("sectionList signal", this.sectionList);
@@ -60,7 +61,7 @@ export class TechniciansComponent {
     this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
       this.knowledgeList = res.data;
       console.log("knowledgeList signal", this.knowledgeList);
-      
+
 
       const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
         acc[knowledge.id_knowledge] = new FormControl(false);
@@ -72,7 +73,7 @@ export class TechniciansComponent {
   }
 
   isCheckedSection(id: number): boolean {
-  
+
     return this.selectedSections.some((section) => section.id_section === id);
   }
 
@@ -83,8 +84,6 @@ export class TechniciansComponent {
 
 
   getSelectedSections(id_section: number, event: Event): void {
-
-
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
@@ -100,10 +99,15 @@ export class TechniciansComponent {
       this.selectedSections = this.selectedSections.filter(
         (section) => section.id_section !== id_section
       );
+      this.setectedKnowledges = this.setectedKnowledges.filter(
+        (knowledge) => knowledge.section_id !== id_section
+      );
+      console.log('--Selected Sections:', this.selectedSections);
+      console.log('--Selected Knowledges:', this.setectedKnowledges);
+      
+      
 
     }
-    console.log('Selected Sections:', this.selectedSections);
-
   }
 
 
@@ -115,12 +119,11 @@ export class TechniciansComponent {
       const knowledge = this.knowledgeList.find(
         (knowledge) => knowledge.id_knowledge === id_knowledge
       );
-      const isSelected = this.setectedKnowledges.some( id_knowledge => knowledge.id_knowledge === id_knowledge);
+      const isSelected = this.setectedKnowledges.some(id_knowledge => knowledge.id_knowledge === id_knowledge);
       if (knowledge && !isSelected) {
         this.setectedKnowledges.push(knowledge);
       }
     } else {
-      // Quitar la sección deseleccionada
       this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.id_knowledge !== id_knowledge
       );
@@ -129,5 +132,12 @@ export class TechniciansComponent {
     console.log('Selected Knowledges:', this.setectedKnowledges);
   }
 
+  filterTechnicians(): void {
+    // this.filtredTechnicians = this.filtredTechnicians.filter((technician) => {
+    //   console.log('technician', technician);
+      
+        
+
+  }
 
 }
