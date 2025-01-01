@@ -71,41 +71,15 @@ export class TechniciansComponent {
     });
   }
 
-  isChecked(id: number): boolean {
+  isCheckedSection(id: number): boolean {
   
     return this.selectedSections.some((section) => section.id_section === id);
   }
 
-  // ngOnInit() {
-  //   this.sectionForm = this.formBuilder.group({});
-  //   this.userService.getUserList().subscribe((res: any) => {
-  //     this.technicians = res.data;
-  //     this.filterService.setTechnicianList(this.technicians);
-  //   });
+  isCheckedKnowledge(id: number): boolean {
+    return this.setectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
+  }
 
-  //   this.sectionService.getSectionList().subscribe((res: any) => {
-  //     this.sectionService.setSectionList(res.data);
-  //     this.sectionList = this.sectionService.sectionList();
-  //   });
-  //   const controls = this.sectionList.reduce((acc, section) => {
-  //     acc[section.id_section] = new FormControl(false);
-  //     return acc;
-  //   }, {} as { [key: string]: FormControl });
-
-  //   this.sectionForm = this.fb.group(controls);
-
-  //   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-  //     this.knowledgeService.setKnowledgeList(res.data);
-  //     this.knowledgeList = this.knowledgeService.knowledgeList();
-  //   });
-
-  //   const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
-  //     acc[knowledge.id_knowledge] = new FormControl(false);
-  //     return acc;
-  //   }, {} as { [key: string]: FormControl });
-
-  //   this.sectionForm.addControl('knowledges', this.fb.group(knowledgeControls));
-  // }
 
 
   getSelectedSections(id_section: number, event: Event): void {
@@ -138,20 +112,21 @@ export class TechniciansComponent {
 
     if (isChecked) {
       // Agregar la sección seleccionada
-      const knowledge = this.sectionList.find(
+      const knowledge = this.knowledgeList.find(
         (knowledge) => knowledge.id_knowledge === id_knowledge
       );
-      if (knowledge) {
-        this.selectedSections.push(knowledge);
+      const isSelected = this.setectedKnowledges.some( id_knowledge => knowledge.id_knowledge === id_knowledge);
+      if (knowledge && !isSelected) {
+        this.setectedKnowledges.push(knowledge);
       }
     } else {
       // Quitar la sección deseleccionada
-      this.selectedSections = this.selectedSections.filter(
+      this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.id_knowledge !== id_knowledge
       );
 
     }
-    console.log('Selected Knowledges:', this.selectedSections);
+    console.log('Selected Knowledges:', this.setectedKnowledges);
   }
 
 
