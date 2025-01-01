@@ -39,6 +39,5 @@ export class SectionService {
 
   setSectionList(sectionList: Section[]): void {
     this.sectionList.set(sectionList);
-    console.log("---sectionList service", this.sectionList());
   }
 }

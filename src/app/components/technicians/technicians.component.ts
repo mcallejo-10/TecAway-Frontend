@@ -5,38 +5,154 @@ import { User } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { Section } from '../../interfaces/section';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 
 @Component({
   selector: 'app-technicians',
-  imports: [],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent {
 
   technicians: User[] = [];
+  filtredTechnicians: User[] = [];
+
+  filterForm!: FormGroup;
 
   userService = inject(UserService);
   filterService = inject(FilterService);
   sectionService = inject(SectionService);
-  sectionList: Section[] = [];
-  
-  
-  
+  knowledgeService = inject(KnowledgeService);
+
+  sectionList: any[] = [];
+  knowledgeList: any[] = [];
+  formBuilder = inject(FormBuilder);
+  selectedSections: any[] = [];
+  setectedKnowledges: any[] = [];
+
+
+  constructor(private fb: FormBuilder) { }
   ngOnInit() {
+    this.filterForm = this.fb.group({});
     this.userService.getUserList().subscribe((res: any) => {
       this.technicians = res.data;
       console.log("tecnics", this.technicians);
-      this.filterService.updateList(this.technicians);      
+      this.filterService.setTechnicianList(this.technicians);      
     });
-    console.log("ahora llamamos a sectionList");
+    
     
     this.sectionService.getSectionList().subscribe((res: any) => {
       this.sectionService.setSectionList(res.data);
       console.log("sectionList signal", this.sectionList);
       this.sectionList = this.sectionService.sectionList();
 
+      const sectionControls = this.sectionList.reduce((acc, section) => {
+        acc[section.id_section] = new FormControl(false);
+        return acc;
+      }, {} as { [key: string]: FormControl });
+
+      this.filterForm.addControl('sections', this.fb.group(sectionControls));
+    });
+
+    this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+      this.knowledgeList = res.data;
+      console.log("knowledgeList signal", this.knowledgeList);
+      
+
+      const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
+        acc[knowledge.id_knowledge] = new FormControl(false);
+        return acc;
+      }, {} as { [key: string]: FormControl });
+
+      this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
     });
   }
+
+  isChecked(id: number): boolean {
+  
+    return this.selectedSections.some((section) => section.id_section === id);
+  }
+
+  // ngOnInit() {
+  //   this.sectionForm = this.formBuilder.group({});
+  //   this.userService.getUserList().subscribe((res: any) => {
+  //     this.technicians = res.data;
+  //     this.filterService.setTechnicianList(this.technicians);
+  //   });
+
+  //   this.sectionService.getSectionList().subscribe((res: any) => {
+  //     this.sectionService.setSectionList(res.data);
+  //     this.sectionList = this.sectionService.sectionList();
+  //   });
+  //   const controls = this.sectionList.reduce((acc, section) => {
+  //     acc[section.id_section] = new FormControl(false);
+  //     return acc;
+  //   }, {} as { [key: string]: FormControl });
+
+  //   this.sectionForm = this.fb.group(controls);
+
+  //   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+  //     this.knowledgeService.setKnowledgeList(res.data);
+  //     this.knowledgeList = this.knowledgeService.knowledgeList();
+  //   });
+
+  //   const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
+  //     acc[knowledge.id_knowledge] = new FormControl(false);
+  //     return acc;
+  //   }, {} as { [key: string]: FormControl });
+
+  //   this.sectionForm.addControl('knowledges', this.fb.group(knowledgeControls));
+  // }
+
+
+  getSelectedSections(id_section: number, event: Event): void {
+
+
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      // Agregar la sección seleccionada
+      const section = this.sectionList.find(
+        (section) => section.id_section === id_section
+      );
+      if (section) {
+        this.selectedSections.push(section);
+      }
+    } else {
+      // Quitar la sección deseleccionada
+      this.selectedSections = this.selectedSections.filter(
+        (section) => section.id_section !== id_section
+      );
+
+    }
+    console.log('Selected Sections:', this.selectedSections);
+
+  }
+
+
+  getSelectedKnowledges(id_knowledge: number, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      // Agregar la sección seleccionada
+      const knowledge = this.sectionList.find(
+        (knowledge) => knowledge.id_knowledge === id_knowledge
+      );
+      if (knowledge) {
+        this.selectedSections.push(knowledge);
+      }
+    } else {
+      // Quitar la sección deseleccionada
+      this.selectedSections = this.selectedSections.filter(
+        (knowledge) => knowledge.id_knowledge !== id_knowledge
+      );
+
+    }
+    console.log('Selected Knowledges:', this.selectedSections);
+  }
+
 
 }

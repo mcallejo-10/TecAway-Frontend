@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Knowledge } from '../../interfaces/knowledge';
 import { Observable } from 'rxjs';
@@ -12,8 +12,10 @@ export class KnowledgeService {
   private myApiUrl: string;
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = '/api/knowledge/';
+    this.myApiUrl = '/knowledge/';
    }
+
+    knowledgeList = signal<Knowledge[]>([]);
 
    getKnowledgeList(): Observable<Knowledge[]> {
      return this.http.get<Knowledge[]>(this.myAppUrl + this.myApiUrl);
@@ -33,5 +35,9 @@ export class KnowledgeService {
 
     deleteKnowledge(id: number): Observable<any> {
       return this.http.delete(this.myAppUrl + this.myApiUrl + id);
+    }
+
+    setKnowledgeList(knowledgeList: Knowledge[]): void {
+      this.knowledgeList.set(knowledgeList);
     }
 }

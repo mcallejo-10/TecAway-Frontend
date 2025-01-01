@@ -1,3 +1,28 @@
+.container {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#filter-list {
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    border-bottom: 1px solid grey;
+    
+}
+
+.filter-title {
+    
+    font-size: 1.1rem;
+    font-weight: bolder;
+   
+}
+
 // .technicians-list {
 //     display: flex;
     
