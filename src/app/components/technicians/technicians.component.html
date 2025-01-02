@@ -13,7 +13,7 @@
             @if(section.section != 'General') {
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="{{ 'section-' + section.id_section }}"
-                (change)="getSelectedSections(section.id_section, $event)">
+                (change)="getSelectedSections(section.id_section!, $event)">
               <label class="form-check-label" for="'section-' + section.id_section">{{ section.section }}
               </label>
             </div>
@@ -24,7 +24,7 @@
             @if(knowledge.section_id == 1)
             {<div class="form-check">
               <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-                (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
+                (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
               <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
               </label>
             </div>}
@@ -35,14 +35,14 @@
         <div id="filtre-knowledges">
           <p class="filter-title">Conocimientos específicos</p>
           @for (section of sectionList; track section.id_section) {
-            @if(isCheckedSection(section.id_section)) {
+            @if(isCheckedSection(section.id_section!)) {
             <p class="filter-title">{{section.section}}</p>
               @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
                 @if(knowledge.section_id == section.id_section) {
                 <div class="form-check">
   
                   <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-                    (change)="getSelectedKnowledges(knowledge.id_knowledge, $event)">
+                    (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
                   
                   <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
                   </label>

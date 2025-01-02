@@ -12,7 +12,7 @@ export class UserKnowledgeService {
   private myApiUrl: string;
   constructor(private http: HttpClient) {
         this.myAppUrl = environment.endpoint;
-        this.myApiUrl = '/api/user-knowledge/';
+        this.myApiUrl = '/user-knowledge/';
    }
 
     getUserKnowledgeList(): Observable<UserKnowledge[]> {
