@@ -24,36 +24,38 @@ export class FilterService {
 loadUserKnowledgeList() {
   this.userKnowledgeService.getUserKnowledgeList().subscribe((res: any) => {
     this.userKnowledgeList.set(res.data); // Actualiza la señal
-    console.log("----userKnowledgeList cargado:", res.data);
+    
   });
 }
-
-
-  filteredTechnicians = computed(() => {
-    const sections = this.selectedSections(); // Secciones seleccionadas
-    const knowledges = this.selectedKnowledges(); // Conocimientos seleccionados
-
-    // IDs de secciones y conocimientos
-    const sectionIds = sections.map(section => section.id_section);
-    const knowledgeIds = knowledges.map(knowledge => knowledge.id_knowledge);
-
-
-    // Obtener IDs de conocimientos asociados a las secciones seleccionadas
-    const filteredKnowledgeIds = knowledgeIds.filter(id =>
-      sections.some(section => section.id_section === id)
-    );
-    console.log("- - - -filteredKnowledgeIds", filteredKnowledgeIds);
-    
-
-       // Obtener IDs de usuarios asociados a los conocimientos filtrados
-  const filteredUserIds = this.userKnowledgeList()
-  .filter(userKnowledge => filteredKnowledgeIds.includes(userKnowledge.knowledge_id))
-  .map(userKnowledge => userKnowledge.user_id);
-
-// Devuelve los IDs únicos
-return Array.from(new Set(filteredUserIds));
+filteredTechnicians = computed(() => {
+  const sections = this.selectedSections(); // Secciones seleccionadas
+  const knowledges = this.selectedKnowledges(); // Conocimientos seleccionados
+  console.log("*****sections", sections);
   
-  });
+
+  // IDs de secciones y conocimientos
+  const sectionIds = sections.map(section => section.id_section);
+  const knowledgeIds = knowledges.map(knowledge => knowledge.id_knowledge);
+
+  // Obtener IDs de conocimientos asociados a las secciones seleccionadas
+  const filteredKnowledgeIds = this.selectedKnowledges()
+    .filter(knowledge => sectionIds.includes(knowledge.section_id))
+    .map(knowledge => knowledge.id_knowledge);
+
+  console.log("*****filteredKnowledgeIds", filteredKnowledgeIds);
+
+  // Obtener IDs de usuarios asociados a los conocimientos filtrados
+  const filteredUserIds = this.userKnowledgeList()
+    .filter(userKnowledge => filteredKnowledgeIds.includes(userKnowledge.knowledge_id))
+    .map(userKnowledge => userKnowledge.user_id);
+console.log("---*****filteredUserIds", filteredUserIds);
+
+
+  // Devuelve los IDs únicos
+  return Array.from(new Set(filteredUserIds)); // Eliminar duplicados
+});
+
+
 
 
   setTechnicianList(techniciansList: User[]) {
