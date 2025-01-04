@@ -60,7 +60,16 @@
 
     <!-- LISTADO DE TECNICAS -->
     <div class="col-12 col-md-9">
-      @for(technician of filtredTechnicians; track technician.id_user) {
+      @if(filteredTechnicians.length == 0 ) {
+        <div class=" col-12 card-link">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title">No hay técnicos disponibles</div>
+            </div>
+          </div> 
+        </div>
+      }
+      @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
 
       <div class=" col-12 card-link">
         <!-- <a (click)="getUrltechnician(technician.url)" [routerLink]="['/startechnicianCard']"> -->

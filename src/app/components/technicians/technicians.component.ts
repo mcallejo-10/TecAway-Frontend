@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+
 import { UserService } from '../../services/userService/user.service';
 import { User } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
@@ -19,7 +19,6 @@ import { Knowledge } from '../../interfaces/knowledge';
 export class TechniciansComponent {
 
   technicians: User[] = [];
-  filtredTechnicians: User[] = [];
 
   filterForm!: FormGroup;
   formBuilder = inject(FormBuilder);
@@ -34,21 +33,21 @@ export class TechniciansComponent {
   selectedSections: Section[] = [];
   setectedKnowledges: Knowledge[] = [];
 
+  setFilteredIds: Number[] = this.filterService.setFilteredIds();
+  filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
   ngOnInit() {
     this.filterForm = this.fb.group({});
     this.userService.getUserList().subscribe((res: any) => {
       this.technicians = res.data;
-      
+      this.filteredTechnicians = this.technicians;
       this.filterService.setTechnicianList(this.technicians);
-      this.filtredTechnicians = this.filterService.techniciansFiltred();
     });
-
 
     this.sectionService.getSectionList().subscribe((res: any) => {
       this.sectionService.setSectionList(res.data);
-      
+
       this.sectionList = this.sectionService.sectionList();
 
       const sectionControls = this.sectionList.reduce((acc, section) => {
@@ -73,6 +72,8 @@ export class TechniciansComponent {
 
   }
 
+
+
   isCheckedSection(id: number): boolean {
 
     return this.selectedSections.some((section) => section.id_section === id);
@@ -92,30 +93,30 @@ export class TechniciansComponent {
       const section = this.sectionList.find(
         (section) => section.id_section === id_section
       );
+
       if (section) {
-        this.selectedSections.push(section);
-    this.filterService.setSelectedSections(this.selectedSections);
-
-
-        
+        if (!this.selectedSections.some(s => s.id_section === id_section)) {
+          this.selectedSections.push(section);
+          // console.log('Selected Sections:', this.selectedSections);          
+        }
       }
+      this.filterService.setSelectedSections(this.selectedSections);
     } else {
       // Quitar la sección deseleccionada
       this.selectedSections = this.selectedSections.filter(
         (section) => section.id_section !== id_section
       );
-    this.filterService.setSelectedSections(this.selectedSections);
+      this.filterService.setSelectedSections(this.selectedSections);
 
       this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.section_id !== id_section
       );
-    
     }
-    this.filterService.filteredTechnicians();
-    
-    console.log('filteredTechnicians', this.filterService.filteredTechnicians());
-    
+    // this.filterService.setSelectedSections(this.selectedSections);
+    this.filterService.setFilteredIds();
+    this.filterTechniciansById();
   }
+
 
 
   getSelectedKnowledges(id_knowledge: number, event: Event): void {
@@ -139,12 +140,19 @@ export class TechniciansComponent {
     console.log('Selected Knowledges:', this.setectedKnowledges);
   }
 
-  filterTechnicians(): void {
-    // this.filtredTechnicians = this.filtredTechnicians.filter((technician) => {
-    //   console.log('technician', technician);
-      
-        
+  filterTechniciansById(): void {
+    const filtredIds = this.filterService.setFilteredIds();
+console.log('Filtred Ids:', filtredIds);
 
+    const filteredTechnicians = this.technicians.filter(
+      (technician) => technician.id_user && filtredIds.includes(technician.id_user)  
+    );
+    this.filterService.techniciansFiltred.set(filteredTechnicians);
+    this.filterService.setFilteredIds();
+    this.filterService.techniciansFiltred();
+    console.log('Filtred Technicians:', filteredTechnicians);
+    console.log('SIGNAL Filtred Technicians:', this.filterService.techniciansFiltred());
+    
   }
 
 }
