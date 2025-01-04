@@ -106,8 +106,11 @@ export class TechniciansComponent {
       this.selectedSections = this.selectedSections.filter(
         (section) => section.id_section !== id_section
       );
+      if (this.selectedSections.length === 0) {
+      this.filterService.setSelectedSections(this.sectionList);
+      }else{
       this.filterService.setSelectedSections(this.selectedSections);
-
+      }
       this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.section_id !== id_section
       );
