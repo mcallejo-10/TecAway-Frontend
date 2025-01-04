@@ -25,8 +25,11 @@ export class UserService {
     return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');  
   }
 
-  getUserById(): Observable<User> {
+  getUser(): Observable<User> {
     return this.http.get<User>(this.myAppUrl + this.myApiUrl);
+  }
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(this.myAppUrl + this.myApiUrl + id);
   }
 
   updateUser(user: User): Observable<any> {

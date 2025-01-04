@@ -9,10 +9,11 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule }
 import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge } from '../../interfaces/knowledge';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-technicians',
-  imports: [ReactiveFormsModule, FormsModule, CommonModule],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
@@ -33,7 +34,7 @@ export class TechniciansComponent {
   selectedSections: Section[] = [];
   setectedKnowledges: Knowledge[] = [];
 
-  setFilteredIds: Number[] = this.filterService.setFilteredIds();
+  setFilteredIds: number[] = this.filterService.filterTechnicians();
   filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
@@ -93,7 +94,6 @@ export class TechniciansComponent {
       const section = this.sectionList.find(
         (section) => section.id_section === id_section
       );
-
       if (section) {
         if (!this.selectedSections.some(s => s.id_section === id_section)) {
           this.selectedSections.push(section);
@@ -107,16 +107,17 @@ export class TechniciansComponent {
         (section) => section.id_section !== id_section
       );
       if (this.selectedSections.length === 0) {
-      this.filterService.setSelectedSections(this.sectionList);
-      }else{
-      this.filterService.setSelectedSections(this.selectedSections);
+        this.filterService.setSelectedSections(this.sectionList);
+      } else {
+        this.filterService.setSelectedSections(this.selectedSections);
       }
       this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.section_id !== id_section
       );
+      this.filterService.setSelectedKnowledges(this.setectedKnowledges);
     }
     // this.filterService.setSelectedSections(this.selectedSections);
-    this.filterService.setFilteredIds();
+    this.filterService.filterTechnicians();
     this.filterTechniciansById();
   }
 
@@ -126,35 +127,43 @@ export class TechniciansComponent {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      // Agregar la sección seleccionada
       const knowledge = this.knowledgeList.find(
         (knowledge) => knowledge.id_knowledge === id_knowledge
       );
-      // const isSelected = this.setectedKnowledges.some(id_knowledge => knowledge.id_knowledge === id_knowledge);
       if (knowledge) {
-        this.setectedKnowledges.push(knowledge);
+        if (!this.setectedKnowledges.some(k => k.id_knowledge === id_knowledge)) {
+          this.setectedKnowledges.push(knowledge);
+        }
       }
-    } else {
+      this.filterService.setSelectedKnowledges(this.setectedKnowledges);
+    this.filterService.filterTechnicians();
+
+    }
+    else {
       this.setectedKnowledges = this.setectedKnowledges.filter(
         (knowledge) => knowledge.id_knowledge !== id_knowledge
       );
+      if (this.setectedKnowledges.length === 0) {
+        this.filterService.setSelectedKnowledges(this.knowledgeList);
+      } else {
+        this.filterService.setSelectedKnowledges(this.setectedKnowledges);
+      }
 
+      this.filterService.filterTechnicians();
     }
-    console.log('Selected Knowledges:', this.setectedKnowledges);
+    this.filterTechniciansById()
   }
 
-  filterTechniciansById(): void {
-    const filtredIds = this.filterService.setFilteredIds();
-console.log('Filtred Ids:', filtredIds);
 
+  filterTechniciansById(): void {
+    const filtredIds = this.filterService.filterTechnicians();
+  
     const filteredTechnicians = this.technicians.filter(
-      (technician) => technician.id_user && filtredIds.includes(technician.id_user)  
+      (technician) => technician.id_user && filtredIds.includes(technician.id_user)
     );
     this.filterService.techniciansFiltred.set(filteredTechnicians);
-    this.filterService.setFilteredIds();
+    this.filterService.filterTechnicians();
     this.filterService.techniciansFiltred();
-    console.log('Filtred Technicians:', filteredTechnicians);
-    console.log('SIGNAL Filtred Technicians:', this.filterService.techniciansFiltred());
     
   }
 
