@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { UserService } from '../../services/userService/user.service';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-technician-detail',
@@ -11,10 +12,21 @@ import { UserService } from '../../services/userService/user.service';
 export class TechnicianDetailComponent {
 
   technician: any = {};
-userService = inject(UserService);
+  userService = inject(UserService);
+  id: number;
 
-  constructor() { 
-    this.technician = this.userService.getUserById(this.technician.id_user);
+  constructor(private aRouter: ActivatedRoute) {
+    this.id = Number(aRouter.snapshot.paramMap.get('id'));
   }
+
+  ngOnInit() {
+    this.technician = this.userService.getUserById(this.id).subscribe((res: any) => {
+      this.technician = res.data;
+      console.log(res.data);
+    });
+
+  };
+
+
 
 }
