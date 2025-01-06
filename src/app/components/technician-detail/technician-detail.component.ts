@@ -2,14 +2,16 @@ import { Component, inject } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { UserService } from '../../services/userService/user.service';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-technician-detail',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './technician-detail.component.html',
   styleUrl: './technician-detail.component.scss'
 })
 export class TechnicianDetailComponent {
+[x: string]: any;
 
   technician: any = {};
   userService = inject(UserService);
@@ -20,7 +22,7 @@ export class TechnicianDetailComponent {
   }
 
   ngOnInit() {
-    this.technician = this.userService.getUserById(this.id).subscribe((res: any) => {
+    this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
       this.technician = res.data;
       console.log(res.data);
     });

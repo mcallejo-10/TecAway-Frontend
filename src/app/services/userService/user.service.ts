@@ -44,4 +44,8 @@ export class UserService {
     formData.append('file', photo);
     return this.http.post<any>(this.myAppUrl + this.myApiUrl + 'upload-photo', formData);
   }
+
+  getUserInfo(id: number): Observable<User> {
+    return this.http.get<User>(this.myAppUrl + this.myApiUrl + 'get-user-info/' + id);
+  }
 }
