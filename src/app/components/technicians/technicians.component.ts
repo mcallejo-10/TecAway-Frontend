@@ -32,7 +32,7 @@ export class TechniciansComponent {
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
   selectedSections: Section[] = [];
-  setectedKnowledges: Knowledge[] = [];
+  selectedKnowledges: Knowledge[] = [];
 
   setFilteredIds: number[] = this.filterService.filterTechnicians();
   filteredTechnicians: User[] = [];
@@ -81,7 +81,7 @@ export class TechniciansComponent {
   }
 
   isCheckedKnowledge(id: number): boolean {
-    return this.setectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
+    return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
   }
 
 
@@ -99,8 +99,16 @@ export class TechniciansComponent {
           this.selectedSections.push(section);
           // console.log('Selected Sections:', this.selectedSections);          
         }
+        const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section!);
+        
+        this.selectedKnowledges.push(knowledeService[0]);
+        this.filterService.setSelectedKnowledges(this.selectedKnowledges);
+        console.log('Selected Knowledges:::', this.selectedKnowledges);
+        
+
       }
       this.filterService.setSelectedSections(this.selectedSections);
+ 
     } else {
       // Quitar la sección deseleccionada
       this.selectedSections = this.selectedSections.filter(
@@ -111,10 +119,10 @@ export class TechniciansComponent {
       } else {
         this.filterService.setSelectedSections(this.selectedSections);
       }
-      this.setectedKnowledges = this.setectedKnowledges.filter(
+      this.selectedKnowledges = this.selectedKnowledges.filter(
         (knowledge) => knowledge.section_id !== id_section
       );
-      this.filterService.setSelectedKnowledges(this.setectedKnowledges);
+      this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     }
     // this.filterService.setSelectedSections(this.selectedSections);
     this.filterService.filterTechnicians();
@@ -131,22 +139,22 @@ export class TechniciansComponent {
         (knowledge) => knowledge.id_knowledge === id_knowledge
       );
       if (knowledge) {
-        if (!this.setectedKnowledges.some(k => k.id_knowledge === id_knowledge)) {
-          this.setectedKnowledges.push(knowledge);
+        if (!this.selectedKnowledges.some(k => k.id_knowledge === id_knowledge)) {
+          this.selectedKnowledges.push(knowledge);
         }
       }
-      this.filterService.setSelectedKnowledges(this.setectedKnowledges);
+      this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     this.filterService.filterTechnicians();
 
     }
     else {
-      this.setectedKnowledges = this.setectedKnowledges.filter(
+      this.selectedKnowledges = this.selectedKnowledges.filter(
         (knowledge) => knowledge.id_knowledge !== id_knowledge
       );
-      if (this.setectedKnowledges.length === 0) {
+      if (this.selectedKnowledges.length === 0) {
         this.filterService.setSelectedKnowledges(this.knowledgeList);
       } else {
-        this.filterService.setSelectedKnowledges(this.setectedKnowledges);
+        this.filterService.setSelectedKnowledges(this.selectedKnowledges);
       }
 
       this.filterService.filterTechnicians();

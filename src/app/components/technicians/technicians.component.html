@@ -38,7 +38,7 @@
             @if(isCheckedSection(section.id_section!)) {
             <p class="filter-title">{{section.section}}</p>
               @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
-                @if(knowledge.section_id == section.id_section) {
+                @if(knowledge.section_id == section.id_section && knowledge.knowledge != section.section) {
                 <div class="form-check">
   
                   <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"

@@ -100,20 +100,22 @@ export class FilterService {
   filterTechnicians(): number[] {
     const sectionFilteredIds = this.filteredBySections(); // IDs filtrados por secciones
     const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); // Filtrar esos IDs por conocimientos
-    return knowledgeFilteredIds;
+
+    return knowledgeFilteredIds
+    
   }
 
   setTechnicianList(techniciansList: User[]) {
     this.techniciansFiltred.set(techniciansList);
     // this.filterTechnicians();
-    // console.log("++++++techniciansList", this.techniciansFiltred());
+  
 
 
   }
 
   setSelectedSections(sections: Section[]) {
     this.selectedSections.set(sections);
-    console.log("¨¨¨¨¨sections", this.selectedSections());
+    // console.log("¨¨¨¨¨sections", this.selectedSections());
 
   }
 
