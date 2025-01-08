@@ -38,6 +38,8 @@ export class TechniciansComponent {
   filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
+
+
   ngOnInit() {
     this.filterForm = this.fb.group({});
     this.userService.getUserList().subscribe((res: any) => {
@@ -50,6 +52,7 @@ export class TechniciansComponent {
       this.sectionService.setSectionList(res.data);
 
       this.sectionList = this.sectionService.sectionList();
+      this.addConocimientosGenerales();
 
       const sectionControls = this.sectionList.reduce((acc, section) => {
         acc[section.id_section!] = new FormControl(false);
@@ -69,8 +72,9 @@ export class TechniciansComponent {
 
       this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
       this.filterService.setSelectedKnowledges(this.knowledgeList);
+      
     });
-
+    
   }
 
 
@@ -85,6 +89,17 @@ export class TechniciansComponent {
   }
 
 
+  // funcion para que se agreguen automaticamente el seccion 'Conocimientos generales' 
+  addConocimientosGenerales(): void {
+    const section = this.sectionList.find(
+      (section) => section.section === 'Conocimientos generales'
+    );
+    if (section) {
+      this.selectedSections.push(section);         
+      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section!);
+      this.selectedKnowledges.push(knowledeService[0]);
+    }
+  }
 
   getSelectedSections(id_section: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -97,25 +112,23 @@ export class TechniciansComponent {
       if (section) {
         if (!this.selectedSections.some(s => s.id_section === id_section)) {
           this.selectedSections.push(section);
-          // console.log('Selected Sections:', this.selectedSections);          
         }
         const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section!);
-        
+
         this.selectedKnowledges.push(knowledeService[0]);
         this.filterService.setSelectedKnowledges(this.selectedKnowledges);
-        console.log('Selected Knowledges:::', this.selectedKnowledges);
-        
-
       }
       this.filterService.setSelectedSections(this.selectedSections);
- 
+
     } else {
       // Quitar la sección deseleccionada
       this.selectedSections = this.selectedSections.filter(
         (section) => section.id_section !== id_section
       );
       if (this.selectedSections.length === 0) {
-        this.filterService.setSelectedSections(this.sectionList);
+
+        this.ngOnInit();
+
       } else {
         this.filterService.setSelectedSections(this.selectedSections);
       }
@@ -124,7 +137,10 @@ export class TechniciansComponent {
       );
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     }
-    // this.filterService.setSelectedSections(this.selectedSections);
+    console.log("<<<<>>>>>>>> selectedKnowledges", this.selectedKnowledges);
+    console.log("<<<<>>> selectedSections", this.selectedSections);
+
+
     this.filterService.filterTechnicians();
     this.filterTechniciansById();
   }
@@ -144,7 +160,7 @@ export class TechniciansComponent {
         }
       }
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
-    this.filterService.filterTechnicians();
+      this.filterService.filterTechnicians();
 
     }
     else {
@@ -165,14 +181,14 @@ export class TechniciansComponent {
 
   filterTechniciansById(): void {
     const filtredIds = this.filterService.filterTechnicians();
-  
+
     const filteredTechnicians = this.technicians.filter(
       (technician) => technician.id_user && filtredIds.includes(technician.id_user)
     );
     this.filterService.techniciansFiltred.set(filteredTechnicians);
     this.filterService.filterTechnicians();
     this.filterService.techniciansFiltred();
-    
+
   }
 
 }

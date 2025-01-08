@@ -10,7 +10,7 @@
         <div id="filter-list">
           <form [formGroup]="filterForm">
             @for (section of sectionList; track section.id_section) {
-            @if(section.section != 'General') {
+            @if(section.section != 'Conocimientos generales') {
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="{{ 'section-' + section.id_section }}"
                 (change)="getSelectedSections(section.id_section!, $event)">
@@ -19,7 +19,7 @@
             </div>
             }
             }
-            <p class="filter-title">Conocimientos generales</p>
+            <!-- <p class="filter-title">Conocimientos generales</p>
             @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
             @if(knowledge.section_id == 1)
             {<div class="form-check">
@@ -28,12 +28,12 @@
               <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
               </label>
             </div>}
-            }
+            } -->
 
           </form>
         </div>
         <div id="filtre-knowledges">
-          <p class="filter-title">Conocimientos específicos</p>
+          
           @for (section of sectionList; track section.id_section) {
             @if(isCheckedSection(section.id_section!)) {
             <p class="filter-title">{{section.section}}</p>

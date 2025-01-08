@@ -92,11 +92,6 @@ export class FilterService {
     });
   }
   
-  
-  
-  
-  
-
   filterTechnicians(): number[] {
     const sectionFilteredIds = this.filteredBySections(); // IDs filtrados por secciones
     const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); // Filtrar esos IDs por conocimientos
