@@ -5,8 +5,8 @@ export interface User {
     name: string;
     title: string;
     description: string;
-    cp: number;
-    distance: number;
+    town: string;
+    can_move: boolean;
     photo: string;
     roles: string;
     createdAt?: Date;
