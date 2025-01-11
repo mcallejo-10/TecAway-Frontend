@@ -5,16 +5,19 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
+import { UserService } from '../../services/userService/user.service';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-
+  currentStep: number = 1; // Para controlar el paso actual
   errorMessage: string = '';
+  charCount: number = 0;
+
   registerForm = new FormGroup({
     name: new FormControl('', [
       Validators.required,
@@ -59,59 +62,86 @@ export class RegisterComponent {
     });
 
   private authService = inject(AuthService)
-  constructor(private fb: FormBuilder,private auth: AuthService,
+  private userService = inject(UserService)
+  
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,    
     private router: Router
   ) {}
- 
-  onRegister(): void {
-    if (this.registerForm.valid) {
-      // this.isLoading = true;
-      this.errorMessage = '';
+   // Método para validar el primer paso
+   validateFirstStep(): boolean {
+    const controls = ['name', 'email', 'password', 'confirmPassword'];
+    return controls.every(control => 
+      this.registerForm.get(control)?.valid && 
+      this.registerForm.get(control)?.touched
+    );
+  }
 
-
-      const userData: User = {
-        name: this.registerForm.get('name')?.value || '',
-        email: this.registerForm.get('email')?.value?.toLowerCase() || '',
-        password: this.registerForm.get('password')?.value || '',
-        title: this.registerForm.get('title')?.value || '',
-        description: this.registerForm.get('description')?.value || '',
-        town: this.registerForm.get('town')?.value || '',
-        can_move: this.registerForm.get('can_move')?.value || false,
-        photo: this.registerForm.get('photo')?.value || '',
-        roles: 'user'
-      };
-
-      this.authService.checkEmailExists(userData.email!)
+  // Método para avanzar al siguiente paso
+  nextStep(): void {
+    if (this.validateFirstStep()) {
+      const email = this.registerForm.get('email')?.value?.toLowerCase() || '';
+      
+      this.userService.checkEmailExists({ email })
         .subscribe({
-          next: (users: User[]) => {
-            if (users.length > 0) {
-            console.log('en next regis', users);
-            
-            this.errorMessage = 'This email is already registered';
-            // this.isLoading = false;
-          } else {
-              console.log('en else regis', users);
-              this.authService.registerUser(userData)
-                .subscribe({
-                  next: (response: User) => {
-                    console.log('Usuario registrado:', response);
-                    // this.isLoading = false;                    
-                    this.router.navigate(['/login']);
-                  },
-                  error: (error:string) => {
-                    console.error('Error al registrar:', error);
-                    this.errorMessage = 'Error al registrar usuario';
-                    // this.isLoading = false;
-                  }
-                });
+          next: (exists: boolean) => {
+            if (exists) {
+              this.errorMessage = 'Este email ya está registrado';
+            } else {
+              this.currentStep = 2;
+              this.errorMessage = '';
             }
           },
-          error: (error: string) => {
+          error: (error) => {
             console.error('Error al verificar email:', error);
             this.errorMessage = 'Error al verificar email';
-            // this.isLoading = false;
           }
         });
+    }
+  }
+
+  // Método para volver al paso anterior
+  previousStep(): void {
+    this.currentStep = 1;
+    this.errorMessage = '';
+  }
+
+  onRegister(): void {
+    if (this.registerForm.valid) {
+      this.errorMessage = '';
+
+      const userData: User = {
+        name: (this.registerForm.get('name')?.value || '').trim(),
+        email: (this.registerForm.get('email')?.value || '').toLowerCase().trim(),
+        password: this.registerForm.get('password')?.value || '',
+        title: (this.registerForm.get('title')?.value || '').trim(),
+        description: (this.registerForm.get('description')?.value || '').trim(),
+        town: (this.registerForm.get('town')?.value || '').trim(),
+        can_move: this.registerForm.get('can_move')?.value || false,
+        photo: this.registerForm.get('photo')?.value || '',
+        roles: ['user']  //
+      };
+      console.log('userData:', userData);
+      
+
+      this.authService.registerUser(userData)
+        .subscribe({
+          next: (response: User) => {
+            console.log('Usuario registrado:', response);
+            this.router.navigate(['/login']);
+          },
+          error: (error: string) => {
+            console.error('Error al registrar:', error);
+            this.errorMessage = 'Error al registrar usuario';
+          }
+        });
+    }
+  }
+  updateCharCount() {
+    const titleControl = this.registerForm.get('title');
+    if (titleControl) {
+      this.charCount = titleControl.value?.length || 0;
     }
   }
 

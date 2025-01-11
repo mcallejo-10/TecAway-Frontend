@@ -19,7 +19,9 @@ export class AuthService {
 
     
     registerUser(user: User): Observable<any> {
-      return this.http.post(this.myAppUrl + this.myApiUrl + 'register', user);
+      console.log('-->user:', user);
+      
+      return this.http.post<User>(this.myAppUrl + this.myApiUrl + 'register', user);
     }
 
     loginUser(loginRequest: LoginRequest): Observable<any> {
@@ -47,9 +49,7 @@ export class AuthService {
       }
     }
 
-    checkEmailExists(email: string): Observable<User[]> {
-      return this.http.get<User[]>(`${this.myAppUrl}${this.myApiUrl}users?email=${email}`);
-    }
+
 }
 
 

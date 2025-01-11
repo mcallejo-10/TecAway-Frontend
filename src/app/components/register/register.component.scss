@@ -1,0 +1,11 @@
+.charcounter {
+    font-size: 0.7em;
+    color: gray;
+    margin-top: 0.5em;
+    display: block;
+  }
+  
+  .charcounter.warning {
+    color: red; /* Cambia de color si el valor es menor al mínimo */
+  }
+  

@@ -45,13 +45,11 @@ export class LoginComponent {
     this.authService.isLoggedIn();    
     if (this.isLogged == false) {
             
-      const loginEmail: string = this.loginForm.get("email")?.value?.toLowerCase() || "";
-      console.log("loginEmail:", loginEmail);
-      
-      
-      this.userService.checkEmailExists(loginEmail).subscribe({
+      const email = this.loginForm.get('email')?.value?.toLowerCase() || '';
+
+      this.userService.checkEmailExists({email}).subscribe({
         next: (exist) => {
-          console.log("exist:", exist);
+          
           
           if (exist == true) {          
             this.userExist = true;

@@ -8,7 +8,7 @@ export interface User {
     town: string;
     can_move: boolean;
     photo: string;
-    roles: string;
+    roles: string[];
     createdAt?: Date;
     updatedAt?: Date;
 }

@@ -16,10 +16,8 @@ export class UserService {
     this.myApiUrl = '/user/';
   }
 
-  checkEmailExists(email: string): Observable<any> {
-    console.log("email:", email);
-    
-    return this.http.post(this.myAppUrl + this.myApiUrl + 'check-email', {email});
+  checkEmailExists(data: {email: string}): Observable<boolean> {
+     return this.http.post<boolean>(this.myAppUrl + this.myApiUrl + 'check-email',data);
   }
   
   getUserList(): Observable<User[]> {
