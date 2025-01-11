@@ -48,7 +48,7 @@ export class AuthService {
     }
 
     checkEmailExists(email: string): Observable<User[]> {
-      return this.http.get<User[]>(`${this.myAppUrl}${this.myApiUrl}/users?email=${email}`);
+      return this.http.get<User[]>(`${this.myAppUrl}${this.myApiUrl}users?email=${email}`);
     }
 }
 

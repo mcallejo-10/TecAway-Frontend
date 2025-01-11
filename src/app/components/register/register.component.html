@@ -1,1 +1,153 @@
-<p>register works!</p>
+<div class="card container-fluid col-8 col-md-7 col-lg-5 col-xl-4 col-xxl-3 mt-5">
+    <div class="row pb-2">
+        <h5>El Email no existe, registrate para acceder</h5>
+    </div>
+    <form [formGroup]="registerForm">
+        <div class="mb-3">
+            <span class="d-flex mb-1">
+                <label htmlFor="inputname" class="form-label">Nombre</label>
+            </span>
+            <input type="text" class="form-control" id="inputname" formControlName="name" [ngClass]="{
+              'is-invalid':
+                registerForm.get('name')?.invalid &&
+                registerForm.get('name')?.touched
+            }" />
+            @if(registerForm.get('name')?.invalid &&
+            registerForm.get('name')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('name')?.errors?.['required']) { Nombre obligatorio }
+                @if(registerForm.get('name')?.errors?.['minlength']) { Mínimo 2 caracteres }
+                @if(registerForm.get('name')?.errors?.['pattern']) { No se permiten números ni caracteres especiales }
+            </div>
+            }
+        </div>
+
+
+        <div class="mb-3">
+            <span class="d-flex ">
+                <label htmlFor="inputEmail" class="form-label">Email</label>
+            </span>
+            <input type="email" class="form-control" id="inputEmail" formControlName="email" [ngClass]="{
+              'is-invalid':
+                registerForm.get('email')?.invalid &&
+                registerForm.get('email')?.touched
+            }" />
+            @if(registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('email')?.errors?.['required']) { Email is required
+                } @if(registerForm.get('email')?.errors?.['email']) { Email must have a
+                correct structure }
+            </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <span class="d-flex">
+                <label htmlFor="inputTitle" class="form-label">Título</label>
+            </span>
+            <input type="text" class="form-control" id="inputTitle" formControlName="title" placeholder="Haz una breve descripción tuya, entre 20 i 130 caracteres" [ngClass]="{
+              'is-invalid':
+                registerForm.get('title')?.invalid &&
+                registerForm.get('title')?.touched
+            }" />
+            @if(registerForm.get('title')?.invalid &&
+            registerForm.get('title')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('title')?.errors?.['required']) { título obligatorio } @if(registerForm.get('title')?.errors?.['minlength']) {
+                Ha de contener mínimo 20 caracteres } @if(registerForm.get('title')?.errors?.['maxlength']) { Ha de contener máximo 130 caracteres }
+            </div>
+            }
+        </div>
+        <div class="mb-3">
+            <span class="d-flex">
+                <label htmlFor="inputDescription" class="form-label">Descripción</label>
+            </span>
+            <textarea class="form-control" id="inputDescription" formControlName="description" placeholder="Haz una descripción más extensa tuya, entre 50 i 500 caracteres" [ngClass]="{
+              'is-invalid':
+                registerForm.get('description')?.invalid &&
+                registerForm.get('description')?.touched
+            }"></textarea>
+            @if(registerForm.get('description')?.invalid &&
+            registerForm.get('description')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('description')?.errors?.['required']) { Descripción obligatoria } @if(registerForm.get('description')?.errors?.['minlength']) {
+                Ha de contener mínimo 50 caracteres } @if(registerForm.get('description')?.errors?.['maxlength']) { Ha de contener máximo 500 caracteres }
+            </div>
+            }
+        </div>
+        <div class="mb-3">
+            <span class="d-flex">
+                <label htmlFor="inputCity" class="form-label">Ciudad</label>
+            </span>
+            <input type="text" class="form-control" id="inputCity" formControlName="city" [ngClass]="{
+              'is-invalid':
+                registerForm.get('city')?.invalid &&
+                registerForm.get('city')?.touched
+            }" />
+            @if(registerForm.get('city')?.invalid &&
+            registerForm.get('city')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('city')?.errors?.['required']) { Ciudad obligatoria }
+                @if(registerForm.get('city')?.errors?.['minlength']) { Mínimo 2 caracteres }
+                @if(registerForm.get('city')?.errors?.['pattern']) { No se permiten números ni caracteres especiales }
+            </div>
+            }
+        </div>
+        <div class="mb-4 form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" formControlName="can_move">
+            <label class="form-check-label" for="flexSwitchCheckDefault">¿Puedes desplazarte?</label>
+        </div>
+
+        <div class="mb-2">
+            <span class="d-flex ">
+                <label htmlFor="inputPassword" class="form-label">Password</label>
+            </span>
+            
+            <input type="password" class="form-control" id="inputPassword" formControlName="password" [ngClass]="{
+              'is-invalid':
+                registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.touched
+            }" />
+            @if(registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('password')?.errors?.['required']) { Password is
+                required } @if(registerForm.get('password')?.errors?.['minlength']) {
+                Must be at least 4 characters long }
+                @if(registerForm.get('password')?.errors?.['pattern']) { Must have at
+                least one uppercase letter }
+            </div>
+            }
+        </div>
+        <div class="mb-3">
+            <span class="d-flex ">
+                <label htmlFor="inputConfirmPassword" class="form-label">Confirm Password</label>
+            </span>
+            <input type="password" class="form-control" id="inputConfirmPassword" formControlName="confirmPassword" [ngClass]="{
+              'is-invalid':
+                registerForm.get('confirmPassword')?.invalid &&
+                registerForm.get('confirmPassword')?.touched
+            }" />
+            @if(registerForm.get('confirmPassword')?.invalid &&
+            registerForm.get('confirmPassword')?.touched) {
+            <div class="text-danger">
+                @if(registerForm.get('confirmPassword')?.errors?.['required']) { Confirm Password is required }
+                @if(registerForm.get('confirmPassword')?.errors?.['mustMatch']) { Passwords must match }
+            </div>
+            }
+        </div>
+        <span class="d-flex justify-content-center mb-1">
+            <button type="submit" (click)="onRegister()" class="btn btn-star">Register</button>
+        </span>
+
+    </form>
+    @if(errorMessage){
+    <span class="d-flex justify-content-center">
+        <div class="text-danger">
+            {{ errorMessage }}
+        </div>
+    </span>
+    }
+
+</div>

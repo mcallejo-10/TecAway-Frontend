@@ -21,6 +21,7 @@ export class UserService {
     
     return this.http.post(this.myAppUrl + this.myApiUrl + 'check-email', {email});
   }
+  
   getUserList(): Observable<User[]> {
     return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');  
   }

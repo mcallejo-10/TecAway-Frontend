@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
+import { MustMatch } from '../../validators/must-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent {
   registerForm = new FormGroup({
     name: new FormControl('', [
       Validators.required,
-      Validators.minLength(2)
+      Validators.minLength(2),
+      Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙñÑ ]*$')
     ]),
     email: new FormControl('', [
       Validators.required,
@@ -27,7 +29,12 @@ export class RegisterComponent {
       [Validators.required,
         Validators.minLength(4),
         Validators.pattern('^(?=.*[A-Z]).{4,}$')
-      ]),    
+      ]),
+      confirmPassword: new FormControl('',
+        [Validators.required,
+          Validators.minLength(4),
+          Validators.pattern('^(?=.*[A-Z]).{4,}$'),
+        ]),    
       title: new FormControl('', [
         Validators.required,
         Validators.minLength(20),
@@ -46,7 +53,10 @@ export class RegisterComponent {
 
       photo: new FormControl(''),
 
-  });
+    }, 
+    {
+    validators: MustMatch('password', 'confirmPassword')
+    });
 
   private authService = inject(AuthService)
   constructor(private fb: FormBuilder,private auth: AuthService,

@@ -61,7 +61,7 @@ export class LoginComponent {
           } else if (exist == false) {
             this.userExist = false;
             this.isValidEmail = true;
-            this.router.navigate(["/"]);
+            this.router.navigate(["/registro"]);
             console.log("Usuario no existe");
             
           }
