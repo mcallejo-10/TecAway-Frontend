@@ -1,11 +1,24 @@
-.charcounter {
-    font-size: 0.7em;
-    color: gray;
-    margin-top: 0.5em;
-    display: block;
-  }
-  
-  .charcounter.warning {
-    color: red; /* Cambia de color si el valor es menor al mínimo */
-  }
+h2 {
+  justify-content: center;
+  text-align: center;  
+}
+
+.steps {
+  text-align: center;
+  justify-content: center;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 0.5rem; /* Espaciado con el párrafo */
+}
+
+.step-description {
+  font-size: 1.2rem;
+  color: #555; /* Gris neutro */
+  margin: 0; /* Elimina márgenes adicionales */
+}
+
   

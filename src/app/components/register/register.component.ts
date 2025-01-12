@@ -16,7 +16,8 @@ import { UserService } from '../../services/userService/user.service';
 export class RegisterComponent {
   currentStep: number = 1; // Para controlar el paso actual
   errorMessage: string = '';
-  charCount: number = 0;
+  charCountTitle: number = 0;
+  charCountDescription: number = 0;
 
   registerForm = new FormGroup({
     name: new FormControl('', [
@@ -138,10 +139,12 @@ export class RegisterComponent {
         });
     }
   }
-  updateCharCount() {
-    const titleControl = this.registerForm.get('title');
+  updateCharCount(name: string): void {
+    const titleControl = this.registerForm.get(name);
+    
     if (titleControl) {
-      this.charCount = titleControl.value?.length || 0;
+      name === 'title' ? this.charCountTitle = titleControl.value?.length || 0 :
+      this.charCountDescription = titleControl.value?.length || 0;
     }
   }
 
