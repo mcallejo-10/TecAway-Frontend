@@ -52,7 +52,7 @@ export class TechniciansComponent {
       this.sectionService.setSectionList(res.data);
 
       this.sectionList = this.sectionService.sectionList();
-      this.addConocimientosGenerales();
+      // this.addConocimientosGenerales();
 
       const sectionControls = this.sectionList.reduce((acc, section) => {
         acc[section.id_section!] = new FormControl(false);
@@ -69,10 +69,12 @@ export class TechniciansComponent {
         acc[knowledge.id_knowledge!] = new FormControl(false);
         return acc;
       }, {} as { [key: string]: FormControl });
+      this.addConocimientosGenerales();
 
       this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
       this.filterService.setSelectedKnowledges(this.knowledgeList);
       
+      console.log("<<<<>>>>> selectedKnowledges", this.selectedKnowledges);
     });
     
   }
@@ -95,9 +97,16 @@ export class TechniciansComponent {
       (section) => section.section === 'Conocimientos generales'
     );
     if (section) {
-      this.selectedSections.push(section);         
-      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section!);
+      this.selectedSections.push(section);      
+              
+      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);
+      console.log('k list', this.knowledgeList);
+      
+      console.log("adddddd knowledeService", knowledeService);
+      
       this.selectedKnowledges.push(knowledeService[0]);
+      console.log("adddddd selectedKnowledges", this.selectedKnowledges);
+      
     }
   }
 

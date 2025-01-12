@@ -37,6 +37,9 @@ export class FilterService {
 
     // IDs de secciones seleccionadas
     const sectionIds = sections.map(section => section.id_section);
+console.log("------------sectionIds", sectionIds);
+console.log("------------knowledges", knowledges);
+
 
     // Filtrar conocimientos que pertenezcan a las secciones seleccionadas
     const filteredKnowledgeIds = knowledges
@@ -94,6 +97,8 @@ export class FilterService {
   
   filterTechnicians(): number[] {
     const sectionFilteredIds = this.filteredBySections(); // IDs filtrados por secciones
+    console.log("sectionFilteredIds", sectionFilteredIds);
+    
     const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); // Filtrar esos IDs por conocimientos
 
     return knowledgeFilteredIds
