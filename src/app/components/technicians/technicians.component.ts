@@ -52,7 +52,7 @@ export class TechniciansComponent {
       this.sectionService.setSectionList(res.data);
 
       this.sectionList = this.sectionService.sectionList();
-      // this.addConocimientosGenerales();
+      
 
       const sectionControls = this.sectionList.reduce((acc, section) => {
         acc[section.id_section!] = new FormControl(false);
