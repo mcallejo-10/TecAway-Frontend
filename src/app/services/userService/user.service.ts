@@ -27,15 +27,14 @@ export class UserService {
   getUser(): Observable<User> {
     return this.http.get<User>(this.myAppUrl + this.myApiUrl);
   }
+
   getUserById(id: number): Observable<User> {
     console.log("id:", id);
-    
     return this.http.get<User>(this.myAppUrl + this.myApiUrl + 'get-user/' + id);
   }
 
   updateUser(user: User): Observable<any> {
-    return this.http.patch(this.myAppUrl + this.myApiUrl, user);
-    
+    return this.http.patch(this.myAppUrl + this.myApiUrl, user);    
   }
 
   uploadPhoto(photo: File): Observable<any> {

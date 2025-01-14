@@ -82,7 +82,6 @@ export class TechniciansComponent {
 
 
   isCheckedSection(id: number): boolean {
-
     return this.selectedSections.some((section) => section.id_section === id);
   }
 
@@ -97,16 +96,9 @@ export class TechniciansComponent {
       (section) => section.section === 'Conocimientos generales'
     );
     if (section) {
-      this.selectedSections.push(section);      
-              
-      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);
-      console.log('k list', this.knowledgeList);
-      
-      console.log("adddddd knowledeService", knowledeService);
-      
-      this.selectedKnowledges.push(knowledeService[0]);
-      console.log("adddddd selectedKnowledges", this.selectedKnowledges);
-      
+      this.selectedSections.push(section);                    
+      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);     
+      this.selectedKnowledges.push(knowledeService[0]);      
     }
   }
 
