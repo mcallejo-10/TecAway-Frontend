@@ -6,6 +6,7 @@ import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -66,9 +67,9 @@ export class RegisterComponent {
   private userService = inject(UserService)
   
   constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,    
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
+
   ) {}
    // Método para validar el primer paso
    validateFirstStep(): boolean {
@@ -130,6 +131,8 @@ export class RegisterComponent {
         .subscribe({
           next: (response: User) => {
             console.log('Usuario registrado:', response);
+            this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
+
             this.router.navigate(['/login']);
           },
           error: (error: string) => {

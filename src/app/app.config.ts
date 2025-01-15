@@ -12,12 +12,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
-    // provideAnimations(),
-    // provideToastr({
-    //   timeOut: 3000,
-    //   positionClass: 'toast-bottom-right',
-    //   preventDuplicates: true,
-    // })
+    provideAnimations(),
+    provideToastr({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    })
     ]
 };
 function provideAnimations(): import("@angular/core").Provider | import("@angular/core").EnvironmentProviders {
