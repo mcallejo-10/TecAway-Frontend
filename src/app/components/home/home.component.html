@@ -1,27 +1,95 @@
-<div class="container container-fluid">
-
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="text-center">
-
-                ¡Bienvenido/a a TecAway!
-
-
-
-
-            </h1>
-            <p>¿Buscas técnicos/as para tu próximo espectáculo? 🎭✨</p>
-            <p>
-                ¿Te dedicas a las artes escénicas y quieres encontrar nuevas oportunidades laborales? 💼🎶
-            </p>
-            <p>TecAway es el lugar donde los espectáculos y el talento se conectan. ¡Únete a nuestra comunidad! 🌟</p>
+<!-- home.component.html -->
+<div class="container-fluid min-vh-100">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <h1 class="display-4 fw-bold text-dark text-center mb-5">¡Bienvenido/a a TecAway!</h1>
+        
+        <div class="row align-items-start">
+            <div class="col-lg-7">
+                <div class="mb-5">
+                    <p class="lead text-dark mb-3">¿Buscas técnicos/as para tu próximo espectáculo?</p>
+                    <a href="/buscar" class="click-btn btn-style506">Buscar</a>
+                </div>
+                
+                <div class="mb-5">
+                    <p class="lead text-dark mb-3">
+                        ¿Te dedicas a las artes escénicas y quieres encontrar nuevas oportunidades laborales?
+                    </p>
+                    <a href="/buscar" class="click-btn btn-style506">Buscar</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+              <img 
+                src="assets/img/tecnic_1.png" 
+                alt="Técnico de teatro" 
+                class="hero-image img-fluid "
+              >
+            </div>            
         </div>
-
-        <div><a class="click-btn btn-style506" href="buscar">Buscar</a></div>
-    </div>
-
-
-
-</div>
-<!-- 
-    <div><a class="click-btn btn-style906" href="buscar" data-hover="¡Encuentra!">Buscar</a></div> -->
+  
+        <div class="row mt-4">
+          <div class="col-12">
+            <p class="community-message text-muted fst-italic text-center h4">
+              TecAway es el lugar donde los espectáculos y el talento se conectan. <br>
+              ¡Únete a nuestra comunidad!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Steps Section -->
+    <section class="steps-section">
+      <div class="container">
+        <h2 class="display-5 text-center mb-5">¿Cómo registrarte como técnico?</h2>
+        
+        <div class="row g-4">
+          <!-- Step 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-shadow-lg">
+              <div class="card-body text-center">
+                <div class="step-circle">
+                  <span class="fw-bold h4 mb-0">1</span>
+                </div>
+                <h3 class="h4 mb-3">Crea tu perfil</h3>
+                <p class="text-muted">
+                  Regístrate en nuestra plataforma y completa tu perfil profesional con tu experiencia y habilidades técnicas.
+                </p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-shadow-lg">
+              <div class="card-body text-center">
+                <div class="step-circle">
+                  <span class="fw-bold h4 mb-0">2</span>
+                </div>
+                <h3 class="h4 mb-3">Sube tu portfolio</h3>
+                <p class="text-muted">
+                  Añade fotos y detalles de los proyectos en los que has participado para mostrar tu experiencia.
+                </p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-shadow-lg">
+              <div class="card-body text-center">
+                <div class="step-circle">
+                  <span class="fw-bold h4 mb-0">3</span>
+                </div>
+                <h3 class="h4 mb-3">Empieza a trabajar</h3>
+                <p class="text-muted">
+                  Conecta con productores y compañías que buscan profesionales como tú para sus espectáculos.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
