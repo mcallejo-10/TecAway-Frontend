@@ -127,9 +127,7 @@ export class TechniciansComponent {
         (section) => section.id_section !== id_section
       );
       if (this.selectedSections.length === 0) {
-
         this.ngOnInit();
-
       } else {
         this.filterService.setSelectedSections(this.selectedSections);
       }
@@ -138,10 +136,6 @@ export class TechniciansComponent {
       );
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     }
-    console.log("<<<<>>>>>>>> selectedKnowledges", this.selectedKnowledges);
-    console.log("<<<<>>> selectedSections", this.selectedSections);
-
-
     this.filterService.filterTechnicians();
     this.filterTechniciansById();
   }
@@ -162,7 +156,6 @@ export class TechniciansComponent {
       }
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
       this.filterService.filterTechnicians();
-
     }
     else {
       this.selectedKnowledges = this.selectedKnowledges.filter(

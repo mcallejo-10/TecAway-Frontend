@@ -19,17 +19,20 @@ export class UserKnowledgeService {
       return this.http.get<UserKnowledge[]>(this.myAppUrl + this.myApiUrl);
     }
 
-    getUserKnowledgeById(id: number): Observable<UserKnowledge> {
-      return this.http.get<UserKnowledge>(this.myAppUrl + this.myApiUrl + id);
+    getUserKnowledgesById(): Observable<UserKnowledge> {
+      return this.http.get<UserKnowledge>(this.myAppUrl + this.myApiUrl + 'user'); 
     }
 
-    saveUserKnowledge(userKnowledge: UserKnowledge): Observable<any> {
-      return this.http.post<UserKnowledge>(this.myAppUrl + this.myApiUrl, userKnowledge);
+    addKnowledge(knowledge_id: any): Observable<any> {
+      console.log('knowledge_id:', knowledge_id);
+      
+      return this.http.post<any>(this.myAppUrl + this.myApiUrl, knowledge_id);
     }
 
-    deleteUserKnowledge(id: number): Observable<any> {
-      return this.http.delete(this.myAppUrl + this.myApiUrl + id);
+    deleteUserKnowledge(knowledge_id: any): Observable<any> {
+      return this.http.delete<any>(this.myAppUrl + this.myApiUrl, {
+        body: {knowledge_id: knowledge_id}
+      });
     }
-
 
 }

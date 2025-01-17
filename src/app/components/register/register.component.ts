@@ -133,11 +133,12 @@ export class RegisterComponent {
             console.log('Usuario registrado:', response);
             this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
 
-            this.router.navigate(['/login']);
+            this.router.navigate(['/agregar-conocimientos']);
           },
           error: (error: string) => {
             console.error('Error al registrar:', error);
             this.errorMessage = 'Error al registrar usuario';
+            this.toastr.error('Error al registrar usuario', 'Error');
           }
         });
     }
