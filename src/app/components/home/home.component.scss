@@ -8,6 +8,7 @@ $hover-shadow: 0 1rem 3rem rgba(0,0,0,.175);
 .hero-section {
   padding: 3rem 0;
   background-color: transparent;
+  font-family: "Nunito Sans", sans-serif;
 
   .hero-image {
     max-height: 350px;
@@ -16,6 +17,10 @@ $hover-shadow: 0 1rem 3rem rgba(0,0,0,.175);
     border-radius: 50%;
   }
 
+}
+
+h1 {
+    text-transform:none;
 }
 .community-message {
   padding: 2rem 0;

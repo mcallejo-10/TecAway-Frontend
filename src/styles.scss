@@ -10,7 +10,7 @@ $button-width: 120px;
 $border-radius: 0px;
 $timberwolf: #d6d6d6ff;
 $aureolin: #ffee32ff;
-$jonquil: #ffd100ff;
+$jonquil: #ffc107;;
 $eerie-black: #202020ff;
 $jet: #333533ff;
 
@@ -111,12 +111,13 @@ $btn-font-weight:             600 !default;
 // Forms
 
 $input-line-height:                     1.5 !default;
-$input-bg:                              $gray-200 !default;
-$input-disabled-bg:                     $gray-300 !default;
-$input-group-addon-bg:                  $gray-300 !default;
+$input-bg:                              $gray-400 !default;
+$input-disabled-bg:                     $gray-600 !default;
+$input-group-addon-bg:                  $gray-600 !default;
 
 $form-select-disabled-color:        $gray-600 !default;
-$form-select-disabled-bg:           $jonquil !default;
+$form-select-disabled-bg:           $gray-600 !default;
+$body-secondary-color:              $gray-600 !default;
 
 // Navbar
 
@@ -161,12 +162,24 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   background-color: $timberwolf;
+  
 
   &-nav {
     .nav-link {
       padding-top: .715rem;
       padding-bottom: .715rem;
+      color: whitesmoke;
       font-style: none;
+
+      &:active {
+        color: $jonquil;
+      }
+
+      &:hover {
+        color: $jonquil;
+      }
+
+      
     }
   }
 
@@ -310,49 +323,52 @@ th {
  // Forms
 
 // @include color-mode(dark) {
-//   .form-control {
-//     color: $body-color;
+  .form-control {
+    color: $body-color;
+    background-color: $timberwolf;
 
-//     &::placeholder {
-//       color: $body-secondary-color;
-//     }
-//   }
+    &:focus{
+      color: $body-color;
+      background-color: rgba(255, 225, 0, 0.359);
+    }
+    &::placeholder {
+      color: $gray-700;
+    }
+  }
 
-//   .form-floating {
-//     > label,
-//     > .form-control:focus ~ label,
-//     > .form-control:not(:placeholder-shown) ~ label,
-//     > .form-control-plaintext ~ label,
-//     > .form-select ~ label {
-//       color: $body-secondary-color;
-//     }
+  .form-floating {
+    > label,
+    > .form-control:focus ~ label,
+    > .form-control:not(:placeholder-shown) ~ label,
+    > .form-control-plaintext ~ label,
+    > .form-select ~ label {
+      color: $body-secondary-color;
+    }
 
-//     > .form-control::placeholder,
-//     > .form-control-plaintext::placeholder {
-//       color: transparent;
-//     }
-//   }
+    > .form-control::placeholder,
+    > .form-control-plaintext::placeholder {
+      color: transparent;
+    }
+  }
 
-//   .form-check-input:checked {
-//     background-color: $body-secondary-color;
-//   }
+  .form-check-input:checked {
+    background-color: $body-secondary-color;
+  }
 
-//   .form-switch .form-check-input {
-//     background-image: $form-switch-bg-image;
-//   }
 
-//   .form-range::-webkit-slider-thumb {
-//     background-color: $gray-600;
-//   }
 
-//   .form-range:disabled::-webkit-slider-thumb {
-//     background-color: $gray-800;
-//   }
+  .form-range::-webkit-slider-thumb {
+    background-color: $gray-600;
+  }
 
-//   .input-group-text {
-//     color: $body-secondary-color;
-//   }
-// }
+  .form-range:disabled::-webkit-slider-thumb {
+    background-color: $gray-800;
+  }
+
+  .input-group-text {
+    color: $body-secondary-color;
+  }
+
 
 // Navs
 
@@ -587,37 +603,4 @@ th {
     }
   }
 }
-
-
-// @import url('https://fonts.googleapis.com/css?family=Lato:100,300,400');
-// @import url('https://fonts.googleapis.com/css?family=Roboto:100');
-
-
-
-
-
-
- 
-                            
-
-// #customBtn2 {
-//     cursor: pointer; border: solid rgb(51, 53, 51); font-family: Raleway; font-size: 18px; color: rgb(0, 0, 0); padding: 13px 30px; transition: 538ms; width: 180px; box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; border-radius: 0px 20px 0px 0px; background: rgb(255, 209, 0); font-weight: 900; --hover-bgc: #333533; --hover-width: 189px; --hover-borderc: #ffd100; --hover-color: #ffd100; --hover-borderSize: 2px; display: flex; justify-content: center; align-items: center;
-// }
-
-
-// #customBtn2:hover{
-    
-// color: rgb(255, 209, 0);
-// width: 180px;
-// background: rgb(51, 53, 51) none repeat scroll 0% 0% / auto  border-box;
-// border-color: rgb(255, 209, 0);
-// border-width: 3px;
-// border-style: solid;
-// }
-
-
-
-
-
-
 
