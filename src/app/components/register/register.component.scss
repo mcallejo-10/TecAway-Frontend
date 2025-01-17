@@ -1,6 +1,4 @@
 .register-title {
-  font-family: tomorrow;
-  
   color: black;
   margin-bottom: 1rem; /* Espaciado con el párrafo */
 }
@@ -11,6 +9,7 @@ h2 {
 }
 
 .steps {
+  
   text-align: center;
   justify-content: center;
 }
@@ -27,5 +26,7 @@ h2 {
   color: #555; /* Gris neutro */
   margin: 0; /* Elimina márgenes adicionales */
 }
-
+li {
+  font-size: 1.1rem;
+}
   
