@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 
 import { UserService } from '../../services/userService/user.service';
 import { User } from '../../interfaces/user';
@@ -182,7 +182,34 @@ export class TechniciansComponent {
     this.filterService.techniciansFiltred.set(filteredTechnicians);
     this.filterService.filterTechnicians();
     this.filterService.techniciansFiltred();
-
+  }
+  toggleFilter() {
+    const filterCard = document.querySelector('.filter-card');
+    const overlay = document.querySelector('.filter-overlay');
+    
+    if (filterCard && overlay) {
+      filterCard.classList.toggle('show');
+      overlay.classList.toggle('show');
+      document.body.style.overflow = filterCard.classList.contains('show') ? 'hidden' : '';
+    }
   }
 
+  closeFilter() {
+    const filterCard = document.querySelector('.filter-card');
+    const overlay = document.querySelector('.filter-overlay');
+    
+    if (filterCard && overlay) {
+      filterCard.classList.remove('show');
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Opcional: cierra el filtro cuando cambia el tamaño de la ventana a desktop
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth >= 768) {
+      this.closeFilter();
+    }
+  }
 }

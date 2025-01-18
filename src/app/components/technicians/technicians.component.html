@@ -4,9 +4,14 @@
 
     <div class="col-12 col-md-3" id="filter">
 
-      <button class="btn click-btn btn-style506 mt-2">Filtrar</button>
-      <div class="card filter-card d-none d-md-block">
+      <button class="btn click-btn btn-style506 mt-2" (click)="toggleFilter()">Filtrar</button>
+
+      <div class="filter-overlay" (click)="closeFilter()"></div>
+
+      <div class="card filter-card ">
+        <button class="filter-close" (click)="closeFilter()">×</button>
         <p class="filter-title">Puesto</p>
+
         <div id="filter-list">
           <form [formGroup]="filterForm">
             @for (section of sectionList; track section.id_section) {
@@ -23,66 +28,72 @@
           </form>
         </div>
         <div id="filtre-knowledges">
-          
+
           @for (section of sectionList; track section.id_section) {
-            @if(isCheckedSection(section.id_section!)) {
-            <p class="filter-title">{{section.section}}</p>
-              @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
-                @if(knowledge.section_id == section.id_section && knowledge.knowledge != section.section) {
-                <div class="form-check">
-  
-                  <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
-                    (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
-                  
-                  <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
-                  </label>
-                </div>
-                }
-              }
-            }
+          @if(isCheckedSection(section.id_section!)) {
+          <p class="filter-title">{{section.section}}</p>
+          @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
+          @if(knowledge.section_id == section.id_section && knowledge.knowledge != section.section) {
+          <div class="form-check">
+
+            <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
+              (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
+
+            <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
+            </label>
+          </div>
+          }
+          }
+          }
           }
         </div>
       </div>
     </div>
 
-    <!-- LISTADO DE TECNICAS -->
+    <!-- Listado de técnicos -->
     <div class="col-12 col-md-9">
-      @if(filterService.techniciansFiltred().length == 0 ) {
+      <!-- Resto del contenido igual que antes -->
+      <!-- ... --><!-- LISTADO DE TECNICAS -->
+      <div class="col-12 col-md-9">
+        @if(filterService.techniciansFiltred().length == 0 ) {
         <div class="card-link">
           <div class="card">
             <div class="card-body">
               <div class="card-title">No hay técnicos disponibles</div>
             </div>
-          </div> 
-        </div>
-      }
-      @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
-
-      <div class=" col-12 card-link">
-        <a [routerLink]="['/user', technician.id_user]">
-        <div class="m-2 card border-warning mb-3 card-technician my-2">
-          <div class="row">
-            <div class="col-2">
-              <div class="card-img">
-                <img src="{{technician.photo}}" class="img" onerror="this.src='/assets/img/user_image.png'"
-                  alt="{{technician.name}} image">
-              </div>
-            </div>
-            <div class="col-10">
-              <div class="card-body px-0">
-                <p class="card-title" id="name">{{technician.name.toUpperCase()}} </p>
-                <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
-                <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
-              </div>
-            </div>
           </div>
         </div>
-        </a>
+        }
+        @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
+
+          <div class="col-12 card-link">
+            <a [routerLink]="['/user', technician.id_user]">
+              <div class="card border-warning card-technician">
+                <div class="row g-0"> <!-- Añadido g-0 para eliminar gutters -->
+                  <div class="col-2">
+                    <div class="card-img">
+                      <img src="{{technician.photo}}" 
+                           class="img" 
+                           onerror="this.src='/assets/img/user_image.png'"
+                           alt="{{technician.name}} image">
+                    </div>
+                  </div>
+                  <div class="col-10">
+                    <div class="card-body">
+                      <p class="card-title" id="name">{{technician.name.toUpperCase()}}</p>
+                      <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
+                      <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        }
+
       </div>
-      }
-
     </div>
-
-
-
   </div>
+</div>
+
+
