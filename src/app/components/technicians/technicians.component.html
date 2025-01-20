@@ -51,49 +51,43 @@
     </div>
 
     <!-- Listado de técnicos -->
+
     <div class="col-12 col-md-9">
-      <!-- Resto del contenido igual que antes -->
-      <!-- ... --><!-- LISTADO DE TECNICAS -->
-      <div class="col-12 col-md-9">
-        @if(filterService.techniciansFiltred().length == 0 ) {
-        <div class="card-link">
-          <div class="card">
-            <div class="card-body">
-              <div class="card-title">No hay técnicos disponibles</div>
-            </div>
+      @if(filterService.techniciansFiltred().length == 0 ) {
+      <div class="card-link">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">No hay técnicos disponibles</div>
           </div>
         </div>
-        }
-        @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
+      </div>
+      }
+      @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
 
-          <div class="col-12 card-link">
-            <a [routerLink]="['/user', technician.id_user]">
-              <div class="card border-warning card-technician">
-                <div class="row g-0"> <!-- Añadido g-0 para eliminar gutters -->
-                  <div class="col-2">
-                    <div class="card-img">
-                      <img src="{{technician.photo}}" 
-                           class="img" 
-                           onerror="this.src='/assets/img/user_image.png'"
-                           alt="{{technician.name}} image">
-                    </div>
-                  </div>
-                  <div class="col-10">
-                    <div class="card-body">
-                      <p class="card-title" id="name">{{technician.name.toUpperCase()}}</p>
-                      <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
-                      <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
-                    </div>
-                  </div>
+      <div class="col-12 card-link">
+        <a [routerLink]="['/user', technician.id_user]">
+          <div class="card card-technician">
+            <div class="row g-0"> <!-- Añadido g-0 para eliminar gutters -->
+              <div class="col-2">
+                <div class="card-img">
+                  <img src="{{technician.photo}}" class="img" onerror="this.src='/assets/img/user_image.png'"
+                    alt="{{technician.name}} image">
                 </div>
               </div>
-            </a>
+              <div class="col-10">
+                <div class="card-body">
+                  <p class="card-title" id="name">{{technician.name.toUpperCase()}}</p>
+                  <p class="card-subtitle mb-2" id="title">{{technician.title}}</p>
+                  <p class="card-subtitle mb-2" id="description">{{technician.description}}</p>
+                </div>
+              </div>
+            </div>
           </div>
-        }
-
+        </a>
       </div>
-    </div>
+    }
+    
   </div>
 </div>
-
+</div>
 
