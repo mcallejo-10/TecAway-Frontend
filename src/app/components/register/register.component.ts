@@ -130,7 +130,6 @@ export class RegisterComponent {
       this.authService.registerUser(userData)
         .subscribe({
           next: (response: User) => {
-            console.log('Usuario registrado:', response);
             this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
 
             this.router.navigate(['/agregar-conocimientos']);

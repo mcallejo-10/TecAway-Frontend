@@ -1,10 +1,13 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TechniciansComponent } from './technicians.component';
-import { FilterService } from './services/filter.service';
+import { FilterService } from '../../services/filterService/filter.service';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
+
 
 describe('TechniciansComponent', () => {
   let component: TechniciansComponent;
@@ -47,9 +50,11 @@ describe('TechniciansComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
+        ActivatedRoute,
         TechniciansComponent,
-        RouterTestingModule,
-        ReactiveFormsModule
+        HttpClient,
+        ReactiveFormsModule,
+        [ToastrModule.forRoot()]
       ],
       providers: [
         { provide: FilterService, useValue: filterService }

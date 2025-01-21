@@ -4,12 +4,13 @@ import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge } from '../../interfaces/knowledge';
 import { Section } from '../../interfaces/section';
-import { ToastrService } from 'ngx-toastr';
 import { UserKnowledgeService } from '../../services/userKowledgeService/user-knowledge.service';
 import { User } from '../../interfaces/user';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+
 
 
 @Component({

@@ -73,9 +73,7 @@ export class TechniciansComponent {
 
       this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
       this.filterService.setSelectedKnowledges(this.knowledgeList);
-      
-      console.log("<<<<>>>>> selectedKnowledges", this.selectedKnowledges);
-    });
+      });
     
   }
 
@@ -90,7 +88,6 @@ export class TechniciansComponent {
   }
 
 
-  // funcion para que se agreguen automaticamente el seccion 'Conocimientos generales' 
   addConocimientosGenerales(): void {
     const section = this.sectionList.find(
       (section) => section.section === 'Conocimientos generales'
@@ -106,7 +103,6 @@ export class TechniciansComponent {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      // Agregar la sección seleccionada
       const section = this.sectionList.find(
         (section) => section.id_section === id_section
       );
@@ -122,7 +118,6 @@ export class TechniciansComponent {
       this.filterService.setSelectedSections(this.selectedSections);
 
     } else {
-      // Quitar la sección deseleccionada
       this.selectedSections = this.selectedSections.filter(
         (section) => section.id_section !== id_section
       );

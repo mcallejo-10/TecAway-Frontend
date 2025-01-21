@@ -24,7 +24,6 @@ export class TechnicianDetailComponent {
   ngOnInit() {
     this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
       this.technician = res.data;
-      console.log(res.data);
     });
 
   };

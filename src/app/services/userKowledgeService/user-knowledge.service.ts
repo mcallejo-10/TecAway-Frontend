@@ -24,8 +24,6 @@ export class UserKnowledgeService {
     }
 
     addKnowledge(knowledge_id: any): Observable<any> {
-      console.log('knowledge_id:', knowledge_id);
-      
       return this.http.post<any>(this.myAppUrl + this.myApiUrl, knowledge_id);
     }
 

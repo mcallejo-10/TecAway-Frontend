@@ -32,21 +32,15 @@ export class FilterService {
 
 
   filteredBySections(): number[] {
-    const sections = this.selectedSections(); // Secciones seleccionadas
-    const knowledges = this.selectedKnowledges(); // Conocimientos seleccionados
-
-    // IDs de secciones seleccionadas
+    const sections = this.selectedSections(); 
+    const knowledges = this.selectedKnowledges(); 
+   
     const sectionIds = sections.map(section => section.id_section);
-console.log("------------sectionIds", sectionIds);
-console.log("------------knowledges", knowledges);
 
-
-    // Filtrar conocimientos que pertenezcan a las secciones seleccionadas
     const filteredKnowledgeIds = knowledges
       .filter(knowledge => sectionIds.includes(knowledge.section_id))
       .map(knowledge => knowledge.id_knowledge);
 
-    // Agrupar usuarios por sus conocimientos asociados
     const userToKnowledgeMap = new Map<number, number[]>();
 
     this.userKnowledgeList().forEach(userKnowledge => {
@@ -69,26 +63,23 @@ console.log("------------knowledges", knowledges);
       )
       .map(([userId]) => userId);
 
-    // Devolver los IDs únicos
-    return Array.from(new Set(filteredUserIds)); // Eliminar duplicados si es necesario
+
+    return Array.from(new Set(filteredUserIds)); // Elimina duplicados
   }
 
   filterByKnowledges(userIds: number[]): number[] {
-    const selectedKnowledgeIds = this.selectedKnowledges().map(knowledge => knowledge.id_knowledge); // Conocimientos seleccionados
-    const selectedSectionIds = this.selectedSections().map(section => section.id_section); // Secciones seleccionadas
+    const selectedKnowledgeIds = this.selectedKnowledges().map(knowledge => knowledge.id_knowledge); 
+    const selectedSectionIds = this.selectedSections().map(section => section.id_section); 
   
     return userIds.filter(userId => {
       const userKnowledge = this.userKnowledgeList().filter(uk => uk.user_id === userId);
   
       if (selectedKnowledgeIds.length === 0) {
-        // Si no hay conocimientos seleccionados, validamos que el usuario tenga algún conocimiento de las secciones seleccionadas
         return userKnowledge.some(uk => {
           const knowledgeSectionId = this.allKnowledges.find(k => k.id_knowledge === uk.knowledge_id)?.section_id;
-          // Validar que el conocimiento pertenezca a alguna de las secciones seleccionadas
           return knowledgeSectionId !== undefined && selectedSectionIds.includes(knowledgeSectionId);
         });
       } else {
-        // Si hay conocimientos seleccionados, validamos que el usuario tenga TODOS los conocimientos seleccionados
         const userKnowledgeIds = userKnowledge.map(uk => uk.knowledge_id);
         return selectedKnowledgeIds.every(knowledgeId => userKnowledgeIds.includes(knowledgeId!));
       }
@@ -96,31 +87,21 @@ console.log("------------knowledges", knowledges);
   }
   
   filterTechnicians(): number[] {
-    const sectionFilteredIds = this.filteredBySections(); // IDs filtrados por secciones
-    console.log("sectionFilteredIds", sectionFilteredIds);
-    
-    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); // Filtrar esos IDs por conocimientos
-
+    const sectionFilteredIds = this.filteredBySections();     
+    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); 
     return knowledgeFilteredIds
     
   }
 
   setTechnicianList(techniciansList: User[]) {
     this.techniciansFiltred.set(techniciansList);
-    // this.filterTechnicians();
-  
-
-
   }
 
   setSelectedSections(sections: Section[]) {
     this.selectedSections.set(sections);
-    // console.log("¨¨¨¨¨sections", this.selectedSections());
-
-  }
+    }
 
   setSelectedKnowledges(knowledges: Knowledge[]) {
     this.selectedKnowledges.set(knowledges);
-    // console.log("^^^^^^^knowledges", this.selectedKnowledges());
   }
 }
