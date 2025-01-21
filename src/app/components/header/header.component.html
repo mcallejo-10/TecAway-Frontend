@@ -24,6 +24,11 @@
                     <a class="nav-link" href="/login">Tu cuenta</a>
 
                 </li>
+                @if(!isLogged===false){
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Cerrar sesión</a>
+                </li>
+                }
             </ul>
 
         </div>

@@ -71,28 +71,23 @@ export class LoginComponent {
         },
       });
     } else {
-      this.router.navigate(["/"]);
+      this.router.navigate(["/login"]);
     }
   }
 
   userLogin() {
     const credentials: LoginRequest = {
-      email: this.loginForm.get("email")?.value || "",
+      email: this.loginForm.get("email")?.value?.toLowerCase() || "",
       password: this.loginForm.get("password")?.value || "",
     };
-    console.log("credentials", credentials);
     
     this.authService.loginUser(credentials).subscribe({
       next: (response) => {
-        sessionStorage.setItem("authToken", response.accessToken);
-        console.log("response:", response.accessToken);
-        
-        this.authService.isLoggedIn();
-        this.router.navigate(["/"]);
+        this.router.navigate(["/editar-cuenta"]);
       },
       error: (error) => {
-        this.errorMessage = "Wrong password";
-        console.error("Error en login", error);
+        this.errorMessage = error.error?.message || "Error en login";
+        console.error("Error en login:", error);
       },
     });
   }

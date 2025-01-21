@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -7,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  private authService = inject(AuthService)
+  isLogged: boolean = false;
 
+  ngOnInit() {
+    this.authService.checkAuthStatus().subscribe();
+
+    this.isLogged = this.authService.isLogged();
+  };
 }
+
+
