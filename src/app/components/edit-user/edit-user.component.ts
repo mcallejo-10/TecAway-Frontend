@@ -80,8 +80,7 @@ errorMessage: string = '';
     this.userService.getUser()
       .subscribe({
         next: (response: User) => {
-          console.log('----Usuario:', response);
-          
+                   
           this.registerForm.patchValue({
             name: response.name,
             email: response.email,

@@ -12,7 +12,6 @@ export class HeaderComponent {
   isLogged: boolean = false;
 
   ngOnInit() {
-    this.authService.checkAuthStatus().subscribe();
 
     this.isLogged = this.authService.isLogged();
   };

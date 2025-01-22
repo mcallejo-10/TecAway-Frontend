@@ -12,6 +12,7 @@ export class AuthService {
   private myAppUrl: string;
   private myApiUrl: string;
   isLogged = signal<boolean>(false);
+ 
   
   constructor(private http: HttpClient) {  
     this.myAppUrl = environment.endpoint;
@@ -22,9 +23,6 @@ export class AuthService {
       return this.http.post<User>(this.myAppUrl + this.myApiUrl + 'register', user);
     }
 
-    // loginUser(loginRequest: LoginRequest): Observable<any> {
-    //   return this.http.post(this.myAppUrl + this.myApiUrl + 'login', loginRequest);
-    // }
 
     forgotPassword(email: string): Observable<any> {
       return this.http.post(this.myAppUrl + this.myApiUrl + 'forgot-password', email);
@@ -40,9 +38,7 @@ export class AuthService {
         tap(() => this.isLogged.set(false))
       );
     }
-    // logoutUser(): Observable<any> {
-    //   return this.http.get(this.myAppUrl + this.myApiUrl + 'logout');
-    // }
+
     loginUser(loginRequest: LoginRequest): Observable<any> {
       return this.http.post(
         `${this.myAppUrl}${this.myApiUrl}login`, 
@@ -60,10 +56,11 @@ export class AuthService {
       );
     }
   
-    // Para verificar si el usuario está autenticado (útil para el guard)
+    
     checkAuthStatus(): Observable<any> {
       return this.http.get(
-        `${this.myAppUrl}${this.myApiUrl}check-auth`
+        `${this.myAppUrl}${this.myApiUrl}check-auth`,
+        { withCredentials: true } 
       ).pipe(
         tap(() => this.isLogged.set(true)),
         catchError(error => {
