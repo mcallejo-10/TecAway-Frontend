@@ -30,17 +30,7 @@ errorMessage: string = '';
       Validators.required,
       Validators.email
     ]),
-    password: new FormControl('',
-      [Validators.required,
-        Validators.minLength(4),
-        Validators.pattern('^(?=.*[A-Z]).{4,}$')
-      ]),
-      confirmPassword: new FormControl('',
-        [Validators.required,
-          Validators.minLength(4),
-          Validators.pattern('^(?=.*[A-Z]).{4,}$'),
-        ]),    
-      title: new FormControl('', [
+    title: new FormControl('', [
         Validators.required,
         Validators.minLength(20),
         Validators.maxLength(130)
@@ -56,7 +46,7 @@ errorMessage: string = '';
       ]),
       can_move: new FormControl(false),
 
-      photo: new FormControl(''),
+      // photo: new FormControl(''),
 
     }, 
     {
@@ -93,7 +83,7 @@ errorMessage: string = '';
             description: response.data.description,
             town: response.data.town,
             can_move: response.data.can_move,
-            photo: response.data.photo
+            // photo: response.data.photo
           });
         },
         error: (error: string) => {
@@ -103,8 +93,10 @@ errorMessage: string = '';
         }
       });
   }
-  updateUser(): void {
 
+  updateUser(): void {
+    console.log('this.registerForm:', this.registerForm);
+    
     if (this.registerForm.valid) {
       this.errorMessage = '';
 

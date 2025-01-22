@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './technician-detail.component.scss'
 })
 export class TechnicianDetailComponent {
-[x: string]: any;
+
 
   technician: any = {};
   userService = inject(UserService);
