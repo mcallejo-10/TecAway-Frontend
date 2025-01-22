@@ -1,6 +1,6 @@
 # TecAway Frontend
 
-![TecAway Logo](src/assets/img/Logo_TecAway_yellow.svg)
+<img src="src/assets/img/Logo_TecAway_yellow.svg" alt="TecAway Logo" width="200">
 
 TecAway es una aplicación web desarrollada para facilitar la conexión entre técnicos/as de teatro y quienes buscan profesionales para sus producciones. Los técnicos/as pueden crear un perfil con una descripción de sus conocimientos y habilidades, permitiendo a los productores o coordinadores encontrar fácilmente al personal que necesitan.
 
@@ -98,3 +98,4 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para má
 
 Para más información o soporte, contacta al equipo a través del repositorio oficial: [TecAway Frontend](https://github.com/mcallejo-10/TecAway-Frontend.git).
 
+ 
