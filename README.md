@@ -1,263 +1,100 @@
-# Proyecto Final - Frontend
+# TecAway Frontend
 
-Este es el repositorio del frontend del Proyecto Final de IT-ACADEMY. Este proyecto está desarrollado con Angular y tiene como objetivo proporcionar una interfaz de usuario para la gestión de conocimientos y usuarios.
+![TecAway Logo](src/assets/img/Logo_TecAway_yellow.svg)
+
+TecAway es una aplicación web desarrollada para facilitar la conexión entre técnicos/as de teatro y quienes buscan profesionales para sus producciones. Los técnicos/as pueden crear un perfil con una descripción de sus conocimientos y habilidades, permitiendo a los productores o coordinadores encontrar fácilmente al personal que necesitan.
+
+## Características Principales
+
+- Gestión de perfiles de técnicos/as con detalles personalizados.
+- Filtrado dinámico y búsqueda avanzada por conocimientos específicos.
+- Contacto directo entre técnicos/as y productores.
+- Interfaz responsiva diseñada con SCSS y Bootstrap modificada a partir de una plantilla de Bootswatch.
+
+## Tecnologías Utilizadas
+
+- **Framework principal:** Angular 19
+- **Estilos:** Bootstrap, SCSS, y una plantilla personalizada de Bootswatch
+- **Versionado:** Git
 
 ## Estructura del Proyecto
 
-La estructura del proyecto es la siguiente:
-
-```plaintext
+```
 src
 ├── app
-│   ├── app.component.html
-│   ├── app.component.scss
-│   ├── app.component.spec.ts
-│   ├── app.component.ts
-│   ├── app.config.ts
-│   ├── app.routes.ts
-│   ├── components
-│   │   ├── add-knowledges
-│   │   │   ├── add-knowledges.component.html
-│   │   │   ├── add-knowledges.component.scss
-│   │   │   ├── add-knowledges.component.spec.ts
-│   │   │   └── add-knowledges.component.ts
-│   │   ├── edit-user
-│   │   │   ├── edit-user.component.html
-│   │   │   ├── edit-user.component.scss
-│   │   │   ├── edit-user.component.spec.ts
-│   │   │   └── edit-user.component.ts
-│   │   ├── footer
-│   │   │   ├── footer.component.html
-│   │   │   ├── footer.component.scss
-│   │   │   ├── footer.component.spec.ts
-│   │   │   └── footer.component.ts
-│   │   ├── header
-│   │   │   ├── header.component.html
-│   │   │   ├── header.component.scss
-│   │   │   ├── header.component.spec.ts
-│   │   │   └── header.component.ts
-│   │   ├── home
-│   │   │   ├── home.component.html
-│   │   │   ├── home.component.scss
-│   │   │   ├── home.component.spec.ts
-│   │   │   └── home.component.ts
-│   │   ├── login
-│   │   │   ├── login.component.html
-│   │   │   ├── login.component.scss
-│   │   │   ├── login.component.spec.ts
-│   │   │   └── login.component.ts
-│   │   ├── register
-│   │   │   ├── register.component.html
-│   │   │   ├── register.component.scss
-│   │   │   ├── register.component.spec.ts
-│   │   │   └── register.component.ts
-│   │   ├── technician-detail
-│   │   │   ├── technician-detail.component.html
-│   │   │   ├── technician-detail.component.scss
-│   │   │   ├── technician-detail.component.spec.ts
-│   │   │   └── technician-detail.component.ts
-│   │   ├── technicians
-│   │   │   ├── technicians.component.html
-│   │   │   ├── technicians.component.scss
-│   │   │   ├── technicians.component.spec.ts
-│   │   │   └── technicians.component.ts
-│   │   └── user-info
-│   │       ├── user-info.component.html
-│   │       ├── user-info.component.scss
-│   │       ├── user-info.component.spec.ts
-│   │       └── user-info.component.ts
-│   ├── guards
-│   │   ├── auth.guard.spec.ts
-│   │   ├── auth.guard.ts
-│   │   └── auth.service.guard.ts
-│   ├── interceptors
-│   │   ├── auth.interceptor.spec.ts
-│   │   └── auth.interceptor.ts
-│   ├── interfaces
-│   │   ├── knowledge.ts
-│   │   ├── login.ts
-│   │   ├── recovery-token.ts
-│   │   ├── section.ts
-│   │   ├── user-knowledge.ts
-│   │   └── user.ts
-│   ├── services
-│   │   ├── authService
-│   │   │   ├── auth.service.spec.ts
-│   │   │   └── auth.service.ts
-│   │   ├── filterService
-│   │   │   ├── filter.service.spec.ts
-│   │   │   └── filter.service.ts
-│   │   ├── knowledgeService
-│   │   │   ├── knowledge.service.spec.ts
-│   │   │   └── knowledge.service.ts
-│   │   ├── sectionService
-│   │   │   ├── section.service.spec.ts
-│   │   │   └── section.service.ts
-│   │   ├── userKowledgeService
-│   │   │   ├── user-knowledge.service.spec.ts
-│   │   │   └── user-knowledge.service.ts
-│   │   └── userService
-│   │       ├── user.service.spec.ts
-│   │       └── user.service.ts
-│   └── validators
-│       └── must-match.validator.ts
+│   ├── app.component.*          # Configuración principal
+│   ├── components               # Componentes de la aplicación
+│   │   ├── add-knowledges       # Gestión de conocimientos
+│   │   ├── edit-user            # Edición de perfiles
+│   │   ├── footer               # Pie de página
+│   │   ├── header               # Encabezado
+│   │   ├── home                 # Página principal
+│   │   ├── login                # Inicio de sesión
+│   │   ├── register             # Registro de usuarios
+│   │   ├── technician-detail    # Detalle de técnicos/as
+│   │   ├── technicians          # Listado de técnicos/as
+│   │   └── user-info            # Información del usuario
+│   ├── guards                   # Protección de rutas
+│   ├── interceptors             # Interceptores HTTP
+│   ├── interfaces               # Interfaces de datos
+│   ├── services                 # Servicios para el manejo de datos
+│   └── validators               # Validaciones personalizadas
 ├── assets
-│   └── img
-│       ├── Logo_TecAway_yellow.svg
-│       ├── tecnic_1.png
-│       └── user_image.png
-├── environments
-│   ├── environment.development.ts
-│   └── environment.ts
-├── index.html
-├── main.ts
-└── styles.scss
+│   └── img                      # Imágenes y recursos visuales
+├── environments                 # Configuración por entorno
+├── index.html                   # Entrada principal
+├── main.ts                      # Punto de inicio de la aplicación
+└── styles.scss                  # Estilos globales
 ```
 
-## Instalación
+## Instalación y Uso
 
-Para instalar las dependencias del proyecto, ejecuta el siguiente comando:
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/mcallejo-10/TecAway-Frontend.git
+   ```
 
-```bash
-npm install
-```
+2. Accede al directorio del proyecto:
+   ```bash
+   cd TecAway-Frontend
+   ```
 
-## Ejecución
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-Para ejecutar el proyecto en un entorno de desarrollo, utiliza el siguiente comando:
+4. Inicia el servidor de desarrollo:
+   ```bash
+   ng serve
+   ```
 
-```bash
-ng serve
-```
-
-El proyecto estará disponible en `http://localhost:4200`.
-
-## Construcción
-
-Para construir el proyecto para producción, utiliza el siguiente comando:
-
-```bash
-ng build
-```
-
-Los archivos generados estarán en la carpeta `dist/`.
+5. Abre [http://localhost:4200](http://localhost:4200) en tu navegador para ver la aplicación en ejecución.
 
 ## Contribución
 
-Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
+Si deseas contribuir a TecAway, sigue estos pasos:
 
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -am 'Añadir nueva funcionalidad'`).
-4. Sube tus cambios (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request.
+1. Crea un fork del repositorio.
+2. Crea una rama para tu funcionalidad o corrección:
+   ```bash
+   git checkout -b mi-rama
+   ```
+3. Realiza tus cambios y confirma los commits:
+   ```bash
+   git commit -m "Descripción de los cambios"
+   ```
+4. Envía tus cambios:
+   ```bash
+   git push origin mi-rama
+   ```
+5. Abre un pull request en el repositorio original.
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 
-src
-├── app
-│   ├── app.component.html
-│   ├── app.component.scss
-│   ├── app.component.spec.ts
-│   ├── app.component.ts
-│   ├── app.config.ts
-│   ├── app.routes.ts
-│   ├── components
-│   │   ├── add-knowledges
-│   │   │   ├── add-knowledges.component.html
-│   │   │   ├── add-knowledges.component.scss
-│   │   │   ├── add-knowledges.component.spec.ts
-│   │   │   └── add-knowledges.component.ts
-│   │   ├── edit-user
-│   │   │   ├── edit-user.component.html
-│   │   │   ├── edit-user.component.scss
-│   │   │   ├── edit-user.component.spec.ts
-│   │   │   └── edit-user.component.ts
-│   │   ├── footer
-│   │   │   ├── footer.component.html
-│   │   │   ├── footer.component.scss
-│   │   │   ├── footer.component.spec.ts
-│   │   │   └── footer.component.ts
-│   │   ├── header
-│   │   │   ├── header.component.html
-│   │   │   ├── header.component.scss
-│   │   │   ├── header.component.spec.ts
-│   │   │   └── header.component.ts
-│   │   ├── home
-│   │   │   ├── home.component.html
-│   │   │   ├── home.component.scss
-│   │   │   ├── home.component.spec.ts
-│   │   │   └── home.component.ts
-│   │   ├── login
-│   │   │   ├── login.component.html
-│   │   │   ├── login.component.scss
-│   │   │   ├── login.component.spec.ts
-│   │   │   └── login.component.ts
-│   │   ├── register
-│   │   │   ├── register.component.html
-│   │   │   ├── register.component.scss
-│   │   │   ├── register.component.spec.ts
-│   │   │   └── register.component.ts
-│   │   ├── technician-detail
-│   │   │   ├── technician-detail.component.html
-│   │   │   ├── technician-detail.component.scss
-│   │   │   ├── technician-detail.component.spec.ts
-│   │   │   └── technician-detail.component.ts
-│   │   ├── technicians
-│   │   │   ├── technicians.component.html
-│   │   │   ├── technicians.component.scss
-│   │   │   ├── technicians.component.spec.ts
-│   │   │   └── technicians.component.ts
-│   │   └── user-info
-│   │       ├── user-info.component.html
-│   │       ├── user-info.component.scss
-│   │       ├── user-info.component.spec.ts
-│   │       └── user-info.component.ts
-│   ├── guards
-│   │   ├── auth.guard.spec.ts
-│   │   ├── auth.guard.ts
-│   │   └── auth.service.guard.ts
-│   ├── interceptors
-│   │   ├── auth.interceptor.spec.ts
-│   │   └── auth.interceptor.ts
-│   ├── interfaces
-│   │   ├── knowledge.ts
-│   │   ├── login.ts
-│   │   ├── recovery-token.ts
-│   │   ├── section.ts
-│   │   ├── user-knowledge.ts
-│   │   └── user.ts
-│   ├── services
-│   │   ├── authService
-│   │   │   ├── auth.service.spec.ts
-│   │   │   └── auth.service.ts
-│   │   ├── filterService
-│   │   │   ├── filter.service.spec.ts
-│   │   │   └── filter.service.ts
-│   │   ├── knowledgeService
-│   │   │   ├── knowledge.service.spec.ts
-│   │   │   └── knowledge.service.ts
-│   │   ├── sectionService
-│   │   │   ├── section.service.spec.ts
-│   │   │   └── section.service.ts
-│   │   ├── userKowledgeService
-│   │   │   ├── user-knowledge.service.spec.ts
-│   │   │   └── user-knowledge.service.ts
-│   │   └── userService
-│   │       ├── user.service.spec.ts
-│   │       └── user.service.ts
-│   └── validators
-│       └── must-match.validator.ts
-├── assets
-│   └── img
-│       ├── Logo_TecAway_yellow.svg
-│       ├── tecnic_1.png
-│       └── user_image.png
-├── environments
-│   ├── environment.development.ts
-│   └── environment.ts
-├── index.html
-├── main.ts
-└── styles.scss
+---
+
+Para más información o soporte, contacta al equipo a través del repositorio oficial: [TecAway Frontend](https://github.com/mcallejo-10/TecAway-Frontend.git).
+
