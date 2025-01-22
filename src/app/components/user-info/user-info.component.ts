@@ -19,11 +19,13 @@ export class UserInfoComponent {
   
   ngOnInit() {
     this.userService.getUser().subscribe((res: any) => {      
-      this.id = res.data.id;
+      this.id = res.data.id_user;
+      console.log('ID USER', res.data);
+      this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
+        this.technician = res.data;
+      });
+      
     });
     
-    this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
-      this.technician = res.data;
-    });
 }
 }
