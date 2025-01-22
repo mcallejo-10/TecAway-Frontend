@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg bg-dark header" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img src="assets/img/Logo_TecAway_yellow.svg" alt="logo" width="70" height="70" class="logo">
@@ -24,10 +24,14 @@
                     <a class="nav-link" href="/tu-cuenta">Tu cuenta</a>
 
                 </li>
-                @if(isLogged===true){
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Cerrar sesión</a>
-                </li>
+                
+                @if(authService.isLogged()===true){
+                    <span>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="logout()" >Cerrar sesión</a>
+                        </li>
+                    </span>
+
                 }
             </ul>
 

@@ -1,7 +1,9 @@
+
+
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/authService/auth.service';
-import { map } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -14,6 +16,11 @@ export const authGuard: CanActivateFn = (route, state) => {
       }
       router.navigate(['/login']);
       return false;
+    }),
+    catchError(() => {
+      // En caso de error (incluyendo cuando no hay token)
+        router.navigate(['/login']);
+        return of(false);
     })
   );
 };

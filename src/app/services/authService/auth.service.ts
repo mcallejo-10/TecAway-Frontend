@@ -28,7 +28,10 @@ export class AuthService {
 
     
     registerUser(user: User): Observable<any> {
-      return this.http.post<User>(this.myAppUrl + this.myApiUrl + 'register', user);
+      return this.http.post<User>(this.myAppUrl + this.myApiUrl + 'register', user
+        ).pipe(
+          tap(() => this.isLogged.set(false))
+        );
     }
 
 
@@ -39,13 +42,29 @@ export class AuthService {
     changePassword(user: User): Observable<any> {
       return this.http.post(this.myAppUrl + this.myApiUrl + 'change-password', user);
     }
+
+    
     logoutUser(): Observable<any> {
       return this.http.get(
-        `${this.myAppUrl}${this.myApiUrl}logout`
+        `${this.myAppUrl}${this.myApiUrl}logout`,
+        { withCredentials: true }  // Importante para enviar/recibir cookies
       ).pipe(
-        tap(() => this.isLogged.set(false))
+        tap(() => {
+          this.isLogged.set(false);
+          // Limpiar cualquier estado local si es necesario
+          localStorage.removeItem('user');
+          sessionStorage.clear();
+        })
       );
     }
+
+    // logoutUser(): Observable<any> {
+    //   return this.http.get(
+    //     `${this.myAppUrl}${this.myApiUrl}logout`
+    //   ).pipe(
+    //     tap(() => this.isLogged.set(false))
+    //   );
+    // }
 
     loginUser(loginRequest: LoginRequest): Observable<any> {
       return this.http.post(
