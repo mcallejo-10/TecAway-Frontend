@@ -74,21 +74,26 @@ errorMessage: string = '';
 
   ngOnInit(): void {
     this.getUser();
+
   }
 
   getUser(): void {
     this.userService.getUser()
       .subscribe({
-        next: (response: User) => {
+        next: (response: any) => {
+          console.log('--response:', response);
+          console.log('NAME :', response.data.name);
+          
+          
                    
           this.registerForm.patchValue({
-            name: response.name,
-            email: response.email,
-            title: response.title,
-            description: response.description,
-            town: response.town,
-            can_move: response.can_move,
-            photo: response.photo
+            name: response.data.name,
+            email: response.data.email,
+            title: response.data.title,
+            description: response.data.description,
+            town: response.data.town,
+            can_move: response.data.can_move,
+            photo: response.data.photo
           });
         },
         error: (error: string) => {

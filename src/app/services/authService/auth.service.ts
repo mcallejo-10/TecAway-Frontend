@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../interfaces/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginRequest } from '../../interfaces/login';
 
 @Injectable({
@@ -17,6 +17,14 @@ export class AuthService {
   constructor(private http: HttpClient) {  
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/auth/';}
+
+    private httpOptions = {
+      withCredentials: true,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    
 
     
     registerUser(user: User): Observable<any> {
@@ -42,7 +50,8 @@ export class AuthService {
     loginUser(loginRequest: LoginRequest): Observable<any> {
       return this.http.post(
         `${this.myAppUrl}${this.myApiUrl}login`, 
-        loginRequest
+        loginRequest,
+        this.httpOptions
       ).pipe(
         tap(response => {
           console.log('Login exitoso');
