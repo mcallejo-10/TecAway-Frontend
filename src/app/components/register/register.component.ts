@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  currentStep: number = 1; // Para controlar el paso actual
+  currentStep: number = 1;
   errorMessage: string = '';
   charCountTitle: number = 0;
   charCountDescription: number = 0;
@@ -32,59 +32,57 @@ export class RegisterComponent {
     ]),
     password: new FormControl('',
       [Validators.required,
-        Validators.minLength(4),
-        Validators.pattern('^(?=.*[A-Z]).{4,}$')
+      Validators.minLength(4),
+      Validators.pattern('^(?=.*[A-Z]).{4,}$')
       ]),
-      confirmPassword: new FormControl('',
-        [Validators.required,
-          Validators.minLength(4),
-          Validators.pattern('^(?=.*[A-Z]).{4,}$'),
-        ]),    
-      title: new FormControl('', [
-        Validators.required,
-        Validators.minLength(20),
-        Validators.maxLength(130)
+    confirmPassword: new FormControl('',
+      [Validators.required,
+      Validators.minLength(4),
+      Validators.pattern('^(?=.*[A-Z]).{4,}$'),
       ]),
-      description: new FormControl('', [
-        Validators.required,
-        Validators.minLength(30),
-        Validators.maxLength(2400)
-      ]),
-      town: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2)
-      ]),
-      can_move: new FormControl(false),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(20),
+      Validators.maxLength(130)
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(30),
+      Validators.maxLength(2400)
+    ]),
+    town: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2)
+    ]),
+    can_move: new FormControl(false),
 
-      photo: new FormControl(''),
+    photo: new FormControl(''),
 
-    }, 
+  },
     {
-    validators: MustMatch('password', 'confirmPassword')
+      validators: MustMatch('password', 'confirmPassword')
     });
 
   private authService = inject(AuthService)
   private userService = inject(UserService)
-  
+
   constructor(
     private router: Router,
     private toastr: ToastrService,
 
-  ) {}
-   // Método para validar el primer paso
-   validateFirstStep(): boolean {
+  ) { }
+  validateFirstStep(): boolean {
     const controls = ['name', 'email', 'password', 'confirmPassword'];
-    return controls.every(control => 
-      this.registerForm.get(control)?.valid && 
+    return controls.every(control =>
+      this.registerForm.get(control)?.valid &&
       this.registerForm.get(control)?.touched
     );
   }
 
-  // Método para avanzar al siguiente paso
   nextStep(): void {
     if (this.validateFirstStep()) {
       const email = this.registerForm.get('email')?.value?.toLowerCase() || '';
-      
+
       this.userService.checkEmailExists({ email })
         .subscribe({
           next: (exists: boolean) => {
@@ -103,7 +101,6 @@ export class RegisterComponent {
     }
   }
 
-  // Método para volver al paso anterior
   previousStep(): void {
     this.currentStep = 1;
     this.errorMessage = '';
@@ -122,10 +119,10 @@ export class RegisterComponent {
         town: (this.registerForm.get('town')?.value || '').trim(),
         can_move: this.registerForm.get('can_move')?.value || false,
         photo: this.registerForm.get('photo')?.value || '',
-        roles: ['user']  //
+        roles: ['user']
       };
       console.log('userData:', userData);
-      
+
 
       this.authService.registerUser(userData)
         .subscribe({
@@ -144,10 +141,10 @@ export class RegisterComponent {
   }
   updateCharCount(name: string): void {
     const titleControl = this.registerForm.get(name);
-    
+
     if (titleControl) {
       name === 'title' ? this.charCountTitle = titleControl.value?.length || 0 :
-      this.charCountDescription = titleControl.value?.length || 0;
+        this.charCountDescription = titleControl.value?.length || 0;
     }
   }
 

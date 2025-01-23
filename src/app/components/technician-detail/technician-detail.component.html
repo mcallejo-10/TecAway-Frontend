@@ -1,60 +1,48 @@
-<!-- Componente para mostrar la información de un técnico -->
-  <div class="container mt-5">
-    <!-- Card para mostrar la información del técnico -->
-    <div class="card" style="max-width: 900px;">
-      <div class="row no-gutters">
-        <!-- Foto del técnico -->
-        <div class="col-md-4 d-flex justify-content-center">
-          <img src="{{ technician.photo }}" class="card-img" alt="Foto del técnico"
-            onerror="this.src='/assets/img/user_image.png'">
-        </div>
+<div class="container mt-5">
+  <div class="card" style="max-width: 900px;">
+    <div class="row no-gutters">
+      <div class="col-md-4 d-flex justify-content-center">
+        <img src="{{ technician.photo }}" class="card-img" alt="Foto del técnico"
+          onerror="this.src='/assets/img/user_image.png'">
+      </div>
 
-        <!-- Información del técnico -->
-        <div class="col-md-8">
-          <div class="card-body">
-            <!-- Nombre -->
-            <h3 class="card-title">{{ technician.name }}</h3>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h3 class="card-title">{{ technician.name }}</h3>
 
-            <!-- Título -->
-            <h5 class="card-subtitle mb-2 text-muted">{{ technician.title }}</h5>
+          <h5 class="card-subtitle mb-2 text-muted">{{ technician.title }}</h5>
 
-            <!-- Localidad y si puede desplazarse -->
-            <div class="card-text">
-              <div>
+          <div class="card-text">
+            <div>
 
 
-                <p><i class="bi bi-geo-alt"></i> {{ technician.town }} </p>
-              </div>
-              <strong>Puede desplazarse largas distancias:</strong>
-
-              @if(technician.can_move == 1) {
-              <span class="badge  bg-success">Si</span>}
-              @if(technician.can_move == 0) {
-              <span class="badge  bg-danger">No</span>
-              }
-
+              <p><i class="bi bi-geo-alt"></i> {{ technician.town }} </p>
             </div>
+            <strong>Puede desplazarse largas distancias:</strong>
 
-            <!-- Secciones y conocimientos -->
-            @for(section of technician.sections; track section.section_name){
-            <h6 class="mt-3"><strong>{{ section.section_name }}</strong></h6>
-            @for(knowledge of section.section_knowledges; track knowledge.knowledge_name){
-            <span class="badge bg-light">{{ knowledge.knowledge_name }}</span>
-
-            }
+            @if(technician.can_move == 1) {
+            <span class="badge  bg-success">Si</span>}
+            @if(technician.can_move == 0) {
+            <span class="badge  bg-danger">No</span>
             }
 
-
-            <!-- Descripción -->
-            <p class="card-text mt-3"> {{ technician.description }}</p>
-
-            <!-- Botón para contactar -->
-            <a href="#" class="btn btn-primary">Contactar</a>
           </div>
+
+          @for(section of technician.sections; track section.section_name){
+          <h6 class="mt-3"><strong>{{ section.section_name }}</strong></h6>
+          @for(knowledge of section.section_knowledges; track knowledge.knowledge_name){
+          <span class="badge bg-light">{{ knowledge.knowledge_name }}</span>
+
+          }
+          }
+
+
+          <p class="card-text mt-3"> {{ technician.description }}</p>
+
+          <a href="#" class="btn btn-primary">Contactar</a>
         </div>
       </div>
     </div>
-    <!-- Boton para volver al listado principal --> 
-    <a routerLink="/buscar" class="btn btn-outline-secondary mt-3">Volver</a>  
   </div>
-
+  <a routerLink="/buscar" class="btn btn-outline-secondary mt-3">Volver</a>
+</div>

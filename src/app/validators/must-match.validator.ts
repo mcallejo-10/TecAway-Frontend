@@ -6,20 +6,19 @@ export function MustMatch(controlName: string, matchingControlName: string) {
     const matchingControl = formGroup.get(matchingControlName);
 
     if (!control || !matchingControl) {
-      return null; // Si no se encuentran los controles, no validar.
+      return null;
     }
 
     if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
-      return null; // Si otro validador ya marcó errores, no sobrescribir.
+      return null;
     }
 
-    // Configura el error si los valores no coinciden.
     if (control.value !== matchingControl.value) {
       matchingControl.setErrors({ mustMatch: true });
     } else {
-      matchingControl.setErrors(null); // Limpia el error si coinciden.
+      matchingControl.setErrors(null);
     }
 
-    return null; // Siempre retorna `null` para indicar que no hay errores a nivel de grupo.
+    return null;
   };
 }

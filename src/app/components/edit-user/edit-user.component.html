@@ -54,7 +54,6 @@
                     }
                 </div>
 
-
                 <div class="mb-3">
                     <span class="d-flex">
                         <label htmlFor="inputDescription" class="form-label">Descripción</label>
@@ -74,9 +73,8 @@
                         @if(registerForm.get('description')?.errors?.['minlength']) { Mínimo 50 caracteres }
                         @if(registerForm.get('description')?.errors?.['maxlength']) { Máximo 500 caracteres }
                     </div>
-                }
+                    }
                 </div>
-
 
                 <div class="mb-3">
                     <span class="d-flex">
@@ -102,17 +100,15 @@
 
                     <button type="submit" class="btn btn-primary" (click)="updateUser()">Aceptar</button>
                 </div>
-                <button></button>
-    
-        </form>
+            </form>
 
-        @if(errorMessage){
-        <span class="d-flex justify-content-center mt-3">
-            <div class="text-danger">
-                {{ errorMessage }}
-            </div>
-        </span>
-        }
+            @if(errorMessage){
+            <span class="d-flex justify-content-center mt-3">
+                <div class="text-danger">
+                    {{ errorMessage }}
+                </div>
+            </span>
+            }
+        </div>
     </div>
-</div>
 </div>

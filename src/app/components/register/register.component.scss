@@ -1,6 +1,6 @@
 .register-title {
   color: black;
-  margin-bottom: 1rem; /* Espaciado con el párrafo */
+  margin-bottom: 1rem;
 }
 
 h2 {
@@ -8,8 +8,7 @@ h2 {
   text-align: center;  
 }
 
-.steps {
-  
+.steps {  
   text-align: center;
   justify-content: center;
 }
@@ -18,13 +17,13 @@ h2 {
   font-size: 1.5rem;
   font-weight: bold;
   color: black;
-  margin-bottom: 0.5rem; /* Espaciado con el párrafo */
+  margin-bottom: 0.5rem;
 }
 
 .step-description {
   font-size: 1.2rem;
-  color: #555; /* Gris neutro */
-  margin: 0; /* Elimina márgenes adicionales */
+  color: #555;
+  margin: 0; 
 }
 
 li {
@@ -34,7 +33,6 @@ li {
 .form-label {
   font-size: 1rem;
   color: rgb(75, 75, 75);
-  font-weight: bold;
-  
+  font-weight: bold;  
 }
   

@@ -10,22 +10,20 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user-info.component.scss'
 })
 export class UserInfoComponent {
- technician: any = {};
+  technician: any = {};
   userService = inject(UserService);
   id: number = 0;
 
   constructor(private aRouter: ActivatedRoute) {
   }
-  
+
   ngOnInit() {
-    this.userService.getUser().subscribe((res: any) => {      
+    this.userService.getUser().subscribe((res: any) => {
       this.id = res.data.id_user;
       console.log('ID USER', res.data);
       this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
         this.technician = res.data;
       });
-      
     });
-    
-}
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './edit-user.component.scss'
 })
 export class EditUserComponent {
-errorMessage: string = '';
+  errorMessage: string = '';
   charCountTitle: number = 0;
   charCountDescription: number = 0;
 
@@ -31,36 +31,32 @@ errorMessage: string = '';
       Validators.email
     ]),
     title: new FormControl('', [
-        Validators.required,
-        Validators.minLength(20),
-        Validators.maxLength(130)
-      ]),
-      description: new FormControl('', [
-        Validators.required,
-        Validators.minLength(30),
-        Validators.maxLength(2400)
-      ]),
-      town: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2)
-      ]),
-      can_move: new FormControl(false),
-
-      // photo: new FormControl(''),
-
-    }, 
+      Validators.required,
+      Validators.minLength(20),
+      Validators.maxLength(130)
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(30),
+      Validators.maxLength(2400)
+    ]),
+    town: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2)
+    ]),
+    can_move: new FormControl(false),
+  },
     {
-    validators: MustMatch('password', 'confirmPassword')
+      validators: MustMatch('password', 'confirmPassword')
     });
 
   private authService = inject(AuthService)
   private userService = inject(UserService)
-  
+
   constructor(
     private router: Router,
-    private toastr: ToastrService,
-
-  ) {}
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.getUser();
@@ -73,9 +69,7 @@ errorMessage: string = '';
         next: (response: any) => {
           console.log('--response:', response);
           console.log('NAME :', response.data.name);
-          
-          
-                   
+
           this.registerForm.patchValue({
             name: response.data.name,
             email: response.data.email,
@@ -96,10 +90,9 @@ errorMessage: string = '';
 
   updateUser(): void {
     console.log('this.registerForm:', this.registerForm);
-    
+
     if (this.registerForm.valid) {
       this.errorMessage = '';
-
       const userData: User = {
         name: (this.registerForm.get('name')?.value || '').trim(),
         email: (this.registerForm.get('email')?.value || '').toLowerCase().trim(),
@@ -111,12 +104,9 @@ errorMessage: string = '';
         photo: this.registerForm.get('photo')?.value || '',
         roles: ['user']  //
       };
-      console.log('userData:', userData);
-      
-
       this.userService.updateUser(userData)
         .subscribe({
-          next: (response: User) => {
+          next: () => {
             this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
 
             this.router.navigate(['/agregar-conocimientos']);
@@ -132,10 +122,9 @@ errorMessage: string = '';
 
   updateCharCount(name: string): void {
     const titleControl = this.registerForm.get(name);
-    
     if (titleControl) {
       name === 'title' ? this.charCountTitle = titleControl.value?.length || 0 :
-      this.charCountDescription = titleControl.value?.length || 0;
+        this.charCountDescription = titleControl.value?.length || 0;
     }
   }
 }

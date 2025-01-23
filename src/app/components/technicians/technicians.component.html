@@ -4,14 +4,10 @@
   <div class="row">
 
     <div class="col-12 col-md-3" id="filter">
-
-
       <div class="filter-overlay" (click)="closeFilter()"></div>
-
       <div class="card filter-card ">
         <button class="filter-close" (click)="closeFilter()">×</button>
         <p class="filter-title">Puesto</p>
-
         <div id="filter-list">
           <form [formGroup]="filterForm">
             @for (section of sectionList; track section.id_section) {
@@ -50,8 +46,6 @@
       </div>
     </div>
 
-    <!-- Listado de técnicos -->
-
     <div class="col-12 col-md-9">
       @if(filterService.techniciansFiltred().length == 0 ) {
       <div class="card-link">
@@ -67,7 +61,7 @@
       <div class="col-12 card-link">
         <a [routerLink]="['/user', technician.id_user]">
           <div class="card card-technician">
-            <div class="row g-0"> <!-- Añadido g-0 para eliminar gutters -->
+            <div class="row g-0">
               <div class="col-2">
                 <div class="card-img">
                   <img src="{{technician.photo}}" class="img" onerror="this.src='/assets/img/user_image.png'"
@@ -85,9 +79,8 @@
           </div>
         </a>
       </div>
-    }
-    
+      }
+
+    </div>
   </div>
 </div>
-</div>
-

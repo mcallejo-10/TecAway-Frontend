@@ -11,17 +11,17 @@ export class UserService {
   private myAppUrl: string;
   private myApiUrl: string;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/user/';
   }
 
-  checkEmailExists(data: {email: string}): Observable<boolean> {
-     return this.http.post<boolean>(this.myAppUrl + this.myApiUrl + 'check-email',data);
+  checkEmailExists(data: { email: string }): Observable<boolean> {
+    return this.http.post<boolean>(this.myAppUrl + this.myApiUrl + 'check-email', data);
   }
-  
+
   getUserList(): Observable<User[]> {
-    return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');  
+    return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');
   }
 
   getUser(): Observable<User> {
@@ -33,7 +33,7 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<any> {
-    return this.http.patch(this.myAppUrl + this.myApiUrl, user);    
+    return this.http.patch(this.myAppUrl + this.myApiUrl, user);
   }
 
   uploadPhoto(photo: File): Observable<any> {

@@ -13,31 +13,31 @@ export class KnowledgeService {
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/knowledge/';
-   }
+  }
 
-    knowledgeList = signal<Knowledge[]>([]);
+  knowledgeList = signal<Knowledge[]>([]);
 
-   getKnowledgeList(): Observable<Knowledge[]> {
-     return this.http.get<Knowledge[]>(this.myAppUrl + this.myApiUrl);
-   }
+  getKnowledgeList(): Observable<Knowledge[]> {
+    return this.http.get<Knowledge[]>(this.myAppUrl + this.myApiUrl);
+  }
 
-   getKnowledgeById(id: number): Observable<Knowledge> {
-     return this.http.get<Knowledge>(this.myAppUrl + this.myApiUrl + id);
-   }
+  getKnowledgeById(id: number): Observable<Knowledge> {
+    return this.http.get<Knowledge>(this.myAppUrl + this.myApiUrl + id);
+  }
 
-    saveKnowledge(knowledge: Knowledge): Observable<any> {
-      return this.http.post<Knowledge>(this.myAppUrl + this.myApiUrl, knowledge);
-    }
+  saveKnowledge(knowledge: Knowledge): Observable<any> {
+    return this.http.post<Knowledge>(this.myAppUrl + this.myApiUrl, knowledge);
+  }
 
-    updateKnowledge(knowledge: Knowledge): Observable<any> {
-      return this.http.put<Knowledge>(this.myAppUrl + this.myApiUrl + knowledge.id_knowledge, knowledge);
-    }
+  updateKnowledge(knowledge: Knowledge): Observable<any> {
+    return this.http.put<Knowledge>(this.myAppUrl + this.myApiUrl + knowledge.id_knowledge, knowledge);
+  }
 
-    deleteKnowledge(id: number): Observable<any> {
-      return this.http.delete(this.myAppUrl + this.myApiUrl + id);
-    }
+  deleteKnowledge(id: number): Observable<any> {
+    return this.http.delete(this.myAppUrl + this.myApiUrl + id);
+  }
 
-    setKnowledgeList(knowledgeList: Knowledge[]): void {
-      this.knowledgeList.set(knowledgeList);
-    }
+  setKnowledgeList(knowledgeList: Knowledge[]): void {
+    this.knowledgeList.set(knowledgeList);
+  }
 }

@@ -32,9 +32,9 @@ export class FilterService {
 
 
   filteredBySections(): number[] {
-    const sections = this.selectedSections(); 
-    const knowledges = this.selectedKnowledges(); 
-   
+    const sections = this.selectedSections();
+    const knowledges = this.selectedKnowledges();
+
     const sectionIds = sections.map(section => section.id_section);
 
     const filteredKnowledgeIds = knowledges
@@ -51,7 +51,6 @@ export class FilterService {
       userToKnowledgeMap.get(user_id)?.push(knowledge_id);
     });
 
-    // Filtrar usuarios que tengan conocimientos correspondientes a **todas las secciones seleccionadas**
     const filteredUserIds = Array.from(userToKnowledgeMap.entries())
       .filter(([userId, knowledgeIds]) =>
         sectionIds.every(sectionId =>
@@ -68,12 +67,12 @@ export class FilterService {
   }
 
   filterByKnowledges(userIds: number[]): number[] {
-    const selectedKnowledgeIds = this.selectedKnowledges().map(knowledge => knowledge.id_knowledge); 
-    const selectedSectionIds = this.selectedSections().map(section => section.id_section); 
-  
+    const selectedKnowledgeIds = this.selectedKnowledges().map(knowledge => knowledge.id_knowledge);
+    const selectedSectionIds = this.selectedSections().map(section => section.id_section);
+
     return userIds.filter(userId => {
       const userKnowledge = this.userKnowledgeList().filter(uk => uk.user_id === userId);
-  
+
       if (selectedKnowledgeIds.length === 0) {
         return userKnowledge.some(uk => {
           const knowledgeSectionId = this.allKnowledges.find(k => k.id_knowledge === uk.knowledge_id)?.section_id;
@@ -85,12 +84,12 @@ export class FilterService {
       }
     });
   }
-  
+
   filterTechnicians(): number[] {
-    const sectionFilteredIds = this.filteredBySections();     
-    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds); 
+    const sectionFilteredIds = this.filteredBySections();
+    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds);
     return knowledgeFilteredIds
-    
+
   }
 
   setTechnicianList(techniciansList: User[]) {
@@ -99,7 +98,7 @@ export class FilterService {
 
   setSelectedSections(sections: Section[]) {
     this.selectedSections.set(sections);
-    }
+  }
 
   setSelectedKnowledges(knowledges: Knowledge[]) {
     this.selectedKnowledges.set(knowledges);

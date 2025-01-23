@@ -2,7 +2,6 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img src="assets/img/Logo_TecAway_yellow.svg" alt="logo" width="70" height="70" class="logo">
-
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
             aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,14 +23,13 @@
                     <a class="nav-link" href="/tu-cuenta">Tu cuenta</a>
 
                 </li>
-                
-                @if(authService.isLogged()===true){
-                    <span>
-                        <li class="nav-item">
-                            <a class="nav-link" (click)="logout()" >Cerrar sesión</a>
-                        </li>
-                    </span>
 
+                @if(authService.isLogged()===true){
+                <span>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="logout()">Cerrar sesión</a>
+                    </li>
+                </span>
                 }
             </ul>
 

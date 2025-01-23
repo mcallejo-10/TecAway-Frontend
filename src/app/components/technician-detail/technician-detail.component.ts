@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { User } from '../../interfaces/user';
 import { UserService } from '../../services/userService/user.service';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -25,9 +24,5 @@ export class TechnicianDetailComponent {
     this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
       this.technician = res.data;
     });
-
   };
-
-
-
 }

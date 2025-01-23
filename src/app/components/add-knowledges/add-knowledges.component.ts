@@ -5,12 +5,11 @@ import { KnowledgeService } from '../../services/knowledgeService/knowledge.serv
 import { Knowledge } from '../../interfaces/knowledge';
 import { Section } from '../../interfaces/section';
 import { UserKnowledgeService } from '../../services/userKowledgeService/user-knowledge.service';
-import { User } from '../../interfaces/user';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
-
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -30,18 +29,16 @@ export class AddKnowledgesComponent {
   selectedKnowledges: number[] = [1];  // Mantenemos el 1 inicial
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
-
   userKnowledgeIds: number[] = [];
+  
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.userKnowledgeService.getUserKnowledgesById().subscribe((res: any) => {
-      // Creamos un nuevo array con los valores del backend
       const backendKnowledges = res.data.map((userKnowledge: UserKnowledge) => userKnowledge.knowledge_id);
       this.userKnowledgeIds = [...backendKnowledges];
       
-      // Aseguramos que el 1 esté incluido en selectedKnowledges
       this.selectedKnowledges = [...new Set([1, ...backendKnowledges])];
       
       this.sectionService.getSectionList().subscribe((res: any) => {
@@ -61,9 +58,7 @@ export class AddKnowledgesComponent {
   }
 
   toggleKnowledge(knowledgeId: number): void {
-    // No permitimos deseleccionar el ID 1
     if (knowledgeId === 1) return;
-
     const index = this.selectedKnowledges.indexOf(knowledgeId);
     if (index === -1) {
       this.selectedKnowledges = [...this.selectedKnowledges, knowledgeId];
@@ -71,6 +66,7 @@ export class AddKnowledgesComponent {
       this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
     }
   }
+
   saveKnowledges(): void {
      if (!this.selectedKnowledges.includes(1)) {
       this.selectedKnowledges.unshift(1); 
@@ -101,6 +97,7 @@ export class AddKnowledgesComponent {
   
     if (operations.length === 0) {
       this.toastr.info('No hay cambios en los conocimientos');
+      this.router.navigate(["/tu-cuenta"]);
       return;
     }
       
@@ -113,6 +110,7 @@ export class AddKnowledgesComponent {
         this.toastr.error('Error al actualizar los conocimientos', 'Error');
       }
     });
+    this.router.navigate(["/tu-cuenta"]);
   }  
   
 }

@@ -1,5 +1,4 @@
 import { Component, HostListener, inject } from '@angular/core';
-
 import { UserService } from '../../services/userService/user.service';
 import { User } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
@@ -33,7 +32,6 @@ export class TechniciansComponent {
   knowledgeList: Knowledge[] = [];
   selectedSections: Section[] = [];
   selectedKnowledges: Knowledge[] = [];
-
   setFilteredIds: number[] = this.filterService.filterTechnicians();
   filteredTechnicians: User[] = [];
 
@@ -73,11 +71,8 @@ export class TechniciansComponent {
 
       this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
       this.filterService.setSelectedKnowledges(this.knowledgeList);
-      });
-    
+      });    
   }
-
-
 
   isCheckedSection(id: number): boolean {
     return this.selectedSections.some((section) => section.id_section === id);
@@ -135,8 +130,6 @@ export class TechniciansComponent {
     this.filterTechniciansById();
   }
 
-
-
   getSelectedKnowledges(id_knowledge: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
@@ -166,7 +159,6 @@ export class TechniciansComponent {
     }
     this.filterTechniciansById()
   }
-
 
   filterTechniciansById(): void {
     const filtredIds = this.filterService.filterTechnicians();
@@ -200,7 +192,6 @@ export class TechniciansComponent {
     }
   }
 
-  // Opcional: cierra el filtro cuando cambia el tamaño de la ventana a desktop
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (window.innerWidth >= 768) {

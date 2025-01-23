@@ -17,7 +17,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Container styles
 .container {
   display: flex;
   flex-direction: column;
@@ -33,7 +32,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Filter styles
 #filter {
   position: relative;
 
@@ -72,7 +70,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Filter overlay
 .filter-overlay {
   display: none;
 
@@ -87,7 +84,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Filter button
 .click-btn {
   display: none;
 
@@ -107,7 +103,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Filter close button
 .filter-close {
   display: none;
 
@@ -125,7 +120,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Card technician styles
 .card-technician {
   border: 1px solid $card-border-color;
   margin: 1rem 0.5rem 1rem 1rem;
@@ -234,7 +228,6 @@ $tablet-breakpoint: 576px;
   }
 }
 
-// Card link styles
 .card-link {
   width: 100%;
 

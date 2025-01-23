@@ -3,11 +3,10 @@
     margin: 20px;
     width: 200px;
     height: 200px;
-   @media (max-width: 768px) {
+
+    @media (max-width: 768px) {
         max-width: 300px;
-        display:flex;
-        align-content: center;;
-       
+        display: flex;
+        align-content: center;
     }
-    
-   }
+}

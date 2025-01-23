@@ -15,14 +15,11 @@ $eerie-black: #202020ff;
 $jet: #333533ff;
 
 
-// Lux 5.3.3
-// Bootswatch
 
 $theme: "lux" !default;
 
-//
 // Color system
-//
+
 
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
@@ -295,7 +292,6 @@ h6 {
 }
 
 // Tables
-
 th {
   font-size: 1rem;
   text-transform: uppercase;
@@ -431,10 +427,6 @@ th {
 }
 
 
-// // button style
-
-
-
 .btn-style506 {
   $btn-color: $eerie-black ;
   position: relative;
@@ -472,13 +464,11 @@ th {
   margin-bottom: 1rem;
 }
 
-
 .border-warning{
   text-decoration: none;
  
   border: 3px solid #ffc107;
 }
-
 
 //bootstrap icons
 
@@ -559,8 +549,6 @@ th {
     }
   }
 }
-
-
 
 .btn-style906 {
   $btn-color: $timberwolf;

@@ -1,7 +1,7 @@
 import { Component, effect, inject } from "@angular/core";
 import { AuthService } from "../../services/authService/auth.service";
 import { User } from "../../interfaces/user";
-import { Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { LoginRequest } from "../../interfaces/login";
 import {
   FormControl,
@@ -31,7 +31,7 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
-  
+
   constructor(
     private router: Router
   ) {
@@ -42,26 +42,26 @@ export class LoginComponent {
   }
 
   checkEmailLogin() {
-    this.authService.isLoggedIn();    
+    this.authService.isLoggedIn();
     if (this.isLogged == false) {
-            
+
       const email = this.loginForm.get('email')?.value?.toLowerCase() || '';
 
-      this.userService.checkEmailExists({email}).subscribe({
+      this.userService.checkEmailExists({ email }).subscribe({
         next: (exist) => {
-          
-          
-          if (exist == true) {          
+
+
+          if (exist == true) {
             this.userExist = true;
             this.isValidEmail = true;
             console.log("Usuario existe");
-            
+
           } else if (exist == false) {
             this.userExist = false;
             this.isValidEmail = true;
             this.router.navigate(["/registro"]);
             console.log("Usuario no existe");
-            
+
           }
         },
         error: (error: string) => {
@@ -80,7 +80,7 @@ export class LoginComponent {
       email: this.loginForm.get("email")?.value?.toLowerCase() || "",
       password: this.loginForm.get("password")?.value || "",
     };
-    
+
     this.authService.loginUser(credentials).subscribe({
       next: (response) => {
         this.router.navigate(["/editar-cuenta"]);

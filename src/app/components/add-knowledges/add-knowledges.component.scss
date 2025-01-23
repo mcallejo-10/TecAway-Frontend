@@ -1,22 +1,17 @@
-.knowledge-btn {
-    
+.knowledge-btn {    
     color: var(--bs-dark);
-    padding: 0.5rem;
-   
+    padding: 0.5rem;   
   }
-
 
 .knowledge-btn.active {
     background-color: var(--bs-warning);
     color: var(--bs-dark);
     border-color: var(--jounquil);
-
   }
   
   .knowledge-btn:hover {
     background-color: var(--bs-warning);
-    color: grey;
-        
+    color: grey;   
   }
   
   .gap-2 {

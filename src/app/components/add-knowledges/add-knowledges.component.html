@@ -2,13 +2,11 @@
 <div class="container mt-4">
     <h2 class="mb-4">Añade tus conocimientos</h2>
     
-    <!-- Iteramos sobre todas las secciones -->
     <div class="row">
       @for (section of sectionList; track section.id_section) {
         <div class="col-12 mb-4">
           <h4 class="border-bottom pb-2">{{ section.section }}</h4>
           
-          <!-- Contenedor para los botones de conocimientos -->
           <div class="d-flex flex-wrap gap-2 mt-3">
             @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
               @if(knowledge.section_id == section.id_section ) {
@@ -26,7 +24,6 @@
       }
     </div>
   
-    <!-- Botón para guardar los cambios -->
     <div class="row mt-4">
       <div class="col-12">
         <button type="button" class="btn btn-primary" (click)="saveKnowledges()">
