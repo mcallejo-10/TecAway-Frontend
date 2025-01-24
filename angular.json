@@ -20,6 +20,7 @@
             "outputPath": "dist/tec-away",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "baseHref": "/TecAway-Frontend/",
             "polyfills": [
               "zone.js"
             ],
