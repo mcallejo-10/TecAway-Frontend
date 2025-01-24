@@ -1,4 +1,4 @@
 export const environment = {
-    production: false,
+    production: true,
     endpoint: 'https://tecaway-backend-production-7c12.up.railway.app'
 };
