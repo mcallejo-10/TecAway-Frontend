@@ -20,7 +20,6 @@
             "outputPath": "dist/tec-away",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/tec-away/",
             "polyfills": [
               "zone.js"
             ],
@@ -119,5 +118,5 @@
       }
     }
   }
-  
+
 }
