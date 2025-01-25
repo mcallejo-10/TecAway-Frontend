@@ -83,7 +83,7 @@ export class LoginComponent {
 
     this.authService.loginUser(credentials).subscribe({
       next: (response) => {
-        this.router.navigate(["/editar-cuenta"]);
+        this.router.navigate(["/tu-cuenta"]);
       },
       error: (error) => {
         this.errorMessage = error.error?.message || "Error en login";

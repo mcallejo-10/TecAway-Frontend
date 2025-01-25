@@ -1,0 +1,50 @@
+$jonquil: #ffc107;;
+$eerie-black: #202020ff;
+$jet: #333533ff;
+
+.click-btn {
+    display: flex;
+    width: fit-content;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem;
+    line-height: 35px;
+    border: 1px solid;
+    
+    text-align: center;
+    font-size: 16px;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.35s;
+    box-sizing: border-box;
+  }
+
+.btn-style506 {
+    $btn-color: black ;
+    position: relative;
+    border-color: $jet;
+    color: black;
+    overflow: hidden;
+    &::before {
+      width: 20%;
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      background-color: $jonquil;
+      transform: rotateZ(-45deg) translate(-50%, -50%);
+      transition: all 0.3s;
+      content: "";
+      z-index: -1;
+    }
+    &:hover {
+      color: $jet;
+      font-weight: bold;
+      &::before {
+        width: 100%;
+        top: 0;
+        transform: none;
+      }
+    }
+  }
