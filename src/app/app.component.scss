@@ -1,0 +1,9 @@
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; // Hace que ocupe al menos toda la altura de la pantalla
+  }
+  
+  .main-content {
+    flex: 1; // Hace que el contenido principal ocupe todo el espacio disponible
+  }
