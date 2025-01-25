@@ -6,6 +6,7 @@
     padding-top: 0;
     height: 12vh;
     align-items: center;
+    min-height: fit-content;
 
     @media screen and (min-width: 992px) {
         padding-top: 1.7rem;
@@ -18,3 +19,4 @@
     padding: 1rem;   
     z-index: 1000;    
 }
+
