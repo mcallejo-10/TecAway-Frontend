@@ -3,11 +3,11 @@ export interface User {
     email: string;
     password: string;
     name: string;
-    title: string;
-    description: string;
-    town: string;
-    can_move: boolean;
-    photo: string;
+    title?: string;
+    description?: string;
+    town?: string;
+    can_move?: boolean;
+    photo?: string;
     roles: string[];
     createdAt?: Date;
     updatedAt?: Date;

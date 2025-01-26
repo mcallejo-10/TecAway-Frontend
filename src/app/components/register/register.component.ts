@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
@@ -7,6 +7,7 @@ import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { validateFile } from '../../validators/validate-file.validator';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent {
   errorMessage: string = '';
   charCountTitle: number = 0;
   charCountDescription: number = 0;
+  selectedFile: File | null = null;
 
   registerForm = new FormGroup({
     name: new FormControl('', [
@@ -55,10 +57,8 @@ export class RegisterComponent {
       Validators.minLength(2)
     ]),
     can_move: new FormControl(false),
-
-    photo: new FormControl(''),
-
-  },
+    photo: new FormControl('', validateFile),
+    },
     {
       validators: MustMatch('password', 'confirmPassword')
     });
@@ -69,8 +69,10 @@ export class RegisterComponent {
   constructor(
     private router: Router,
     private toastr: ToastrService,
-
+    private cdr: ChangeDetectorRef,
   ) { }
+
+
   validateFirstStep(): boolean {
     const controls = ['name', 'email', 'password', 'confirmPassword'];
     return controls.every(control =>
@@ -92,10 +94,13 @@ export class RegisterComponent {
               this.currentStep = 2;
               this.errorMessage = '';
             }
+            this.cdr.detectChanges(); 
           },
           error: (error) => {
             console.error('Error al verificar email:', error);
             this.errorMessage = 'Error al verificar email';
+            this.cdr.detectChanges(); 
+
           }
         });
     }
@@ -105,7 +110,17 @@ export class RegisterComponent {
     this.currentStep = 1;
     this.errorMessage = '';
   }
+  
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file; 
+      this.registerForm.get('photo')?.updateValueAndValidity();
+    }
+  }
+
+  // Modifica el método onRegister para usar selectedFile
   onRegister(): void {
     if (this.registerForm.valid) {
       this.errorMessage = '';
@@ -118,18 +133,17 @@ export class RegisterComponent {
         description: (this.registerForm.get('description')?.value || '').trim(),
         town: (this.registerForm.get('town')?.value || '').trim(),
         can_move: this.registerForm.get('can_move')?.value || false,
-        photo: this.registerForm.get('photo')?.value || '',
         roles: ['user']
       };
-      console.log('userData:', userData);
-
 
       this.authService.registerUser(userData)
         .subscribe({
           next: (response: User) => {
-            this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
-
-            this.router.navigate(['/agregar-conocimientos']);
+            if (this.selectedFile) { // Usamos selectedFile en lugar de registerForm.get('photo')
+              this.uploadUserPhoto(this.selectedFile);
+            } else {
+              this.finishRegistration(userData.name);
+            }
           },
           error: (error: string) => {
             console.error('Error al registrar:', error);
@@ -138,6 +152,26 @@ export class RegisterComponent {
           }
         });
     }
+  }
+
+  
+  private uploadUserPhoto(photo: File): void {
+    this.userService.uploadPhoto(photo).subscribe({
+      next: () => {
+        this.finishRegistration(this.registerForm.get('name')?.value!);
+      },
+      error: (error) => {
+        console.error('Error al subir la foto:', error);
+        this.toastr.warning('El usuario se creó pero hubo un error al subir la foto', 'Advertencia');
+        this.router.navigate(['/agregar-conocimientos']);
+      }
+    });
+  }
+
+  // Método para finalizar el registro
+  private finishRegistration(userName: string): void {
+    this.toastr.success(`${userName} Registro exitoso`, 'El usuario se ha registrado con éxito!');
+    this.router.navigate(['/agregar-conocimientos']);
   }
   updateCharCount(name: string): void {
     const titleControl = this.registerForm.get(name);

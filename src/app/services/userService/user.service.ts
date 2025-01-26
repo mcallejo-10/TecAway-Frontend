@@ -39,7 +39,9 @@ export class UserService {
   uploadPhoto(photo: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', photo);
-    return this.http.post<any>(this.myAppUrl + this.myApiUrl + 'upload-photo', formData);
+    return this.http.post<any>(this.myAppUrl + this.myApiUrl + 'upload-photo', formData, {
+      withCredentials: true
+    });
   }
 
   getUserInfo(id: number): Observable<User> {
