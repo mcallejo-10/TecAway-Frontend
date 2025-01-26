@@ -1,24 +1,24 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/authService/auth.service';
-import { User } from '../../interfaces/user';
-import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { validateFile } from '../../validators/validate-file.validator';
 
 
 @Component({
   selector: 'app-edit-user',
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './edit-user.component.html',
-  styleUrl: './edit-user.component.scss'
+  styleUrl: './edit-user.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditUserComponent {
+export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
   errorMessage: string = '';
   charCountTitle: number = 0;
   charCountDescription: number = 0;
+  selectedFile: File | null = null;
 
   registerForm = new FormGroup({
     name: new FormControl('', [
@@ -44,80 +44,49 @@ export class EditUserComponent {
       Validators.required,
       Validators.minLength(2)
     ]),
+    photo: new FormControl('', validateFile),
     can_move: new FormControl(false),
-  },
-    {
-      validators: MustMatch('password', 'confirmPassword')
-    });
+  });
 
-  private authService = inject(AuthService)
+
   private userService = inject(UserService)
 
   constructor(
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.getUser();
-
   }
 
   getUser(): void {
     this.userService.getUser()
       .subscribe({
         next: (response: any) => {
-          console.log('--response:', response);
-          console.log('NAME :', response.data.name);
+          Promise.resolve().then(() => {  // Envolver en una Promise
+            this.registerForm.patchValue({
+              name: response.data.name,
+              email: response.data.email,
+              title: response.data.title,
+              description: response.data.description,
+              town: response.data.town,
+              can_move: response.data.can_move,
+            });
 
-          this.registerForm.patchValue({
-            name: response.data.name,
-            email: response.data.email,
-            title: response.data.title,
-            description: response.data.description,
-            town: response.data.town,
-            can_move: response.data.can_move,
-            // photo: response.data.photo
+            this.updateCharCount('title');
+            this.updateCharCount('description');
+            this.cdr.markForCheck();  // Usar markForCheck en lugar de detectChanges
           });
         },
         error: (error: string) => {
           console.error('Error al obtener usuario:', error);
           this.errorMessage = 'Error al obtener usuario';
           this.toastr.error('Error al obtener usuario', 'Error');
+          this.cdr.markForCheck();
         }
       });
-  }
-
-  updateUser(): void {
-    console.log('this.registerForm:', this.registerForm);
-
-    if (this.registerForm.valid) {
-      this.errorMessage = '';
-      const userData: User = {
-        name: (this.registerForm.get('name')?.value || '').trim(),
-        email: (this.registerForm.get('email')?.value || '').toLowerCase().trim(),
-        password: this.registerForm.get('password')?.value || '',
-        title: (this.registerForm.get('title')?.value || '').trim(),
-        description: (this.registerForm.get('description')?.value || '').trim(),
-        town: (this.registerForm.get('town')?.value || '').trim(),
-        can_move: this.registerForm.get('can_move')?.value || false,
-        photo: this.registerForm.get('photo')?.value || '',
-        roles: ['user']  //
-      };
-      this.userService.updateUser(userData)
-        .subscribe({
-          next: () => {
-            this.toastr.success(`${userData.name} Registro exitoso`, 'El usuario se ha registrado con éxito!');
-
-            this.router.navigate(['/agregar-conocimientos']);
-          },
-          error: (error: string) => {
-            console.error('Error al registrar:', error);
-            this.errorMessage = 'Error al registrar usuario';
-            this.toastr.error('Error al registrar usuario', 'Error');
-          }
-        });
-    }
   }
 
   updateCharCount(name: string): void {
@@ -127,4 +96,62 @@ export class EditUserComponent {
         this.charCountDescription = titleControl.value?.length || 0;
     }
   }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.registerForm.get('photo')?.updateValueAndValidity();
+    }
+  }
+
+  updateUser(): void {
+    if (this.registerForm.valid) {
+      this.errorMessage = '';
+      const userData: any = {
+        name: (this.registerForm.get('name')?.value || '').trim(),
+        email: (this.registerForm.get('email')?.value || '').toLowerCase().trim(),
+        title: (this.registerForm.get('title')?.value || '').trim(),
+        description: (this.registerForm.get('description')?.value || '').trim(),
+        town: (this.registerForm.get('town')?.value || '').trim(),
+        can_move: this.registerForm.get('can_move')?.value || false,
+        roles: ['user']
+      };
+
+      this.userService.updateUser(userData)
+        .subscribe({
+          next: () => {
+            if (this.selectedFile) {
+              this.uploadUserPhoto(this.selectedFile);
+            } else {
+              this.finishUpdate(userData.name);
+            }
+          },
+          error: (error: string) => {
+            console.error('Error al actualizar:', error);
+            this.errorMessage = 'Error al actualizar usuario';
+            this.toastr.error('Error al actualizar usuario', 'Error');
+          }
+        });
+    }
+  }
+
+  private uploadUserPhoto(photo: File): void {
+    this.userService.uploadPhoto(photo).subscribe({
+      next: () => {
+        this.finishUpdate(this.registerForm.get('inputName')?.value!);
+      },
+      error: (error) => {
+        console.error('Error al subir la foto:', error);
+        this.toastr.warning('Los datos se actualizaron pero hubo un error al subir la foto', 'Advertencia');
+      }
+    });
+  }
+
+  private finishUpdate(userName: string): void {
+    this.toastr.success(`${userName} Actualización exitosa`, 'El usuario se ha actualizado con éxito!');
+    this.router.navigate(['/tu-cuenta']);
+  }
+
+ 
 }

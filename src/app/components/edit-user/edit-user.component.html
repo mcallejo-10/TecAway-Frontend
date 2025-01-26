@@ -95,6 +95,29 @@
                         formControlName="can_move">
                     <label class="form-check-label" for="flexSwitchCheckDefault">¿Puedes desplazarte?</label>
                 </div>
+                <div class="mb-3">
+                    <span class="d-flex">
+                        <label htmlFor="inputPhoto" class="form-label">Foto de perfil (opcional)</label>
+                    </span>
+                    <input type="file" 
+                           class="form-control" 
+                           id="inputPhoto" 
+                           formControlName="photo"
+                           accept="image/*"
+                           (change)="onFileSelected($event)"
+                           placeholder="Tamaño máximo: 2MB. Formatos permitidos: jpg, png, gif"
+                           [ngClass]="{'is-invalid': registerForm.get('photo')?.errors?.['maxSize'] || registerForm.get('photo')?.errors?.['invalidFormat']}" />
+                    @if(registerForm.get('photo')?.errors?.['maxSize']) {
+                    <div class="text-danger">
+                        El archivo excede el tamaño máximo permitido (2MB)
+                    </div>
+                    }
+                    @if(registerForm.get('photo')?.errors?.['invalidFormat']) {
+                    <div class="text-danger">
+                        Solo se permiten archivos de imagen
+                    </div>
+                    }
+                </div>
 
                 <div class="d-flex justify-content-between mb-3">
 
