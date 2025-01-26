@@ -75,6 +75,36 @@ h1 {
       max-height: 300px;
       margin-bottom: 2rem;
     }
-  }
-  
+  }  
 }
+
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 1.5rem 0;  // Reduced padding for mobile
+
+    .hero-image {
+      justify-self: center;
+      max-height: 250px;  // Slightly smaller image for mobile
+      margin-bottom: 1.5rem;  // Reduced margin
+    }
+  }
+
+  .mb-5 {
+    margin-bottom: 1.3rem !important;  // Override Bootstrap's mb-5 for mobile
+  }
+
+  .mt-4 {
+    margin-top: 1rem !important;  // Reduce top margin on mobile
+  }
+
+  .community-message {
+    padding: 1rem 0;  // Reduced padding
+  }
+
+  h1.mb-5 {
+    margin-bottom: 1rem !important;  // Reduce heading bottom margin
+  }
+}
+
+
