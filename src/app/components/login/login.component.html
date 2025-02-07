@@ -2,11 +2,11 @@
     <div class="card">
         <form [formGroup]="loginForm">
             <div class="form-group p-3">
-                <div class="form-label">Introduce tu email</div>
+                <p class="card-title text-center">Para acceder a tu cuenta introduce tu email</p>
                 <span class="d-flex">
-                    <label for="email">Email:</label>
+                    <label class="form-label mb-0" for="email">Email:</label>
                 </span>
-                <div class="mt-3 ">
+                <div >
 
                     <input id="email" formControlName="email" class="form-control">
                     @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched){
@@ -24,13 +24,13 @@
 
             @if(isValidEmail == false) {
             <div class="p-3 d-flex justify-content-center">
-                <button type="submit" (click)="checkEmailLogin()" class="btn btn-star">Continue</button>
+                <button type="submit" (click)="checkEmailLogin()" class="click-btn btn-style506">Continue</button>
             </div>
             }
             @if(userExist == true && isValidEmail == true) {
             <div class="form-group p-3">
                 <span class="d-flex">
-                    <label for="password">Password:</label>
+                    <label class="form-label mb-0"  for="password">Password:</label>
                 </span>
                 <input id="password" formControlName="password" type="password" class="form-control" autofocus>
                 @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
@@ -46,7 +46,7 @@
             </div>
 
             <div class="p-3 d-flex justify-content-center">
-                <button type="submit" (click)="userLogin()" class="btn btn-star">Login</button>
+                <button type="submit" (click)="userLogin()" class="click-btn btn-style506">Login</button>
             </div>
             }
 
