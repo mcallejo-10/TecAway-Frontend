@@ -1,5 +1,5 @@
 <div class="container container-fluid mt-2">
-  <h1>Listado de profesionales</h1>
+  
   <button class="btn click-btn btn-style506 mt-2" (click)="toggleFilter()">Filtrar</button>
   <div class="row">
 
@@ -48,10 +48,20 @@
 
     <div class="col-12 col-md-9">
       @if(filterService.techniciansFiltred().length == 0 ) {
-      <div class="card-link">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title">No hay técnicos disponibles</div>
+      <div class="col-12 card-link">
+        <div class="card card-technician">
+          <div class="row g-0">
+            <div class="col-2">
+              <div class="card-img">
+                <img src="/assets/img/user_image.png" class="img" alt="No technicians available">
+              </div>
+            </div>
+            <div class="col-10">
+              <div class="card-body">
+                <p class="card-title">No hay técnicos disponibles</p>
+                <p class="card-subtitle mb-2">Por favor, ajuste los filtros de búsqueda</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

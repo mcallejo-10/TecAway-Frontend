@@ -438,6 +438,7 @@ th {
   $btn-color: $surface ;
   position: relative;
   border-color: $jet;
+  border-radius: 2px;
   color: white;
   overflow: hidden;
   &::before {
@@ -613,6 +614,7 @@ body {
   background-color: $surface;
   color: $white;
   border: 1px solid rgba($jonquil, 0.1);
+  border-radius: 3px;
 }
 
 .form-control {
