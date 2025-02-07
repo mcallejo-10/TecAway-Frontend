@@ -1,12 +1,15 @@
 .knowledge-btn {    
-    color: var(--bs-dark);
+    color: var(--bs-light);
     padding: 0.5rem;   
+    font-weight: lighter;
   }
 
 .knowledge-btn.active {
     background-color: var(--bs-warning);
     color: var(--bs-dark);
     border-color: var(--jounquil);
+    font-weight: 800;
+
   }
   
   .knowledge-btn:hover {
@@ -68,4 +71,9 @@ $jet: #333533ff;
         transform: none;
       }
     }
+  }
+
+  h4, h2{
+  color: whitesmoke;
+  margin-top: 1rem;
   }
