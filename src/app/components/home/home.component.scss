@@ -1,6 +1,6 @@
 
 $primary-yellow: #ffc107;
-$hover-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+$hover-shadow: 1rem 1rem 3rem rgba(255, 255, 255, 0.867);
 
 .hero-section {
   padding: 3rem 0;
@@ -22,7 +22,7 @@ h1 {
 .community-message {
   padding: 2rem 0;
   font-family: "Nunito Sans", sans-serif;
-  color: #6c757dde; // Esto es lo que hace text-muted
+  color: #e0e2e4de; // Esto es lo que hace text-muted
   font-style: italic; // Esto es lo que hace fst-italic
   text-align: center; // Esto es lo que hace text-center
   font-size: 1.2rem;
@@ -32,7 +32,7 @@ h1 {
 
 .steps-section {
   padding: 3rem 0;
-  background-color: rgba($primary-yellow, 0.2);
+  background-color: #ffe8a4;
 
   .step-circle {
     width: 60px;
@@ -50,7 +50,7 @@ h1 {
   transition: box-shadow 0.3s ease-in-out;
 
   &:hover {
-    box-shadow: $hover-shadow !important;
+    box-shadow: 0 1rem 3rem rgba(73, 73, 73, 0.923) !important;
   }
 }
 

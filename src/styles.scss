@@ -6,13 +6,18 @@
 
 
 $background: #000000;
+// Eliminar las variables duplicadas y mantener solo las del tema oscuro
 $button-width: 120px;
 $border-radius: 0px;
-$timberwolf: #d6d6d6ff;
-$aureolin: #ffee32ff;
-$jonquil: #ffc107;;
-$eerie-black: #202020ff;
-$jet: #333533ff;
+
+// Dark theme colors
+$background: #121212;    // Main background
+$surface: #353535;      // Secondary background
+$timberwolf: #2C2C2C;   // Dark gray
+$aureolin: #FFD700;     // Bright yellow
+$jonquil: #FFC107;      // Amber yellow
+$eerie-black: #1A1A1A;  // Very dark gray
+$jet: #2D2D2D;         // Dark charcoal
 
 
 
@@ -424,14 +429,16 @@ th {
   text-decoration: none;
   transition: all 0.35s;
   box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.253);
+
 }
 
 
 .btn-style506 {
-  $btn-color: $eerie-black ;
+  $btn-color: $surface ;
   position: relative;
   border-color: $jet;
-  color: $eerie-black;
+  color: white;
   overflow: hidden;
   &::before {
     width: 20%;
@@ -592,3 +599,43 @@ th {
   }
 }
 
+body {
+  background-color: $background;
+  color: $white;
+}
+
+.navbar {
+  background-color: $surface;
+  border-bottom: 1px solid rgba($jonquil, 0.1);
+}
+
+.card {
+  background-color: $surface;
+  color: $white;
+  border: 1px solid rgba($jonquil, 0.1);
+}
+
+.form-control {
+  background-color: $timberwolf;
+  color: $white;
+  border: 1px solid rgba($jonquil, 0.2);
+  
+  &:focus {
+    background-color: lighten($timberwolf, 5%);
+    color: $white;
+    border-color: $jonquil;
+  }
+
+  &::placeholder {
+    color: rgba($white, 0.5);
+  }
+}
+
+// Ajustar los enlaces
+a {
+  color: $jonquil;
+  
+  &:hover {
+    color: $aureolin;
+  }
+}

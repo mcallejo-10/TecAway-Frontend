@@ -3,6 +3,7 @@ $primary-color: #ffc107;
 $card-border-color: $primary-color;
 $mobile-breakpoint: 768px;
 $tablet-breakpoint: 576px;
+$surface: #353535;
 
 // Mixins
 @mixin mobile {
@@ -40,7 +41,7 @@ $tablet-breakpoint: 576px;
     border: 1px solid $card-border-color;
     padding: 0.5rem;
     margin: 1rem;
-    background-color: rgba(255, 255, 255, 0.499);
+    background-color: $surface;
 
     @include mobile {
       &:not(.d-none) {
