@@ -1,11 +1,11 @@
 .register-title {
-  color: black;
   margin-bottom: 1rem;
-}
-
-h2 {
-  justify-content: center;
-  text-align: center;  
+  text-shadow: 1px 1px 2px rgba(232, 232, 232, 0.338) ;
+  h4 {
+    color: whitesmoke;
+    justify-content: center;
+    text-align: center;  
+  }
 }
 
 .steps {  
@@ -16,7 +16,7 @@ h2 {
 .step-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: black;
+  color: #FFD700;
   margin-bottom: 0.5rem;
 }
 
@@ -28,11 +28,14 @@ h2 {
 
 li {
   font-size: 1.1rem;
+  color: whitesmoke;
 }
 
 .form-label {
   font-size: 1rem;
-  color: rgb(75, 75, 75);
-  font-weight: bold;  
+  color: #FFD700;
+  font-weight:lighter;
+  font-style: oblique;  
 }
   
+
