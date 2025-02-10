@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
+import { signal } from '@angular/core';
 
 
 describe('TechniciansComponent', () => {
@@ -16,19 +17,45 @@ describe('TechniciansComponent', () => {
 
   const mockTechnicians = [
     {
-      id_user: 1,
-      name: 'John Doe',
-      title: 'Senior Developer',
-      description: 'Full stack developer with 5 years of experience',
-      photo: 'path/to/photo.jpg'
+      email: "ismael.academy@gmail.com",
+      password: "$2b$10$tXrqo7VdSPCLAsIUhrVsYejYeMt9FLo9J4OchgCKwuDvpeDK6Xf1q", //pass: ismael123
+      name: "Ismael",
+      title: "Ha de ser un titulo entre 30 y 130 caracteresm",
+      description: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc  lorem i skjd",
+      town: "Barcelona",
+      can_move: true,
+      roles: ["user"],
     },
     {
-      id_user: 2,
-      name: 'Jane Smith',
-      title: 'UX Designer',
-      description: 'Creative designer specialized in user experience',
-      photo: 'path/to/photo2.jpg'
-    }
+      email: "laura@hotmail.com",
+      password: "$2b$10$tXrqo7VdSPCLAsIUhrVsYejYeMt9FLo9J4OchgCKwuDvpeDK6Xf1q", //pass: ismael123
+      name: "Laura",
+      title: "Ha de ser un titulo entre 30 y 130 caracteresm",
+      description: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc  lorem i skjd Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc  lorem i skjd",
+      town: "Barcelona",
+      can_move: false,
+      roles: ["user"],
+    },
+    {
+      email: "maria@hotmail.com",
+      password: "$2b$10$tXrqo7VdSPCLAsIUhrVsYejYeMt9FLo9J4OchgCKwuDvpeDK6Xf1q", //pass: ismael123
+      name: "Maria",
+      title: "Ha de ser un titulo entre 30 y 130 caracteresm",
+      description: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc  lorem i skjd",
+      town: "Barcelona",
+      can_move: true,
+      roles: ["mod", "admin"],
+    },
+    {
+      email: "mod@hotmail.com",
+      password: "$2b$10$tXrqo7VdSPCLAsIUhrVsYejYeMt9FLo9J4OchgCKwuDvpeDK6Xf1q", //pass: ismael123
+      name: "Moderador",
+      title: "Ha de ser un titulo entre 30 y 130 caracteresm",
+      description: "Aquí un texto de ejemplo: lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc  lorem i skjd",
+      town: "Madrid",
+      can_move: true,
+      roles: ["admin"],
+    },
   ];
 
   const mockSections = [
@@ -44,29 +71,32 @@ describe('TechniciansComponent', () => {
   ];
 
   beforeEach(async () => {
-    filterService = jasmine.createSpyObj('FilterService', ['techniciansFiltred'], {
-      techniciansFiltred: new BehaviorSubject(mockTechnicians)
+    filterService = jasmine.createSpyObj('FilterService', ['getTechnicians'], {
+      techniciansFiltred: signal(mockTechnicians)
     });
 
     await TestBed.configureTestingModule({
+      declarations: [], 
       imports: [
-        ActivatedRoute,
-        TechniciansComponent,
-        HttpClient,
         ReactiveFormsModule,
-        [ToastrModule.forRoot()]
+        ToastrModule.forRoot(),
+        TechniciansComponent
       ],
       providers: [
-        { provide: FilterService, useValue: filterService }
+        { provide: FilterService, useValue: filterService },
+        { provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', ['get', 'post']) },
+        { provide: ActivatedRoute, useValue: { /* mock route data if needed */ } }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TechniciansComponent);
     component = fixture.componentInstance;
+    
+    // Mover estas líneas dentro del beforeEach
     component.sectionList = mockSections;
     component.knowledgeList = mockKnowledges;
     fixture.detectChanges();
-  });
+  }); // Solo un cierre de llave aquí
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -78,7 +108,7 @@ describe('TechniciansComponent', () => {
   });
 
   it('should display "No hay técnicos disponibles" when list is empty', () => {
-    filterService.techniciansFiltred.next([]);
+    filterService.techniciansFiltred.set([]); // Cambiado next() por set()
     fixture.detectChanges();
     
     const emptyMessage = fixture.nativeElement.querySelector('.card-title');

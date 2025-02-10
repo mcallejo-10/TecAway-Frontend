@@ -35,13 +35,14 @@ h1 {
 
 .steps-section {
   padding: 3rem 0;
-  background-color: #ffe8a4;
+  background-color: #fbbc00;
 
   .step-circle {
     width: 60px;
     height: 60px;
     background-color: $primary-yellow;
     border-radius: 50%;
+    border-color: 2px solid white;
     display: flex;
     align-items: center;
     justify-content: center;
