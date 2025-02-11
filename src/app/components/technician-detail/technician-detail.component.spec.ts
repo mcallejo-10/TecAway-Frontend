@@ -29,9 +29,30 @@ describe('TechnicianDetailComponent', () => {
     // Configurar ambos mocks
     userServiceMock.getUserById.and.returnValue(of(mockUser));
     userServiceMock.getUserInfo.and.returnValue(of({
+      code: 1,
+      message: "Secciones y conocimientos del usuario obtenidos correctamente",
       data: {
-        userKnowledges: [],
-        userProjects: []
+        id: 1,
+        name: "Test User Name",
+        email: "test.user@test.com",
+        title: "This is a valid title that meets the minimum length requirement of 20 chars",
+        description: "This is a valid description that meets the minimum length requirement of 30 characters",
+        town: "Barcelona",
+        can_move: 1,
+        photo: "https://example.com/photo.jpg",
+        sections: [
+          {
+            section_name: "Conocimientos generales",
+            section_knowledges: [
+              {
+                knowledge_name: "Conocimientos generales"
+              },
+              {
+                knowledge_name: "Trabajo en altura"
+              }
+            ]
+          }
+        ]
       }
     }));
 
