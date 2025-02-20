@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { KnowledgeService } from './knowledge.service';
 
@@ -6,7 +7,12 @@ describe('KnowledgeService', () => {
   let service: KnowledgeService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        KnowledgeService
+      ]
+    });
     service = TestBed.inject(KnowledgeService);
   });
 

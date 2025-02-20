@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { EditUserComponent } from './edit-user.component';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { UserResponse } from '../../interfaces/user';
 
 describe('EditUserComponent', () => {
   let component: EditUserComponent;
@@ -14,17 +15,25 @@ describe('EditUserComponent', () => {
   beforeEach(async () => {
     userServiceMock = jasmine.createSpyObj('UserService', ['getUser', 'updateUser', 'uploadPhoto']);
     
-    // Configurar retornos mock
+    // Updated mock to match UserResponse type
     userServiceMock.getUser.and.returnValue(of({
-        email: 'test.user@test.com',  // Email válido
-        password: 'TestPassword123!',
-        name: 'Test User Name',  // Al menos 2 caracteres, solo letras
+      code: 200,
+      message: "User Detail",
+      data: {
+        id_user: 1,
+        email: 'test.user@test.com',
+        password: 'TestPass123',
+        name: 'Test User',
         roles: ['user'],
-        title: 'This is a valid title that meets the minimum length requirement of 20 chars',  // Entre 20-130 caracteres
-        description: 'This is a valid description that meets the minimum length requirement of 30 characters and provides meaningful information about the user',  // Entre 30-2400 caracteres
-        town: 'Barcelona',  // Al menos 2 caracteres
-        can_move: false
-    }));
+        title: 'Test Title',
+        description: 'Test Description',
+        town: 'Test Town',
+        can_move: false,
+        photo: 'https://example.com/photo.jpg',
+        created_at: '2025-01-20T23:30:02.000Z',
+        updated_at: '2025-01-31T16:02:51.000Z'
+      }
+    } as UserResponse));
 
     await TestBed.configureTestingModule({
       imports: [

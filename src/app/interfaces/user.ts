@@ -12,3 +12,9 @@ export interface User {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface UserResponse {
+    code: number;
+    message: string;
+    data: User;
+  }

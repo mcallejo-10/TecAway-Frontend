@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { User } from '../../interfaces/user';
+import { User, UserResponse } from '../../interfaces/user';
 import { UserInfoResponse } from '../../interfaces/user-info';
 
 @Injectable({
@@ -25,8 +25,8 @@ export class UserService {
     return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');
   }
 
-  getUser(): Observable<User> {
-    return this.http.get<User>(this.myAppUrl + this.myApiUrl);
+  getUser(): Observable<UserResponse> {
+    return this.http.get<UserResponse>(this.myAppUrl + this.myApiUrl);
   }
 
   getUserById(id: number): Observable<User> {

@@ -19,8 +19,8 @@ export class UserKnowledgeService {
       return this.http.get<UserKnowledge[]>(this.myAppUrl + this.myApiUrl);
     }
 
-    getUserKnowledgesById(): Observable<UserKnowledge> {
-      return this.http.get<UserKnowledge>(this.myAppUrl + this.myApiUrl + 'user'); 
+    getUserKnowledgesById(): Observable<UserKnowledge[]> {
+      return this.http.get<UserKnowledge[]>(this.myAppUrl + this.myApiUrl + 'user'); 
     }
 
     addKnowledge(knowledge_id: any): Observable<any> {

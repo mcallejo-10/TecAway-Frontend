@@ -39,7 +39,7 @@
 
           <p class="card-text mt-3"> {{ technician.description }}</p>
 
-          <a href="#" class="click-btn btn-style506">Contactar</a>
+          <a [routerLink]="['/registro', technician.id_user]" class="click-btn btn-style506">Contactar</a>
         </div>
       </div>
     </div>
