@@ -19,7 +19,7 @@ export class HeaderComponent {
     
   ngOnInit() {
 
-    this.authService.checkAuthStatus().subscribe();
+   // this.authService.checkAuthStatus().subscribe();
   };
 
   

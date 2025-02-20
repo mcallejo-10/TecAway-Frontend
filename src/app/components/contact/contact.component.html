@@ -1,6 +1,6 @@
 <div class="container container-fluid">
-    <div class="row d-flex justify-content-center">
-        <h4>Envia un mensaje a {{technician.name}}:</h4>
+    <div class="row d-flex justify-content-center mt-5">
+        <h4>Contacta con {{technician.name}}:</h4>
     </div>
 
     <div class="row justify-content-center">
@@ -64,16 +64,10 @@
                         @if(registerForm.get('message')?.errors?.['minlength']) { Mínimo 10 caracteres }
                     </div>
                     }
-
                 </div>
-
-
                 <div class="d-flex justify-content-end mb-3">
                     <div class="click-btn btn-style506" (click)="sendEmail()">Enviar</div>
                 </div>
-
-
-
             </form>
 
             @if(errorMessage){
@@ -83,7 +77,8 @@
                 </div>
             </span>
             }
-
         </div>
     </div>
+  <a routerLink="/buscar" class="click-btn btn-style506 ">Volver</a>
+
 </div>

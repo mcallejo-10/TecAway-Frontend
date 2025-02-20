@@ -4,7 +4,7 @@ import { User } from '../../interfaces/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginRequest } from '../../interfaces/login';
-import { EmailData } from '../../interfaces/emailData';
+
 
 @Injectable({
   providedIn: 'root'
@@ -94,9 +94,6 @@ export class AuthService {
     return this.isLogged();
   }
 
-  sendEmail(emailData: EmailData): Observable<any> {    
-    return this.http.post(this.myAppUrl + this.myApiUrl + 'forgot-password', emailData);
-  }
 }
 
 

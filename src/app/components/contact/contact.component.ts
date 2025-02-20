@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, } from '@angular/router';
-import { AuthService } from '../../services/authService/auth.service';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { EmailData } from '../../interfaces/emailData';
+import { MessageData } from '../../interfaces/MessageData';
 import { User } from '../../interfaces/user';
+import { ContactService } from '../../services/contactService/contact.service';
 
 @Component({
   selector: 'app-contact',
@@ -43,7 +43,7 @@ export class ContactComponent {
     ])
   });
 
-  private authService = inject(AuthService)
+  private contactService = inject(ContactService)
   private userService = inject(UserService)
 
   constructor(
@@ -71,14 +71,14 @@ export class ContactComponent {
   sendEmail(): void {
     if (this.registerForm.valid) {
       this.errorMessage = '';
-      const emailData: EmailData = {
-        name: this.registerForm.get('name')?.value || '',
-        email: this.registerForm.get('email')?.value || '',
-        phone: this.registerForm.get('phone')?.value || '',
+      const emailData: MessageData = {
+        senderName: this.registerForm.get('name')?.value || '',
+        senderEmail: this.registerForm.get('email')?.value || '',
         message: this.registerForm.get('message')?.value || '',
+        userId: this.id
       };
 
-      this.authService.sendEmail(emailData).subscribe({
+      this.contactService.sendMessage(emailData).subscribe({
         next: () => {
           this.toastr.success('Email enviado correctamente');
           this.registerForm.reset();
