@@ -89,9 +89,13 @@ export class AuthService {
     );
   }
 
-
   isLoggedIn() {
     return this.isLogged();
+  }
+
+  sendEmail(email: string, message: string, name: string): Observable<any> {
+    const emailData = { email, message, name };
+    return this.http.post(this.myAppUrl + this.myApiUrl + 'forgot-password', emailData);
   }
 }
 
