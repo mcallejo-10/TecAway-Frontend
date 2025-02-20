@@ -1,53 +1,79 @@
 <div class="container container-fluid">
     <div class="row d-flex justify-content-center">
-        <h2>Contacto</h2>
-
+        <h4>Envia un mensaje a {{technician.name}}:</h4>
     </div>
+
     <div class="row justify-content-center">
-        
-
+        <div class="card col-sm-10 col-md-10 col-lg-8 mt-2 mb-4">
             <form [formGroup]="registerForm">
-                @if (currentStep === 1) {
-                <div class="step-1">
-                    <div class="mb-3">
-                        <span class="d-flex mb-1">
-                            <label htmlFor="inputname" class="form-label">Nombre</label>
-                        </span>
-                        <input type="text" class="form-control" id="inputname" formControlName="name"
-                            [ngClass]="{'is-invalid': registerForm.get('name')?.invalid && registerForm.get('name')?.touched}" />
-                        @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
-                        <div class="text-danger">
-                            @if(registerForm.get('name')?.errors?.['required']) { Nombre obligatorio }
-                            @if(registerForm.get('name')?.errors?.['minlength']) { Mínimo 2 caracteres }
-                            @if(registerForm.get('name')?.errors?.['pattern']) { No se permiten números ni caracteres
-                            especiales }
-                        </div>
-                        }
+                <div class="mb-3 mt-4">
+                    <span class="d-flex mb-1 ">
+                        <label htmlFor="inputname" class="form-label">Nombre</label>
+                    </span>
+                    <input type="text" class="form-control" id="inputname" formControlName="name"
+                        [ngClass]="{'is-invalid': registerForm.get('name')?.invalid && registerForm.get('name')?.touched}" />
+                    @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+                    <div class="text-danger">
+                        @if(registerForm.get('name')?.errors?.['required']) { Nombre obligatorio }
+                        @if(registerForm.get('name')?.errors?.['minlength']) { Mínimo 2 caracteres }
+                        @if(registerForm.get('name')?.errors?.['pattern']) { No se permiten números ni caracteres
+                        especiales }
                     </div>
-
-                    <div class="mb-3">
-                        <span class="d-flex">
-                            <label htmlFor="inputEmail" class="form-label">Email</label>
-                        </span>
-                        <input type="email" class="form-control" id="inputEmail" formControlName="email"
-                            [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}" />
-                        @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-                        <div class="text-danger">
-                            @if(registerForm.get('email')?.errors?.['required']) { Email obligatorio }
-                            @if(registerForm.get('email')?.errors?.['email']) { El email debe tener un formato correcto
-                            }
-                        </div>
-                        }
-                    </div>
-
-                    
-                    <div class="d-flex justify-content-end mb-3">
-                        <div class="click-btn btn-style506" (click)="">Enviar</div>
-                    </div>
+                    }
                 </div>
-                }
 
-                
+                <div class="mb-3">
+                    <span class="d-flex">
+                        <label htmlFor="inputphone" class="form-label">Teléfono</label>
+                    </span>
+                    <input type="text" class="form-control" id="inputphone" formControlName="phone"
+                        [ngClass]="{'is-invalid': registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched}" />
+                    @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
+                    <div class="text-danger">
+                        @if(registerForm.get('phone')?.errors?.['required']) { Teléfono obligatorio }
+                        @if(registerForm.get('phone')?.errors?.['pattern']) { El teléfono debe tener un formato
+                        correcto }
+                    </div>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <span class="d-flex">
+                        <label htmlFor="inputEmail" class="form-label">Email</label>
+                    </span>
+                    <input type="email" class="form-control" id="inputEmail" formControlName="email"
+                        [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}" />
+                    @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                    <div class="text-danger">
+                        @if(registerForm.get('email')?.errors?.['required']) { Email obligatorio }
+                        @if(registerForm.get('email')?.errors?.['email']) { El email debe tener un formato correcto
+                        }
+                    </div>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <span class="d-flex">
+                        <label htmlFor="inputMessage" class="form-label">Mensaje</label>
+                    </span>
+                    <textarea class="form-control" id="inputMessage" rows="3" formControlName="message"
+                        [ngClass]="{'is-invalid': registerForm.get('message')?.invalid && registerForm.get('message')?.touched}"></textarea>
+                    @if(registerForm.get('message')?.invalid && registerForm.get('message')?.touched) {
+                    <div class="text-danger">
+                        @if(registerForm.get('message')?.errors?.['required']) { Mensaje obligatorio }
+                        @if(registerForm.get('message')?.errors?.['minlength']) { Mínimo 10 caracteres }
+                    </div>
+                    }
+
+                </div>
+
+
+                <div class="d-flex justify-content-end mb-3">
+                    <div class="click-btn btn-style506" (click)="sendEmail()">Enviar</div>
+                </div>
+
+
+
             </form>
 
             @if(errorMessage){
@@ -57,7 +83,7 @@
                 </div>
             </span>
             }
+
         </div>
     </div>
-
 </div>

@@ -2,21 +2,24 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, } from '@angular/router';
+import { ActivatedRoute, Router, } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
-import { User } from '../../interfaces/user';
-import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { validateFile } from '../../validators/validate-file.validator';
+import { EmailData } from '../../interfaces/emailData';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-contact',
-  imports: [],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
+  errorMessage: string = '';
+  id: number;
+  technician: User = {} as User;
+
 
   registerForm = new FormGroup({
     name: new FormControl('', [
@@ -27,6 +30,12 @@ export class ContactComponent {
     email: new FormControl('', [
       Validators.required,
       Validators.email
+    ]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]*$'),
+      Validators.minLength(9),
+      Validators.maxLength(9)
     ]),
     message: new FormControl('', [
       Validators.required,
@@ -41,23 +50,45 @@ export class ContactComponent {
     private router: Router,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
-  ) { }
+    private aRouter: ActivatedRoute) {
+    this.id = Number(aRouter.snapshot.paramMap.get('id'));
+  }
 
+  ngOnInit(): void {
+    
+    this.userService.getUserById(this.id).subscribe({
+      next: (response: any) => {
+        this.technician = response.data;
+      },
+      error: (error: string) => {
+        console.error('Error al obtener usuario:', error);
+        this.errorMessage = 'Error al obtener usuario';        
+      }
+    });
+    
+  }
 
   sendEmail(): void {
     if (this.registerForm.valid) {
-      const email = this.registerForm.get('email')?.value;
-      const message = this.registerForm.get('message')?.value;
-      const name = this.registerForm.get('name')?.value;
-      this.authService.sendEmail(email!, message!, name!).subscribe(
-        () => {
+      this.errorMessage = '';
+      const emailData: EmailData = {
+        name: this.registerForm.get('name')?.value || '',
+        email: this.registerForm.get('email')?.value || '',
+        phone: this.registerForm.get('phone')?.value || '',
+        message: this.registerForm.get('message')?.value || '',
+      };
+
+      this.authService.sendEmail(emailData).subscribe({
+        next: () => {
           this.toastr.success('Email enviado correctamente');
           this.registerForm.reset();
         },
-        (error) => {
+        error: (error) => {
+          console.error('Error al enviar el email', error);
           this.toastr.error('Error al enviar el email');
+          this.errorMessage = 'Error al enviar el email';
         }
-      );
+      });
     }
   }
 }
