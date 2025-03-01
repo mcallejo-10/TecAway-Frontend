@@ -17,19 +17,8 @@ export class ContactService {
     this.myApiUrl = '/api/contact/';
   }
 
-  private httpOptions = {
-    withCredentials: true,
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };  
-
-
   sendMessage(messageData: MessageData) {
     return this.http.post<any>(
-      this.myAppUrl + this.myApiUrl + 'send-message', 
-      messageData,
-      this.httpOptions
-    );
+      this.myAppUrl + this.myApiUrl + 'send-message', messageData);
   }
 }

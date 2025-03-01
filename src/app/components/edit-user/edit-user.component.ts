@@ -150,7 +150,7 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
 
   private finishUpdate(userName: string): void {
     this.toastr.success(`${userName} Actualización exitosa`, 'El usuario se ha actualizado con éxito!');
-    this.router.navigate(['/tu-cuenta']);
+    this.router.navigate(['/agregar-conocimientos']);
   }
 
  

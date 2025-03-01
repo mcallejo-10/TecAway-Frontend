@@ -24,21 +24,6 @@
 
                 <div class="mb-3">
                     <span class="d-flex">
-                        <label htmlFor="inputphone" class="form-label">Teléfono</label>
-                    </span>
-                    <input type="text" class="form-control" id="inputphone" formControlName="phone"
-                        [ngClass]="{'is-invalid': registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched}" />
-                    @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
-                    <div class="text-danger">
-                        @if(registerForm.get('phone')?.errors?.['required']) { Teléfono obligatorio }
-                        @if(registerForm.get('phone')?.errors?.['pattern']) { El teléfono debe tener un formato
-                        correcto }
-                    </div>
-                    }
-                </div>
-
-                <div class="mb-3">
-                    <span class="d-flex">
                         <label htmlFor="inputEmail" class="form-label">Email</label>
                     </span>
                     <input type="email" class="form-control" id="inputEmail" formControlName="email"

@@ -5,7 +5,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ActivatedRoute, Router, } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { MessageData } from '../../interfaces/MessageData';
+import { MessageData } from '../../interfaces/messageData';
 import { User } from '../../interfaces/user';
 import { ContactService } from '../../services/contactService/contact.service';
 
@@ -30,12 +30,6 @@ export class ContactComponent {
     email: new FormControl('', [
       Validators.required,
       Validators.email
-    ]),
-    phone: new FormControl('', [
-      Validators.required,
-      Validators.pattern('^[0-9]*$'),
-      Validators.minLength(9),
-      Validators.maxLength(9)
     ]),
     message: new FormControl('', [
       Validators.required,
