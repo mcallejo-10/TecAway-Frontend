@@ -1,3 +1,7 @@
+@if(loading == true) {
+  <app-loading-bar></app-loading-bar>
+  } @if(loading == false) {
+
 <div class="container container-fluid mt-2">
 
   <button class="btn click-btn btn-style506 mt-2" (click)="toggleFilter()">Filtrar</button>
@@ -100,3 +104,4 @@
     </div>
   </div>
 </div>
+  }

@@ -15,7 +15,7 @@ export class FilterService {
   constructor() {
     this.loadUserKnowledgeList(); // Cargar los datos
   }
-  
+  serviceLoading = signal<boolean>(true);
   techniciansFiltred = signal<User[]>([]);
   selectedSections: WritableSignal<Section[]> = signal([]);
   selectedKnowledges = signal<Knowledge[]>([]);
