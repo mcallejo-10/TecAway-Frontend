@@ -36,102 +36,75 @@ export class TechniciansComponent {
   filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
-  // Función principal
-ngOnInit() {
-  this.filterForm = this.fb.group({});
-  this.loadTechnicians();
-  this.loadSections();
-  this.loadKnowledges();
-}
 
-// Función para cargar técnicos/usuarios
-private loadTechnicians(): void {
-  this.userService.getUserList().subscribe((res: any) => {
-    this.technicians = res.data;
-    this.filteredTechnicians = this.technicians;
-    this.filterService.setTechnicianList(this.technicians);
-  });
-}
+  ngOnInit() {
+    this.filterForm = this.fb.group({});
+    this.loadTechnicians();
+    this.loadSections();
+    this.loadKnowledges();
+  }
 
-// Función para cargar secciones
-private loadSections(): void {
-  this.sectionService.getSectionList().subscribe((res: any) => {
-    this.sectionService.setSectionList(res.data);
-    this.sectionList = this.sectionService.sectionList();
-    
-    this.addSectionControls();
-    this.filterService.setSelectedSections(this.sectionList);
-  });
-}
+  // Funciónes para la carga inicial de datos
+  private loadTechnicians(): void {
+    this.userService.getUserList().subscribe((res: any) => {
+      this.technicians = res.data;
+      this.filteredTechnicians = this.technicians;
+      this.filterService.setTechnicianList(this.technicians);
+    });
+  }
 
-// Función para añadir controles de secciones al formulario
-private addSectionControls(): void {
-  const sectionControls = this.sectionList.reduce((acc, section) => {
-    acc[section.id_section!] = new FormControl(false);
-    return acc;
-  }, {} as { [key: string]: FormControl });
-  
-  this.filterForm.addControl('sections', this.fb.group(sectionControls));
-}
+  private loadSections(): void {
+    this.sectionService.getSectionList().subscribe((res: any) => {
+      this.sectionService.setSectionList(res.data);
+      this.sectionList = this.sectionService.sectionList();
 
-// Función para cargar conocimientos
-private loadKnowledges(): void {
-  this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-    this.knowledgeList = res.data;
-    
-    this.addKnowledgeControls();
-    this.addConocimientosGenerales();
-    
-    this.filterService.setSelectedKnowledges(this.knowledgeList);
-  });
-}
+      this.addSectionControls();
+      this.filterService.setSelectedSections(this.sectionList);
+    });
+  }
 
-// Función para añadir controles de conocimientos al formulario
-private addKnowledgeControls(): void {
-  const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
-    acc[knowledge.id_knowledge!] = new FormControl(false);
-    return acc;
-  }, {} as { [key: string]: FormControl });
-  
-  this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
-}
+  private addSectionControls(): void {
+    const sectionControls = this.sectionList.reduce((acc, section) => {
+      acc[section.id_section!] = new FormControl(false);
+      return acc;
+    }, {} as { [key: string]: FormControl });
 
-  // ngOnInit() {
-  //   this.filterForm = this.fb.group({});
-  //   this.userService.getUserList().subscribe((res: any) => {
-  //     this.technicians = res.data;
-  //     this.filteredTechnicians = this.technicians;
-  //     this.filterService.setTechnicianList(this.technicians);
-  //   });
+    this.filterForm.addControl('sections', this.fb.group(sectionControls));
+  }
 
-  //   this.sectionService.getSectionList().subscribe((res: any) => {
-  //     this.sectionService.setSectionList(res.data);
+  private loadKnowledges(): void {
+    this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+      this.knowledgeList = res.data;
 
-  //     this.sectionList = this.sectionService.sectionList();
-      
+      this.addKnowledgeControls();
+      this.addConocimientosGenerales();
 
-  //     const sectionControls = this.sectionList.reduce((acc, section) => {
-  //       acc[section.id_section!] = new FormControl(false);
-  //       return acc;
-  //     }, {} as { [key: string]: FormControl });
+      this.filterService.setSelectedKnowledges(this.knowledgeList);
+    });
+  }
 
-  //     this.filterForm.addControl('sections', this.fb.group(sectionControls));
-  //     this.filterService.setSelectedSections(this.sectionList);
-  //   });
+  private addKnowledgeControls(): void {
+    const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
+      acc[knowledge.id_knowledge!] = new FormControl(false);
+      return acc;
+    }, {} as { [key: string]: FormControl });
 
-  //   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-  //     this.knowledgeList = res.data;
-  //     const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
-  //       acc[knowledge.id_knowledge!] = new FormControl(false);
-  //       return acc;
-  //     }, {} as { [key: string]: FormControl });
-  //     this.addConocimientosGenerales();
+    this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
+  }
 
-  //     this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
-  //     this.filterService.setSelectedKnowledges(this.knowledgeList);
-  //     });    
-  // }
+  addConocimientosGenerales(): void {
+    const section = this.sectionList.find(
+      (section) => section.section === 'Conocimientos generales'
+    );
+    if (section) {
+      this.selectedSections.push(section);
+      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);
+      this.selectedKnowledges.push(knowledeService[0]);
+    }
+  }
 
+
+// Funciones de los checkboxes
   isCheckedSection(id: number): boolean {
     return this.selectedSections.some((section) => section.id_section === id);
   }
@@ -140,17 +113,6 @@ private addKnowledgeControls(): void {
     return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
   }
 
-
-  addConocimientosGenerales(): void {
-    const section = this.sectionList.find(
-      (section) => section.section === 'Conocimientos generales'
-    );
-    if (section) {
-      this.selectedSections.push(section);                    
-      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);     
-      this.selectedKnowledges.push(knowledeService[0]);      
-    }
-  }
 
   getSelectedSections(id_section: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -218,6 +180,8 @@ private addKnowledgeControls(): void {
     this.filterTechniciansById()
   }
 
+
+// Funciones de filtrado
   filterTechniciansById(): void {
     const filtredIds = this.filterService.filterTechnicians();
 
@@ -229,10 +193,16 @@ private addKnowledgeControls(): void {
     this.filterService.techniciansFiltred();
   }
 
+
+
+  
+
+
+  // Funciones del menú de filtros para móviles
   toggleFilter() {
     const filterCard = document.querySelector('.filter-card');
     const overlay = document.querySelector('.filter-overlay');
-    
+
     if (filterCard && overlay) {
       filterCard.classList.toggle('show');
       overlay.classList.toggle('show');
@@ -243,7 +213,7 @@ private addKnowledgeControls(): void {
   closeFilter() {
     const filterCard = document.querySelector('.filter-card');
     const overlay = document.querySelector('.filter-overlay');
-    
+
     if (filterCard && overlay) {
       filterCard.classList.remove('show');
       overlay.classList.remove('show');

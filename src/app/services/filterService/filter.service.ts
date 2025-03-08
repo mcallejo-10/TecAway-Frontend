@@ -15,18 +15,30 @@ export class FilterService {
   constructor() {
     this.loadUserKnowledgeList(); // Cargar los datos
   }
+
   techniciansFiltred = signal<User[]>([]);
   selectedSections: WritableSignal<Section[]> = signal([]);
   selectedKnowledges = signal<Knowledge[]>([]);
   userKnowledgeList = signal<UserKnowledge[]>([]);
-  filteredIsd = signal<number[]>([]);
+  filteredIds = signal<number[]>([]);
   userKnowledgeService = inject(UserKnowledgeService);
   knowledgeService = inject(KnowledgeService);
   allKnowledges: Knowledge[] = this.knowledgeService.knowledgeList();
 
   loadUserKnowledgeList() {
-    this.userKnowledgeService.getUserKnowledgeList().subscribe((res: any) => {
-      this.userKnowledgeList.set(res.data); // Actualiza la señal    
+    this.userKnowledgeService.getUserKnowledgeList().subscribe({
+      next: (res: any) => {
+        if (res && Array.isArray(res.data)) {
+          this.userKnowledgeList.set(res.data);
+        } else {
+          console.error('Invalid response format:', res);
+          this.userKnowledgeList.set([]);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading user knowledge list:', error);
+        this.userKnowledgeList.set([]);
+      }
     });
   }
 
@@ -34,13 +46,7 @@ export class FilterService {
   filteredBySections(): number[] {
     const sections = this.selectedSections();
     const knowledges = this.selectedKnowledges();
-
     const sectionIds = sections.map(section => section.id_section);
-
-    const filteredKnowledgeIds = knowledges
-      .filter(knowledge => sectionIds.includes(knowledge.section_id))
-      .map(knowledge => knowledge.id_knowledge);
-
     const userToKnowledgeMap = new Map<number, number[]>();
 
     this.userKnowledgeList().forEach(userKnowledge => {
@@ -52,7 +58,7 @@ export class FilterService {
     });
 
     const filteredUserIds = Array.from(userToKnowledgeMap.entries())
-      .filter(([userId, knowledgeIds]) =>
+      .filter(([, knowledgeIds]) =>
         sectionIds.every(sectionId =>
           knowledges.some(
             knowledge =>
@@ -85,22 +91,54 @@ export class FilterService {
     });
   }
 
-  filterTechnicians(): number[] {
-    const sectionFilteredIds = this.filteredBySections();
-    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds);
-    return knowledgeFilteredIds
 
+
+  filterByTown(town: string): number[] {
+    const filteredUserIds = this.filteredBySections();
+    const filteredUserIdsByTown = filteredUserIds.filter(userId => {
+      const user = this.techniciansFiltred().find(t => t.id_user === userId);
+      return user?.town === town;
+    });
+    return filteredUserIdsByTown;
+  }
+
+  // Añadir una señal para mantener la lista original de técnicos
+  private originalTechnicians = signal<User[]>([]);
+
+  filterTechnicians(): number[] {
+    if (this.selectedSections().length === 0 && this.selectedKnowledges().length === 0) {
+      return this.originalTechnicians().map(tech => tech.id_user!).filter((id): id is number => id !== undefined);
+    }
+
+    const usersBySections = this.filteredBySections();
+    const filteredIds = this.filterByKnowledges(usersBySections); // Cambiado a filterByKnowledges
+
+    const filteredTechnicians = this.originalTechnicians().filter(tech =>
+      tech.id_user && filteredIds.includes(tech.id_user)
+    );
+    this.techniciansFiltred.set(filteredTechnicians);
+
+    return filteredIds;
   }
 
   setTechnicianList(techniciansList: User[]) {
-    this.techniciansFiltred.set(techniciansList);
+    this.originalTechnicians.set(techniciansList); // Guardar la lista original
+    this.techniciansFiltred.set(techniciansList); // Inicializar la lista filtrada
   }
 
   setSelectedSections(sections: Section[]) {
     this.selectedSections.set(sections);
+    if (sections.length === 0) {
+      // Restaurar la lista original si no hay secciones seleccionadas
+      this.techniciansFiltred.set(this.originalTechnicians());
+    }
   }
 
   setSelectedKnowledges(knowledges: Knowledge[]) {
     this.selectedKnowledges.set(knowledges);
+    if (knowledges.length === 0 && this.selectedSections().length === 0) {
+      // Restaurar la lista original si no hay filtros
+      this.techniciansFiltred.set(this.originalTechnicians());
+    }
   }
 }
