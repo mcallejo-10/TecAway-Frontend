@@ -58,13 +58,19 @@ export class TechniciansComponent {
       this.sectionService.setSectionList(res.data);
       this.sectionList = this.sectionService.sectionList();
 
-      this.addSectionControls();
-      this.filterService.setSelectedSections(this.sectionList);
+      // Filtrar las secciones para excluir Conocimientos generales de los controles
+      const filteredSections = this.sectionList.filter(section => 
+        section.section !== 'Conocimientos generales'
+      );
+      
+      this.addSectionControls(filteredSections);
+      this.addConocimientosGenerales(); // Añadir primero los conocimientos generales
+      this.filterService.setSelectedSections(this.selectedSections);
     });
   }
 
-  private addSectionControls(): void {
-    const sectionControls = this.sectionList.reduce((acc, section) => {
+  private addSectionControls(sections: Section[]): void {
+    const sectionControls = sections.reduce((acc, section) => {
       acc[section.id_section!] = new FormControl(false);
       return acc;
     }, {} as { [key: string]: FormControl });
@@ -72,17 +78,28 @@ export class TechniciansComponent {
     this.filterForm.addControl('sections', this.fb.group(sectionControls));
   }
 
+  addConocimientosGenerales(): void {
+    const generalSection = this.sectionList.find(
+      (section) => section.section === 'Conocimientos generales'
+    );
+    if (generalSection && !this.selectedSections.some(s => s.id_section === generalSection.id_section)) {
+      this.selectedSections.push(generalSection);
+      
+      const generalKnowledge = this.knowledgeList.filter(k => k.section_id === generalSection.id_section);
+      if (generalKnowledge.length > 0) {
+        this.selectedKnowledges.push(generalKnowledge[0]);
+      }
+    }
+  }
+
   private loadKnowledges(): void {
     this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
       this.knowledgeList = res.data;
-
       this.addKnowledgeControls();
       this.addConocimientosGenerales();
-
       this.filterService.setSelectedKnowledges(this.knowledgeList);
     });
   }
-
   private addKnowledgeControls(): void {
     const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
       acc[knowledge.id_knowledge!] = new FormControl(false);
@@ -92,16 +109,16 @@ export class TechniciansComponent {
     this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
   }
 
-  addConocimientosGenerales(): void {
-    const section = this.sectionList.find(
-      (section) => section.section === 'Conocimientos generales'
-    );
-    if (section) {
-      this.selectedSections.push(section);
-      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);
-      this.selectedKnowledges.push(knowledeService[0]);
-    }
-  }
+  // addConocimientosGenerales(): void {
+  //   const section = this.sectionList.find(
+  //     (section) => section.section === 'Conocimientos generales'
+  //   );
+  //   if (section) {
+  //     this.selectedSections.push(section);
+  //     const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);
+  //     this.selectedKnowledges.push(knowledeService[0]);
+  //   }
+  // }
 
 
 // Funciones de los checkboxes
