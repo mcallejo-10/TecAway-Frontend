@@ -80,16 +80,29 @@ private loadTechnicians(): void {
   });
 }
 
-private loadSections(): void {
-  this.sectionService.getSectionList().subscribe((res: any) => {
-    this.sectionService.setSectionList(res.data);
-    this.sectionList = this.sectionService.sectionList();
+// private loadSections(): void {
+//   this.sectionService.getSectionList().subscribe((res: any) => {
+//     this.sectionService.setSectionList(res.data);
+//     this.sectionList = this.sectionService.sectionList();
     
-    this.addSectionControls();
-    this.filterService.setSelectedSections(this.sectionList);
-  });
-}
+//     this.addSectionControls();
+//     this.filterService.setSelectedSections(this.sectionList);
+//   });
+// }
 
+
+
+
+// private loadKnowledges(): void {
+//   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+//     this.knowledgeList = res.data;
+    
+//     this.addKnowledgeControls();
+//     this.addConocimientosGenerales();
+    
+//     this.filterService.setSelectedKnowledges(this.knowledgeList);
+//   });
+// }
 
 private addSectionControls(): void {
   const sectionControls = this.sectionList.reduce((acc, section) => {
@@ -99,19 +112,6 @@ private addSectionControls(): void {
   
   this.filterForm.addControl('sections', this.fb.group(sectionControls));
 }
-
-
-private loadKnowledges(): void {
-  this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-    this.knowledgeList = res.data;
-    
-    this.addKnowledgeControls();
-    this.addConocimientosGenerales();
-    
-    this.filterService.setSelectedKnowledges(this.knowledgeList);
-  });
-}
-
 
 private addKnowledgeControls(): void {
   const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
@@ -126,9 +126,9 @@ private addKnowledgeControls(): void {
     return this.selectedSections.some((section) => section.id_section === id);
   }
 
-  isCheckedKnowledge(id: number): boolean {
-    return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
-  }
+  // isCheckedKnowledge(id: number): boolean {
+  //   return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
+  // }
 
 
   addConocimientosGenerales(): void {

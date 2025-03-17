@@ -57,13 +57,51 @@ export class AddKnowledgesComponent {
     return this.selectedKnowledges.includes(knowledgeId);
   }
 
+  private getFirstKnowledgeOfSection(sectionId: number): number | null {
+    const firstKnowledge = this.knowledgeList.find(k => k.section_id === sectionId);
+    return firstKnowledge?.id_knowledge || null;
+  }
+  
+  private getSectionFromKnowledge(knowledgeId: number): number | null {
+    const knowledge = this.knowledgeList.find(k => k.id_knowledge === knowledgeId);
+    return knowledge?.section_id || null;
+  }
+  
+  private hasOtherKnowledgesInSection(sectionId: number, excludeKnowledgeId: number): boolean {
+    return this.selectedKnowledges.some(id => {
+      const knowledge = this.knowledgeList.find(k => k.id_knowledge === id);
+      return knowledge?.section_id === sectionId && id !== excludeKnowledgeId;
+    });
+  }
+  
   toggleKnowledge(knowledgeId: number): void {
-    if (knowledgeId === 1) return;
+    if (knowledgeId === 1) return; // Conocimientos generales siempre marcado
+    
     const index = this.selectedKnowledges.indexOf(knowledgeId);
+    const sectionId = this.getSectionFromKnowledge(knowledgeId);
+    
     if (index === -1) {
+      // Añadir conocimiento
       this.selectedKnowledges = [...this.selectedKnowledges, knowledgeId];
+      
+      // Añadir primer conocimiento de la sección si no está incluido
+      if (sectionId) {
+        const firstKnowledgeId = this.getFirstKnowledgeOfSection(sectionId);
+        if (firstKnowledgeId && !this.selectedKnowledges.includes(firstKnowledgeId)) {
+          this.selectedKnowledges = [...this.selectedKnowledges, firstKnowledgeId];
+        }
+      }
     } else {
-      this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+      // Verificar si es el primer conocimiento de la sección
+      if (sectionId && knowledgeId === this.getFirstKnowledgeOfSection(sectionId)) {
+        // Solo permitir desmarcar si no hay otros conocimientos de la sección marcados
+        if (!this.hasOtherKnowledgesInSection(sectionId, knowledgeId)) {
+          this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+        }
+      } else {
+        // No es el primer conocimiento, se puede desmarcar normalmente
+        this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+      }
     }
   }
 

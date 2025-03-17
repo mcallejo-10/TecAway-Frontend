@@ -1,13 +1,13 @@
 @if(loading == true) {
-  <app-loading-bar></app-loading-bar>
-  } @if(loading == false) {
+<app-loading-bar></app-loading-bar>
+} @if(loading == false) {
 
 <div class="container container-fluid mt-2">
 
   <button class="btn click-btn btn-style506 mt-2" (click)="toggleFilter()">Filtrar</button>
   <div class="row">
 
-    <div class="col-12 col-md-3" id="filter">
+    <section class="col-12 col-md-3" id="filter">
       <div class="filter-overlay" (click)="closeFilter()"></div>
       <div class="card filter-card ">
         <button class="filter-close" (click)="closeFilter()">×</button>
@@ -35,10 +35,8 @@
           @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
           @if(knowledge.section_id == section.id_section && knowledge.knowledge != section.section) {
           <div class="form-check">
-
             <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
               (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
-
             <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
             </label>
           </div>
@@ -52,11 +50,11 @@
           <input type="text">
         </div>
       </div>
+    </section>
 
 
-    </div>
 
-    <div class="col-12 col-md-9">
+    <section class="col-12 col-md-9">
       @if(filterService.techniciansFiltred().length == 0 ) {
       <div class="col-12 card-link">
         <div class="card card-technician">
@@ -76,6 +74,8 @@
         </div>
       </div>
       }
+
+
       @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
 
       <div class="col-12 card-link">
@@ -100,8 +100,8 @@
         </a>
       </div>
       }
-
-    </div>
+    </section>
   </div>
 </div>
-  }
+
+}
