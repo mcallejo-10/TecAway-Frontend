@@ -5,6 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 
+$white:    #fff !default;
+$black:    #000 !default;
+
 $background: #000000;
 // Eliminar las variables duplicadas y mantener solo las del tema oscuro
 $button-width: 120px;
@@ -20,6 +23,68 @@ $eerie-black: #1A1A1A;  // Very dark gray
 $jet: #2D2D2D;         // Dark charcoal
 
 
+// Light theme colors
+$light-background: #ffffff;    // Main background
+$light-surface: #f7f7f7;      // Secondary background
+$light-timberwolf: #d4d4d4;   // Light gray
+$light-aureolin: #FFD700;     // Bright yellow
+$light-jonquil: #FFC107;      // Amber yellow
+$light-eerie: #f0f0f0;        // Very light gray
+$light-jet: #e0e0e0;         // Light charcoal
+
+// Dark theme colors
+$dark-background: #121212;    // Main background
+$dark-surface: #353535;      // Secondary background
+$dark-timberwolf: #2C2C2C;   // Dark gray
+$dark-aureolin: #FFD700;     // Bright yellow
+$dark-jonquil: #FFC107;      // Amber yellow
+$dark-eerie: #1A1A1A;        // Very dark gray
+$dark-jet: #2D2D2D;         // Dark charcoal
+
+// Theme variables (will be updated via JavaScript)
+$current-background: $dark-background;
+$current-surface: $dark-surface;
+$current-timberwolf: $dark-timberwolf;
+$current-aureolin: $dark-aureolin;
+$current-jonquil: $dark-jonquil;
+$current-eerie: $dark-eerie;
+$current-jet: $dark-jet;
+
+// Theme mixins
+@mixin light-theme {
+  --background: #{$light-background};
+  --surface: #{$light-surface};
+  --timberwolf: #{$light-timberwolf};
+  --aureolin: #{$light-aureolin};
+  --jonquil: #{$light-jonquil};
+  --eerie: #{$light-eerie};
+  --jet: #{$light-jet};
+  --text-color: #{$black};
+}
+
+@mixin dark-theme {
+  --background: #{$dark-background};
+  --surface: #{$dark-surface};
+  --timberwolf: #{$dark-timberwolf};
+  --aureolin: #{$dark-aureolin};
+  --jonquil: #{$dark-jonquil};
+  --eerie: #{$dark-eerie};
+  --jet: #{$dark-jet};
+  --text-color: #{$white};
+}
+
+// Apply themes
+:root {
+  @include light-theme;
+}
+
+[data-theme="light"] {
+  @include light-theme;
+}
+
+[data-theme="dark"] {
+  @include dark-theme;
+}
 
 $theme: "lux" !default;
 
@@ -163,25 +228,22 @@ a {
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
-  background-color: $surface;
-  
+  background-color: var(--surface);
 
   &-nav {
     .nav-link {
       padding-top: .715rem;
       padding-bottom: .715rem;
-      color: whitesmoke;
+      color: var(--text-color);
       font-style: none;
 
       &:active {
-        color: $jonquil;
+        color: var(--jonquil);
       }
 
       &:hover {
-        color: $jonquil;
+        color: var(--jonquil);
       }
-
-      
     }
   }
 
@@ -214,6 +276,11 @@ a {
 .btn {
   font-size: 1rem;
   text-transform: uppercase;
+  color: var(--text-color);
+
+  &:hover {
+    color: var(--jonquil);
+  }
 
   &-sm {
     font-size: 10px;
@@ -441,7 +508,7 @@ th {
   position: relative;
   border-color: $jet;
   border-radius: 2px;
-  color: white;
+  color: var(--text-color);
   overflow: hidden !important;
   &::before {
     width: 20%;
@@ -465,11 +532,16 @@ th {
     }
   }
 }
-
+.card {
+  background-color: var(--surface);
+  color: var(--text-color);
+  border: 1px solid rgba(var(--jonquil), 0.1);
+  border-radius: 16px;
+}
 .filter-card{
   
-  border: 1px solid #ced4da;
-  
+  border: 2px solid #ced4da;
+  border-radius: 3px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
@@ -486,62 +558,63 @@ th {
   width: 50px;
   height: 50px;
   color: $jonquil;
-  // text-shadow: 1.5px 0px 0px $jonquil;
   font-size: larger;
 }
 
 
 
 body {
-  background-color: $background;
-  color: $white;
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 .navbar {
-  background-color: $surface !important;
-  border-bottom: 2px solid rgba($jonquil, 0.4);
-  box-shadow: 0 2px 4px -2px rgba($jonquil, 0.5); // Añade un sutil resplandor
-  
-}
-
-.card {
-  background-color: $surface;
-  color: $white;
-  border: 1px solid rgba($jonquil, 0.1);
-  border-radius: 3px;
+  background-color: var(--surface) !important;
+  border-bottom: 2px solid rgba(var(--jonquil), 0.4);
+  box-shadow: 0 2px 4px -2px rgba(var(--jonquil), 0.5);
 }
 
 
 
-.form-control {
-  background-color: $timberwolf;
-  color: $white;
-  border: 1px solid rgba($jonquil, 0.2);
-  
-  &:focus {
-    background-color: lighten($timberwolf, 5%);
-    color: $white;
-    border-color: $jonquil;
+.form-check {
+  &-input {
+    background-color: var(--timberwolf);
+    border-color: var(--text-color);
+
+    &:checked {
+      background-color: var(--jonquil);
+      border-color: var(--jonquil);
+    }
+
+    &:focus {
+      border-color: var(--jonquil);
+      box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    }
   }
 
-  &::placeholder {
-    color: rgba($white, 0.5);
+  &-label {
+    color: var(--text-color);
   }
 }
 
-// Ajustar los enlaces
-a {
-  color: $jonquil;
-  
-  &:hover {
-    color: $aureolin;
-  }
-}
 .form-label {
-  font-size: 1rem;
-  color: #FFD700;
-  font-weight:lighter;
-  font-style: oblique;  
+  color: var(--jonquil);
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.156);
+  
+  .modal-content {
+    background-color: var(--surface);
+    color: var(--text-color);
+  }
+  .modal-header {
+    border-bottom: 2px solid var(--timberwolf);
+  }
+}
+
+.bi {
+  color: var(--jonquil);
 }
 
 //info modal 
@@ -554,5 +627,36 @@ a {
   }
   .modal-header{
     border-bottom: 2px solid $gray-700;    
+  }
+}
+
+
+.community-message {
+  padding: 2rem 0;
+  font-family: "Nunito Sans", sans-serif; 
+  font-style: italic; 
+  text-align: center; 
+  font-size: 1.2rem;
+  font-weight:800;
+  text-transform: uppercase;  
+  color: var(--text-color);
+  
+  
+  .message-header {
+    color: var(--jonquil);
+    font-weight: bold;
+  }
+  
+  .message-content {
+    color: var(--text-color);
+  }
+ 
+}
+.welcome-title {
+  color: var(--text-color) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  
+  [data-theme="light"] & {
+    text-shadow: none;
   }
 }

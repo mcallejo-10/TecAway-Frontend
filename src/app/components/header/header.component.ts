@@ -13,39 +13,41 @@ export class HeaderComponent {
   authService = inject(AuthService)
   isLogged: boolean = false;
 
-    constructor(
-      private router: Router,       
-    ) {}
-    
+  constructor(
+    private router: Router,
+  ) { }
+
+  isDarkMode: boolean = localStorage.getItem('theme') === 'dark';
+
   ngOnInit() {
+    // Apply saved theme on component initialization
+    document.documentElement.setAttribute(
+      'data-theme',
+      this.isDarkMode ? 'dark' : 'light'
+    );
+  }
+  logout() {
+    console.log('Logout');
 
-   // this.authService.checkAuthStatus().subscribe();
-  };
+    this.authService.logoutUser().subscribe({
+      next: () => {
+        console.log('Logout exitoso');
+        // Navegar al login después del logout
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Error en logout:', error);
+        // Aún así, podemos forzar la navegación al login
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
-  
-logout() {
-  console.log('Logout');
-  
-  this.authService.logoutUser().subscribe({
-    next: () => {
-      console.log('Logout exitoso');
-      // Navegar al login después del logout
-      this.router.navigate(['/']);
-    },
-    error: (error) => {
-      console.error('Error en logout:', error);
-      // Aún así, podemos forzar la navegación al login
-      this.router.navigate(['/']);
-    }
-  });
-}
-
-  // logout() {
-  //   this.authService.logoutUser().subscribe(() => {
-
-  //     console.log('Logout exitoso', this.authService.isLogged())
-
-  //   });
-  // }
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }
 }
 

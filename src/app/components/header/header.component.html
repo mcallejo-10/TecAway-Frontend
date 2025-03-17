@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/buscar">Buscar técnicos/as
+                    <a class="nav-link" href="/buscar">Buscar técnicos/as
                         <span class="visually-hidden">(current)</span>
                     </a>
                 </li>
@@ -31,6 +31,11 @@
                
                 }
             </ul>
+            <div class="theme-toggle ms-0 me-3">
+                <button class="btn btn-link" (click)="toggleTheme()">
+                    <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+                </button>
+            </div>
 
         </div>
     </div>
