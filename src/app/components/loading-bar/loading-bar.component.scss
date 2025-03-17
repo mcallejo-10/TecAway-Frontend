@@ -3,10 +3,12 @@
   background-color: var(--surface);
   border-radius: 4px;
   overflow: hidden;
+  border: 1px solid var(--jonquil);
 }
 
 .progress-bar {
   background-color: var(--jonquil);
+  transition: width 0.3s ease;
   
   &-striped {
     background-image: linear-gradient(
@@ -25,6 +27,11 @@
   &-animated {
     animation: progress-bar-stripes 1s linear infinite;
   }
+}
+
+
+.progress-bar-striped.progress-bar-animated {
+  background-color: var(--jonquil) !important;
 }
 
 @keyframes progress-bar-stripes {

@@ -1,25 +1,26 @@
 .knowledge-btn {    
-    color: var(--bs-light);
+    color: var(--text-color);
     padding: 0.5rem;   
     font-weight: lighter;
-  }
+    border: 1px solid var(--jonquil);
+    background-color: var(--surface);
+}
 
 .knowledge-btn.active {
-    background-color: var(--bs-warning);
-    color: var(--bs-dark);
-    border-color: var(--jounquil);
+    background-color: var(--jonquil);
+    color: var(--jet);
+    border-color: var(--jonquil);
     font-weight: 800;
+}
+  
+.knowledge-btn:hover {
+    background-color: var(--jonquil);
+    color: var(--jet);   
+}
 
-  }
-  
-  .knowledge-btn:hover {
-    background-color: var(--bs-warning);
-    color: grey;   
-  }
-  
-  .gap-2 {
+.gap-2 {
     gap: 0.5rem !important;
-  }
+}
 
 
   $jonquil: #ffc107;;
@@ -42,38 +43,21 @@ $jet: #333533ff;
     text-decoration: none;
     transition: all 0.35s;
     box-sizing: border-box;
-  }
+}
 
 .btn-style506 {
-    $btn-color: black ;
-    position: relative;
-    border-color: $jet;
-    color: black;
-    overflow: hidden;
+    color: var(--text-color);
+    border-color: var(--jonquil);
+    
     &::before {
-      width: 20%;
-      height: 100%;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      background-color: $jonquil;
-      transform: rotateZ(-45deg) translate(-50%, -50%);
-      transition: all 0.3s;
-      content: "";
-      z-index: -1;
+        background-color: var(--jonquil);
     }
     &:hover {
-      color: $jet;
-      font-weight: bold;
-      &::before {
-        width: 100%;
-        top: 0;
-        transform: none;
-      }
+        color: var(--jet);
     }
-  }
+}
 
-  h4, h2{
-  color: whitesmoke;
-  margin-top: 1rem;
-  }
+h4, h2 {
+    color: var(--text-color);
+    margin-top: 1rem;
+}
