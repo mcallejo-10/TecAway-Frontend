@@ -219,7 +219,7 @@ $surface: #bebebe;
     }
   }
 
-  @media (min-width: $tablet-breakpoint + 1) {
+  @media (min-width: ($tablet-breakpoint + 1)) {
     .row {
       flex-direction: row;
     }

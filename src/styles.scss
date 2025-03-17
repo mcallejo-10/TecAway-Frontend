@@ -26,7 +26,7 @@ $jet: #2D2D2D;         // Dark charcoal
 // Light theme colors
 $light-background: #ffffff;    // Main background
 $light-surface: #f7f7f7;      // Secondary background
-$light-timberwolf: #d4d4d4;   // Light gray
+$light-timberwolf: #676767;   // Light gray
 $light-aureolin: #FFD700;     // Bright yellow
 $light-jonquil: #FFC107;      // Amber yellow
 $light-eerie: #f0f0f0;        // Very light gray
@@ -35,7 +35,7 @@ $light-jet: #e0e0e0;         // Light charcoal
 // Dark theme colors
 $dark-background: #121212;    // Main background
 $dark-surface: #353535;      // Secondary background
-$dark-timberwolf: #2C2C2C;   // Dark gray
+$dark-timberwolf: #808080;   // Dark gray
 $dark-aureolin: #FFD700;     // Bright yellow
 $dark-jonquil: #FFC107;      // Amber yellow
 $dark-eerie: #1A1A1A;        // Very dark gray
@@ -360,6 +360,25 @@ h5,
 h6 {
   text-transform: uppercase;
   letter-spacing: 3px;
+  color: var(--text-color);
+  
+  &.display-5 {
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+}
+
+.card {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    font-weight: 600;
+  }
+}
+
+.step-circle {
+  span {
+    color: var(--text-color);
+  }
 }
 
 .text-secondary {
@@ -395,9 +414,10 @@ th {
 
 // @include color-mode(dark) {
   .form-control {
-    color: $body-color;
-    background-color: $timberwolf;
-
+    background-color: var(--background)!important;
+    color: var(--text-color);
+    border: 1px solid var(--jonquil);
+  
     &:focus{
       color: $body-color;
       background-color: rgba(255, 225, 0, 0.359);
@@ -587,8 +607,14 @@ body {
     }
 
     &:focus {
+      background-color: rgba(255, 225, 0, 0.359);
+      color: var(--text-color);
       border-color: var(--jonquil);
-      box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    }
+
+    &::placeholder {
+      color: var(--text-color);
+      opacity: 0.6;
     }
   }
 

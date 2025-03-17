@@ -222,7 +222,7 @@ private addKnowledgeControls(): void {
 
   toggleFilter() {
     const filterCard = document.querySelector('.filter-card');
-    const overlay = document.querySelector('.filter-over    lay');
+    const overlay = document.querySelector('.filter-overlay');
 
     if (filterCard && overlay) {
       filterCard.classList.toggle('show');
@@ -233,7 +233,7 @@ private addKnowledgeControls(): void {
 
   closeFilter() {
     const filterCard = document.querySelector('.filter-card');
-    const overlay = document.querySelector('.filter-over    lay');
+    const overlay = document.querySelector('.filter-overlay');
 
     if (filterCard && overlay) {
       filterCard.classList.remove('show');
