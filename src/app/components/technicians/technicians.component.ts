@@ -8,16 +8,18 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule }
 import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge } from '../../interfaces/knowledge';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterLink, RouterModule, } from '@angular/router';
+import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 
 @Component({
   selector: 'app-technicians',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule,  LoadingBarComponent],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent {
 
+  loading = true;
   technicians: User[] = [];
 
   filterForm!: FormGroup;
@@ -36,51 +38,97 @@ export class TechniciansComponent {
   filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
-
-
-  ngOnInit() {
-    this.filterForm = this.fb.group({});
-    this.userService.getUserList().subscribe((res: any) => {
-      this.technicians = res.data;
-      this.filteredTechnicians = this.technicians;
-      this.filterService.setTechnicianList(this.technicians);
-    });
-
-    this.sectionService.getSectionList().subscribe((res: any) => {
-      this.sectionService.setSectionList(res.data);
-
+  // Función principal
+ngOnInit() {
+  this.loading = true;
+  this.filterForm = this.fb.group({});
+  
+  this.sectionService.getSectionList().subscribe({
+    next: (sectionsRes: any) => {
+      this.sectionService.setSectionList(sectionsRes.data);
       this.sectionList = this.sectionService.sectionList();
-      
-
-      const sectionControls = this.sectionList.reduce((acc, section) => {
-        acc[section.id_section!] = new FormControl(false);
-        return acc;
-      }, {} as { [key: string]: FormControl });
-
-      this.filterForm.addControl('sections', this.fb.group(sectionControls));
+      this.addSectionControls();
       this.filterService.setSelectedSections(this.sectionList);
-    });
 
-    this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-      this.knowledgeList = res.data;
-      const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
-        acc[knowledge.id_knowledge!] = new FormControl(false);
-        return acc;
-      }, {} as { [key: string]: FormControl });
-      this.addConocimientosGenerales();
+      this.knowledgeService.getKnowledgeList().subscribe({
+        next: (knowledgesRes: any) => {
+          this.knowledgeList = knowledgesRes.data;
+          this.addKnowledgeControls();
+          this.addConocimientosGenerales();
+          this.filterService.setSelectedKnowledges(this.knowledgeList);
 
-      this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
-      this.filterService.setSelectedKnowledges(this.knowledgeList);
-      });    
-  }
+          this.userService.getUserList().subscribe({
+            next: (techRes: any) => {
+              this.technicians = techRes.data;
+              this.filteredTechnicians = this.technicians;
+              this.filterService.setTechnicianList(this.technicians);
+              this.loading = false; // Solo se ejecuta cuando todo ha terminado
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
+// Función para cargar técnicos/usuarios
+private loadTechnicians(): void {
+  this.userService.getUserList().subscribe((res: any) => {
+    this.technicians = res.data;
+    this.filteredTechnicians = this.technicians;
+    this.filterService.setTechnicianList(this.technicians);
+  });
+}
+
+// private loadSections(): void {
+//   this.sectionService.getSectionList().subscribe((res: any) => {
+//     this.sectionService.setSectionList(res.data);
+//     this.sectionList = this.sectionService.sectionList();
+    
+//     this.addSectionControls();
+//     this.filterService.setSelectedSections(this.sectionList);
+//   });
+// }
+
+
+
+
+// private loadKnowledges(): void {
+//   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+//     this.knowledgeList = res.data;
+    
+//     this.addKnowledgeControls();
+//     this.addConocimientosGenerales();
+    
+//     this.filterService.setSelectedKnowledges(this.knowledgeList);
+//   });
+// }
+
+private addSectionControls(): void {
+  const sectionControls = this.sectionList.reduce((acc, section) => {
+    acc[section.id_section!] = new FormControl(false);
+    return acc;
+  }, {} as { [key: string]: FormControl });
+  
+  this.filterForm.addControl('sections', this.fb.group(sectionControls));
+}
+
+private addKnowledgeControls(): void {
+  const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
+    acc[knowledge.id_knowledge!] = new FormControl(false);
+    return acc;
+  }, {} as { [key: string]: FormControl });
+  
+  this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
+}
 
   isCheckedSection(id: number): boolean {
     return this.selectedSections.some((section) => section.id_section === id);
   }
 
-  isCheckedKnowledge(id: number): boolean {
-    return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
-  }
+  // isCheckedKnowledge(id: number): boolean {
+  //   return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
+  // }
 
 
   addConocimientosGenerales(): void {
@@ -170,10 +218,12 @@ export class TechniciansComponent {
     this.filterService.filterTechnicians();
     this.filterService.techniciansFiltred();
   }
+
+
   toggleFilter() {
     const filterCard = document.querySelector('.filter-card');
     const overlay = document.querySelector('.filter-overlay');
-    
+
     if (filterCard && overlay) {
       filterCard.classList.toggle('show');
       overlay.classList.toggle('show');
@@ -184,7 +234,7 @@ export class TechniciansComponent {
   closeFilter() {
     const filterCard = document.querySelector('.filter-card');
     const overlay = document.querySelector('.filter-overlay');
-    
+
     if (filterCard && overlay) {
       filterCard.classList.remove('show');
       overlay.classList.remove('show');

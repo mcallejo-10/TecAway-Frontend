@@ -5,6 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 
+$white:    #fff !default;
+$black:    #000 !default;
+
 $background: #000000;
 // Eliminar las variables duplicadas y mantener solo las del tema oscuro
 $button-width: 120px;
@@ -20,6 +23,68 @@ $eerie-black: #1A1A1A;  // Very dark gray
 $jet: #2D2D2D;         // Dark charcoal
 
 
+// Light theme colors
+$light-background: #ffffff;    // Main background
+$light-surface: #f7f7f7;      // Secondary background
+$light-timberwolf: #676767;   // Light gray
+$light-aureolin: #FFD700;     // Bright yellow
+$light-jonquil: #FFC107;      // Amber yellow
+$light-eerie: #f0f0f0;        // Very light gray
+$light-jet: #7b7b7b;         // Light charcoal
+
+// Dark theme colors
+$dark-background: #121212;    // Main background
+$dark-surface: #353535;      // Secondary background
+$dark-timberwolf: #808080;   // Dark gray
+$dark-aureolin: #FFD700;     // Bright yellow
+$dark-jonquil: #FFC107;      // Amber yellow
+$dark-eerie: #1A1A1A;        // Very dark gray
+$dark-jet: #2D2D2D;         // Dark charcoal
+
+// Theme variables (will be updated via JavaScript)
+$current-background: $dark-background;
+$current-surface: $dark-surface;
+$current-timberwolf: $dark-timberwolf;
+$current-aureolin: $dark-aureolin;
+$current-jonquil: $dark-jonquil;
+$current-eerie: $dark-eerie;
+$current-jet: $dark-jet;
+
+// Theme mixins
+@mixin light-theme {
+  --background: #{$light-background};
+  --surface: #{$light-surface};
+  --timberwolf: #{$light-timberwolf};
+  --aureolin: #{$light-aureolin};
+  --jonquil: #{$light-jonquil};
+  --eerie: #{$light-eerie};
+  --jet: #{$light-jet};
+  --text-color: #{$black};
+}
+
+@mixin dark-theme {
+  --background: #{$dark-background};
+  --surface: #{$dark-surface};
+  --timberwolf: #{$dark-timberwolf};
+  --aureolin: #{$dark-aureolin};
+  --jonquil: #{$dark-jonquil};
+  --eerie: #{$dark-eerie};
+  --jet: #{$dark-jet};
+  --text-color: #{$white};
+}
+
+// Apply themes
+:root {
+  @include light-theme;
+}
+
+[data-theme="light"] {
+  @include light-theme;
+}
+
+[data-theme="dark"] {
+  @include dark-theme;
+}
 
 $theme: "lux" !default;
 
@@ -163,25 +228,22 @@ a {
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
-  background-color: $surface;
-  
+  background-color: var(--surface);
 
   &-nav {
     .nav-link {
       padding-top: .715rem;
       padding-bottom: .715rem;
-      color: whitesmoke;
+      color: var(--text-color);
       font-style: none;
 
       &:active {
-        color: $jonquil;
+        color: var(--jonquil);
       }
 
       &:hover {
-        color: $jonquil;
+        color: var(--jonquil);
       }
-
-      
     }
   }
 
@@ -214,6 +276,11 @@ a {
 .btn {
   font-size: 1rem;
   text-transform: uppercase;
+  color: var(--text-color);
+
+  &:hover {
+    color: var(--jonquil);
+  }
 
   &-sm {
     font-size: 10px;
@@ -293,6 +360,25 @@ h5,
 h6 {
   text-transform: uppercase;
   letter-spacing: 3px;
+  color: var(--text-color);
+  
+  &.display-5 {
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+}
+
+.card {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    font-weight: 600;
+  }
+}
+
+.step-circle {
+  span {
+    color: var(--text-color);
+  }
 }
 
 .text-secondary {
@@ -328,9 +414,10 @@ th {
 
 // @include color-mode(dark) {
   .form-control {
-    color: $body-color;
-    background-color: $timberwolf;
-
+    background-color: var(--background)!important;
+    color: var(--text-color);
+    border: 1px solid var(--jonquil);
+  
     &:focus{
       color: $body-color;
       background-color: rgba(255, 225, 0, 0.359);
@@ -441,7 +528,7 @@ th {
   position: relative;
   border-color: $jet;
   border-radius: 2px;
-  color: white;
+  color: var(--text-color);
   overflow: hidden !important;
   &::before {
     width: 20%;
@@ -465,11 +552,16 @@ th {
     }
   }
 }
-
+.card {
+  background-color: var(--surface);
+  color: var(--text-color);
+  border: 1px solid rgba(var(--jonquil), 0.1);
+  border-radius: 16px;
+}
 .filter-card{
   
-  border: 1px solid #ced4da;
-  
+  border: 2px solid #ced4da;
+  border-radius: 3px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
@@ -485,171 +577,112 @@ th {
 .bi {
   width: 50px;
   height: 50px;
-  color: black;
-  text-shadow: 0.5px 1px 2px $jonquil;
+  color: $jonquil;
   font-size: larger;
 }
 
-// .btn-style701 {
-//   $btn-color: $gray-800;
-//   $btn-hover-color: $jonquil;
-//   $size: 8px;
-//   $offset: 50%;
-//   position: relative;
-//   border: none;
-//   border-color:$btn-color;
-//   color: $btn-color;
-//   background-color: #ffff0025;
-//   span {
-//     width: 100%;
-//     display: block;
-//     position: relative;
-//   }
-//   &::before,
-//   &::after,
-//   span::before,
-//   span::after {
-//     width: $size;
-//     height: $size;
-//     position: absolute;
-//     transition: all 0.5s;
-//     border: 3px solid $btn-color;
-//     opacity: 0;
-//     content: "";
-//   }
-//   &::before {
-//     top: 0;
-//     left: 0;
-//     border-right: none;
-//     border-bottom: none;
-//     transform: translate(-$offset, -$offset);
-//   }
-//   &::after {
-//     bottom: 0;
-//     left: 0;
-//     border-right: none;
-//     border-top: none;
-//     transform: translate(-$offset, $offset);
-//   }
-//   span::before {
-//     top: 0;
-//     right: 0;
-//     border-left: none;
-//     border-bottom: none;
-//     transform: translate($offset, -$offset);
-//   }
-//   span::after {
-//     bottom: 0;
-//     right: 0;
-//     border-left: none;
-//     border-top: none;
-//     transform: translate($offset, $offset);
-//   }
-//   &:hover {
-//     font-size: 16.5px;
-//     color: $btn-hover-color;
-//     background-color: rgba(128, 128, 128, 0.06);
-//     &::before,
-//     &::after,
-//     span::before,
-//     span::after {
-//       opacity: 1;
-//       border-color: $btn-hover-color;
-//       transform: translate(0%, 0%);
-//     }
-//   }
-// }
 
-// .btn-style906 {
-//   $btn-color: $timberwolf;
-//   $btn-hover-color: $jonquil;
-//   position: relative;
-//   background: $btn-color;
-//   border-color: $btn-color;
-//   color: #fff;
-//   overflow: hidden;
-//   &::before {
-//     width: 0;
-//     height: 4.5px;
-//     position: absolute;
-//     bottom: 0;
-//     left: 0;
-//     background-color: $primary;
-//     transition: all 0.35s;
-//     content: "";
-//     z-index: 2;
-//   }
-//   &::after {
-//     width: 100%;
-//     height: 100%;
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     border-radius: $border-radius;
-//     background-color: $btn-hover-color;
-//     transform: translate(0, -100%);
-//     transition: all 0.35s;
-//     content: attr(data-hover);
-//     z-index: 1;
-//   }
-//   &:hover {
-//     &::before {
-//       width: 100%;
-//     }
-//     &::after {
-//       transform: translate(0, 0);
-//     }
-//   }
-// }
 
 body {
-  background-color: $background;
-  color: $white;
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 .navbar {
-  background-color: $surface !important;
-  border-bottom: 2px solid rgba($jonquil, 0.4);
-  box-shadow: 0 2px 4px -2px rgba($jonquil, 0.5); // Añade un sutil resplandor
-  
-}
-
-.card {
-  background-color: $surface;
-  color: $white;
-  border: 1px solid rgba($jonquil, 0.1);
-  border-radius: 3px;
+  background-color: var(--surface) !important;
+  border-bottom: 2px solid rgba(var(--jonquil), 0.4);
+  box-shadow: 0 2px 4px -2px rgba(var(--jonquil), 0.5);
 }
 
 
 
-.form-control {
-  background-color: $timberwolf;
-  color: $white;
-  border: 1px solid rgba($jonquil, 0.2);
-  
-  &:focus {
-    background-color: lighten($timberwolf, 5%);
-    color: $white;
-    border-color: $jonquil;
+.form-check {
+  &-input {
+    background-color: var(--timberwolf);
+    border-color: var(--text-color);
+
+    &:checked {
+      background-color: var(--jonquil);
+      border-color: var(--jonquil);
+    }
+
+    &:focus {
+      background-color: rgba(255, 225, 0, 0.359);
+      color: var(--text-color);
+      border-color: var(--jonquil);
+    }
+
+    &::placeholder {
+      color: var(--text-color);
+      opacity: 0.6;
+    }
   }
 
-  &::placeholder {
-    color: rgba($white, 0.5);
+  &-label {
+    color: var(--text-color);
   }
 }
 
-// Ajustar los enlaces
-a {
-  color: $jonquil;
-  
-  &:hover {
-    color: $aureolin;
-  }
-}
 .form-label {
-  font-size: 1rem;
-  color: #FFD700;
-  font-weight:lighter;
-  font-style: oblique;  
+  color: var(--jonquil);
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.156);
+  
+  .modal-content {
+    background-color: var(--surface);
+    color: var(--text-color);
+  }
+  .modal-header {
+    border-bottom: 2px solid var(--timberwolf);
+  }
+}
+
+.bi {
+  color: var(--jonquil);
+}
+
+//info modal 
+.modal {
+  background-color: rgba(0, 0, 0, 0.156);
+  color: black;
+  
+  .modal-content{
+    background-color: $yellow;
+  }
+  .modal-header{
+    border-bottom: 2px solid $gray-700;    
+  }
+}
+
+
+.community-message {
+  padding: 2rem 0;
+  font-family: "Nunito Sans", sans-serif; 
+  font-style: italic; 
+  text-align: center; 
+  font-size: 1.2rem;
+  font-weight:800;
+  text-transform: uppercase;  
+  color: var(--text-color);
+  
+  
+  .message-header {
+    color: var(--jonquil);
+    font-weight: bold;
+  }
+  
+  .message-content {
+    color: var(--text-color);
+  }
+ 
+}
+.welcome-title {
+  color: var(--text-color) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  
+  [data-theme="light"] & {
+    text-shadow: none;
+  }
 }

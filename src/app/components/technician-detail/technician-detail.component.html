@@ -1,6 +1,6 @@
-<div class="container mt-5">
+<div class="container container-fluid justify-content-center mt-5">
   <div class="card" style="max-width: 900px;">
-    <div class="row no-gutters">
+    <div class="row ">
       <div class="col-md-4 d-flex justify-content-center">
         <img src="{{ technician.photo }}" class="card-img" alt="Foto del técnico"
           onerror="this.src='/assets/img/user_image.png'">
@@ -14,8 +14,6 @@
 
           <div class="card-text">
             <div>
-
-
               <p><i class="bi bi-geo-alt"></i> {{ technician.town }} </p>
             </div>
             <strong>Puede desplazarse largas distancias:</strong>
@@ -32,14 +30,36 @@
           <h6 class="mt-3"><strong>{{ section.section_name }}</strong></h6>
           @for(knowledge of section.section_knowledges; track knowledge.knowledge_name){
           <span class="badge bg-light">{{ knowledge.knowledge_name }}</span>
-
           }
           }
-
-
           <p class="card-text mt-3"> {{ technician.description }}</p>
+          <div class="row">
+            <a [routerLink]="['/contact-user', id]" class="click-btn btn-style506">Contactar</a>
+            <button type="button" class="btn col-1 p-0 m-0" data-bs-toggle="modal" data-bs-target="#infoModal">
+              <i class="bi bi-info-circle"></i>
+            </button>
 
-          <a [routerLink]="['/contact-user', id]" class="click-btn btn-style506">Contactar</a>
+            <!-- Info Modal -->
+            <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Información de contacto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <p>Tu mensaje se enviará por correo electrónico. </p>
+                      <p>
+                        La persona destinataria podrá responder directamente al email que hayas proporcionado.
+                      </p>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>

@@ -76,6 +76,7 @@ export class ContactComponent {
         next: () => {
           this.toastr.success('Email enviado correctamente');
           this.registerForm.reset();
+          this.router.navigate(['/user', this.id]);
         },
         error: (error) => {
           console.error('Error al enviar el email', error);

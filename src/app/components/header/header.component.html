@@ -10,12 +10,12 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/buscar">Buscar técnicos/as
+                    <a class="nav-link" href="/buscar">Buscar técnicos/as
                         <span class="visually-hidden">(current)</span>
                     </a>
                 </li>
             </ul>
-            <ul class="navbar-nav me-2 mb-2 mb-lg-0">
+            <ul class="navbar-nav me-2 mb-1 mb-lg-0">
                 <li class="nav-item me-2">
                     <a class="nav-link" aria-current="page" href="/registro">Anunciate</a>
                 </li>
@@ -31,7 +31,12 @@
                
                 }
             </ul>
-
+            
+        </div>
+        <div class="theme-toggle ms-0 me-3">
+            <button class="btn btn-link" (click)="toggleTheme()">
+                <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+            </button>
         </div>
     </div>
 </nav>

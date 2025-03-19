@@ -15,11 +15,12 @@ export class FilterService {
   constructor() {
     this.loadUserKnowledgeList(); // Cargar los datos
   }
+  serviceLoading = signal<boolean>(true);
   techniciansFiltred = signal<User[]>([]);
   selectedSections: WritableSignal<Section[]> = signal([]);
   selectedKnowledges = signal<Knowledge[]>([]);
   userKnowledgeList = signal<UserKnowledge[]>([]);
-  filteredIsd = signal<number[]>([]);
+  filteredIds = signal<number[]>([]);
   userKnowledgeService = inject(UserKnowledgeService);
   knowledgeService = inject(KnowledgeService);
   allKnowledges: Knowledge[] = this.knowledgeService.knowledgeList();
@@ -37,9 +38,9 @@ export class FilterService {
 
     const sectionIds = sections.map(section => section.id_section);
 
-    const filteredKnowledgeIds = knowledges
-      .filter(knowledge => sectionIds.includes(knowledge.section_id))
-      .map(knowledge => knowledge.id_knowledge);
+    // const filteredKnowledgeIds = knowledges
+    //   .filter(knowledge => sectionIds.includes(knowledge.section_id))
+    //   .map(knowledge => knowledge.id_knowledge);
 
     const userToKnowledgeMap = new Map<number, number[]>();
 
@@ -83,6 +84,17 @@ export class FilterService {
         return selectedKnowledgeIds.every(knowledgeId => userKnowledgeIds.includes(knowledgeId!));
       }
     });
+  }
+
+
+
+  filterByTown(town: string): number[] {
+    const filteredUserIds = this.filteredBySections();
+    const filteredUserIdsByTown = filteredUserIds.filter(userId => {
+      const user = this.techniciansFiltred().find(t => t.id_user === userId);
+      return user?.town === town;
+    });
+    return filteredUserIdsByTown;
   }
 
   filterTechnicians(): number[] {
