@@ -1,4 +1,3 @@
-
 $primary-yellow: #ffc107;
 $hover-shadow: 1rem 1rem 3rem rgba(255, 255, 255, 0.867);
 
@@ -16,10 +15,44 @@ $hover-shadow: 1rem 1rem 3rem rgba(255, 255, 255, 0.867);
 }
 
 h1 {
-    text-transform:none;
-    color: whitesmoke;
-    text-shadow: 0rem 0 0.1rem rgba(244, 215, 56, 0.867);
-    
+  font-size: 3rem;
+  text-transform: none;
+  @media (max-width: 1200px) {
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 992px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+h2 {
+  font-size: 2rem;
+  text-shadow: 0rem 0 0.1rem rgba(37, 32, 8, 0.867);
+  
+  @media (max-width: 1200px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 992px) {
+    font-size: 1.6rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1.2rem;
+  }
 }
 
 
@@ -50,56 +83,55 @@ h1 {
 }
 
 @media (max-width: 992px) {
-    .hero-section {
-      .hero-image {
-          justify-self: center;
-        max-height: 300px;
-        margin-bottom: 2rem;
-      }
-    }
-    .image-container {
-      display: flex;
-      justify-content: center;
+  .hero-section {
+    .hero-image {
+      justify-self: center;
+      max-height: 300px;
+      margin-bottom: 2rem;
     }
   }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+  }
+}
 
 @media (max-width: 768px) {
   .hero-section {
     .hero-image {
-        justify-self: center;
+      justify-self: center;
       max-height: 300px;
       margin-bottom: 2rem;
     }
-  }  
+  }
 }
 
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 1.5rem 0;  // Reduced padding for mobile
+    padding: 1.5rem 0; // Reduced padding for mobile
 
     .hero-image {
       justify-self: center;
-      max-height: 250px;  // Slightly smaller image for mobile
-      margin-bottom: 1.5rem;  // Reduced margin
+      max-height: 250px; // Slightly smaller image for mobile
+      margin-bottom: 1.5rem; // Reduced margin
     }
   }
 
   .mb-5 {
-    margin-bottom: 1.3rem !important;  // Override Bootstrap's mb-5 for mobile
+    margin-bottom: 1.3rem !important; // Override Bootstrap's mb-5 for mobile
   }
 
   .mt-4 {
-    margin-top: 1rem !important;  // Reduce top margin on mobile
+    margin-top: 1rem !important; // Reduce top margin on mobile
   }
 
   .community-message {
-    padding: 1rem 0;  // Reduced padding
+    padding: 1rem 0; // Reduced padding
   }
 
   h1.mb-5 {
-    margin-bottom: 1rem !important;  // Reduce heading bottom margin
+    margin-bottom: 1rem !important; // Reduce heading bottom margin
   }
 }
-
-
