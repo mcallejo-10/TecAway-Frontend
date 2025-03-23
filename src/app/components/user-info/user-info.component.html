@@ -38,9 +38,32 @@
       </div>
     </div>
   </div>
-  <div class="row d-flex justify-content-start my-4">
-
+  <div class="row d-flex justify-content-start my-4 gap-3">
     <a routerLink="/" class="click-btn btn-style506">Volver</a>
-    <a routerLink="/editar-cuenta" class="click-btn btn-style506">Editar</a>
+    <a routerLink="/editar-cuenta" class="click-btn btn-style506">Editar perfil</a>
+    <button class="click-btn btn-style506 btn-danger-custom" data-bs-toggle="modal" data-bs-target="#deleteModal">
+      Eliminar cuenta
+    </button>
   </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteAccount()">
+              Eliminar cuenta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

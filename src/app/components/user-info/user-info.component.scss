@@ -1,28 +1,66 @@
 .card-img {
-    border-radius: 50%;
-    margin: 20px;
-    width: 200px;
-    height: 200px;
+  border-radius: 50%;
+  margin: 20px;
+  width: 200px;
+  height: 200px;
 
-    
-    @media (max-width: 768px) {
-        max-width: 300px;
-        display: flex;
-        align-content: center;
-    }
+
+  @media (max-width: 768px) {
+    max-width: 300px;
+    display: flex;
+    align-content: center;
+  }
 }
+
 img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-  }
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
 .card-subtitle {
-    font-size: 1.5rem;
-    font-weight:500;
-    color: #FFD700;
-    margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #FFD700;
+  margin-bottom: 0.5rem;
+}
+
+.btn-danger-custom {
+  &:hover::before {
+    background-color: #ff0000 !important;
   }
 
-  
+  &:hover {
+    border-color: #9b0000;
+    font-weight: 800 !important;
+  }
+}
+
+.click-btn {
+  min-width: 150px; // Asegura un ancho mínimo para el texto
+  white-space: nowrap; // Evita que el texto se rompa
+}
+
+.modal {
+  .btn-secondary {
+    border: 1px solid var(--jet);
+    color: var(--text-color);
+    background-color: var(--surface);
+    
+    &:hover {
+      background-color: var(--surface);
+      color: gray;
+      border-color: var(--text-color);
+    }
+  }
+
+  .btn-danger {
+    border: 1px solid #dc3545;
+    &:hover {
+      background-color: #dc3545;
+      border-color: #0e0000;
+    }
+  }
+}
