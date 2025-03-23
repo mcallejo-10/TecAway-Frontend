@@ -49,4 +49,9 @@ export class UserService {
     return this.http.get<UserInfoResponse>(this.myAppUrl + this.myApiUrl + 'get-user-info/' + id);
   }
 
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.myAppUrl}${this.myApiUrl}${id}`, {
+      withCredentials: true
+    });
+  }
 }
