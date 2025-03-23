@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-user-info',
@@ -12,10 +13,14 @@ import { CommonModule } from '@angular/common';
 export class UserInfoComponent {
   technician: any = {};
   userService = inject(UserService);
+  authService = inject(AuthService);
   id: number = 0;
+  showDeleteModal: boolean = false;
 
-  constructor(private aRouter: ActivatedRoute) {
-  }
+  constructor(
+    private aRouter: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.userService.getUser().subscribe((res: any) => {
@@ -24,6 +29,27 @@ export class UserInfoComponent {
       this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
         this.technician = res.data;
       });
+    });
+  }
+
+  openDeleteModal() {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+  }
+
+  deleteAccount() {
+    this.userService.deleteUser(this.id).subscribe({
+      next: () => {
+        this.authService.logoutUser();
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Error deleting account:', error);
+        // Aquí podrías añadir un mensaje de error para el usuario
+      }
     });
   }
 }
