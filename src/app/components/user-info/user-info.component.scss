@@ -1,9 +1,13 @@
+.card {
+  border: 1px solid var(--jonquil)!important;
+  border-radius: 0;
+}
+
 .card-img {
   border-radius: 50%;
   margin: 20px;
   width: 200px;
   height: 200px;
-
 
   @media (max-width: 768px) {
     max-width: 300px;
@@ -23,7 +27,7 @@ img {
 .card-subtitle {
   font-size: 1.5rem;
   font-weight: 500;
-  color: #FFD700;
+  color: var(--jonquil);
   margin-bottom: 0.5rem;
 }
 
@@ -39,8 +43,8 @@ img {
 }
 
 .click-btn {
-  min-width: 150px; // Asegura un ancho mínimo para el texto
-  white-space: nowrap; // Evita que el texto se rompa
+  min-width: 150px;
+  white-space: nowrap;
 }
 
 .modal {
