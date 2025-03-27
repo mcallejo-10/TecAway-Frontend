@@ -125,12 +125,34 @@ $surface: #bebebe;
   border: 1px solid $card-border-color;
   margin: 1rem 0.5rem 1rem 1rem;
   transition: all 0.3s ease;
-  cursor: crosshair;  // Cambia el cursor a una cruz
-  position: relative;  // Para el efecto de resplandor
+  cursor: crosshair;
+  position: relative;
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba($primary-color, 0.4);  // Resplandor amarillo
+  .card-img {
+    .img {
+      margin: 12px;
+      margin-left: 18px;
+      margin-right: 18px;
+      max-width: 100px;
+      transition: all 0.3s ease;
+      
+      @media screen and (min-width: 768px) {
+        filter: grayscale(80%);
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 10px rgba($primary-color, 0.6), 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+      .card-img .img {
+        filter: grayscale(0);
+        transform: scale(1.2);
+        box-shadow: 0 0px 10px rgba($primary-color, 0.3);
+      }
+    }
   }
 
   .row {
@@ -240,15 +262,16 @@ $surface: #bebebe;
 
 .card-link {
   width: 100%;
-  cursor: crosshair;  // Asegura que el cursor se mantiene como cruz en todo el área clickeable
+  cursor: crosshair;
 
   a {
     text-decoration: none;
     color: inherit;
-    cursor: crosshair;  // Mantiene el cursor como cruz también en el enlace
+    cursor: crosshair;
   }
 
   @include tablet {
     padding: 0 0.5rem;
   }
 }
+
