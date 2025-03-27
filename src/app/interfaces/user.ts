@@ -9,8 +9,8 @@ export interface User {
     can_move?: boolean;
     photo?: string;
     roles: string[];
-    createdAt?: Date;
-    updatedAt?: Date;
+    created_at?: Date;
+    updated_at?: Date;
 }
 
 export interface UserResponse {
