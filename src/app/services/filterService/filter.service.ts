@@ -104,9 +104,9 @@ export class FilterService {
 
   }
 
-  setTechnicianList(techniciansList: User[]) {
-    this.techniciansFiltred.set(techniciansList);
-  }
+  // setTechnicianList(techniciansList: User[]) {
+  //   this.techniciansFiltred.set(techniciansList);
+  // }
 
   setSelectedSections(sections: Section[]) {
     this.selectedSections.set(sections);
@@ -115,4 +115,16 @@ export class FilterService {
   setSelectedKnowledges(knowledges: Knowledge[]) {
     this.selectedKnowledges.set(knowledges);
   }
+  // En filter.service.ts
+  setTechnicianList(technicians: User[]): void {
+    const sortedTechnicians = this.sortTechniciansByDate(technicians);
+    this.techniciansFiltred.set(sortedTechnicians);
+  }
+  
+  private sortTechniciansByDate(technicians: User[]): User[] {
+    return technicians.sort((a: User, b: User) => {
+      return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
+    });
+  }
 }
+
