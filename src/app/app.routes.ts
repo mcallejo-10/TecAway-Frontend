@@ -9,6 +9,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { authGuard } from './guards/auth.guard';
 import { ContactComponent } from './components/contact/contact.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
     { path: 'agregar-conocimientos', component: AddKnowledgesComponent, canActivate: [authGuard] },
     { path: 'tu-cuenta', component: UserInfoComponent, canActivate: [authGuard] },
     { path: 'editar-cuenta', component: EditUserComponent, canActivate: [authGuard] },
+    { path: 'privacy-policy', component: PrivacyPolicyComponent },
     { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

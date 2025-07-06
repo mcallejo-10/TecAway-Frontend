@@ -2,7 +2,18 @@
     justify-content: center;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    color: var(--text-color);
     background-color: var(--surface);
     border-top: 2px solid rgba(var(--jonquil), 0.4);
+    font-size:xx-small;
 }
+.nav-link {
+      padding-top: .715rem;
+      padding-bottom: .715rem;
+      color: var(--text-color);
+      font-style: none;
+
+
+      &:hover {
+        color: var(--jonquil);
+      }
+    }
