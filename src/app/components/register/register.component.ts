@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
 import { User } from '../../interfaces/user';
 import { MustMatch } from '../../validators/must-match.validator';
@@ -11,7 +11,7 @@ import { validateFile } from '../../validators/validate-file.validator';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -58,6 +58,7 @@ export class RegisterComponent {
     ]),
     can_move: new FormControl(false),
     photo: new FormControl('', validateFile),
+    acceptPrivacyPolicy: new FormControl(false, [Validators.requiredTrue]),
     },
     {
       validators: MustMatch('password', 'confirmPassword')
@@ -74,7 +75,7 @@ export class RegisterComponent {
 
 
   validateFirstStep(): boolean {
-    const controls = ['name', 'email', 'password', 'confirmPassword'];
+    const controls = ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy'];
     return controls.every(control =>
       this.registerForm.get(control)?.valid &&
       this.registerForm.get(control)?.touched
@@ -82,6 +83,12 @@ export class RegisterComponent {
   }
 
   nextStep(): void {
+    // Marcar todos los campos como touched para mostrar errores
+    const controls = ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy'];
+    controls.forEach(control => {
+      this.registerForm.get(control)?.markAsTouched();
+    });
+
     if (this.validateFirstStep()) {
       const email = this.registerForm.get('email')?.value?.toLowerCase() || '';
 
@@ -100,9 +107,12 @@ export class RegisterComponent {
             console.error('Error al verificar email:', error);
             this.errorMessage = 'Error al verificar email';
             this.cdr.detectChanges(); 
-
           }
         });
+    } else {
+      // Mensaje específico si no se han completado todos los campos
+      this.errorMessage = 'Por favor, completa todos los campos requeridos y acepta la política de privacidad';
+      this.cdr.detectChanges();
     }
   }
 

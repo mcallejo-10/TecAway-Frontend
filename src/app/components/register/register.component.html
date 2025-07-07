@@ -92,6 +92,29 @@
                         </div>
                         }
                     </div>
+                     <!-- Checkbox de aceptación de política de privacidad -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input id="acceptPrivacyPolicy" formControlName="acceptPrivacyPolicy" 
+                                   type="checkbox" class="form-check-input">
+                            <label class="form-check-label" for="acceptPrivacyPolicy">
+                                Acepto la <a routerLink="/privacy-policy" target="_blank" class="link text-decoration-underline">política de privacidad</a>
+                            </label>
+                        </div>
+                        @if(registerForm.get('acceptPrivacyPolicy')?.invalid && registerForm.get('acceptPrivacyPolicy')?.touched){
+                        <div class="text-danger">
+                            Debes aceptar la política de privacidad para continuar
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Mensaje de error del paso 1 -->
+                    @if(errorMessage && currentStep === 1){
+                    <div class="alert alert-danger">
+                        {{ errorMessage }}
+                    </div>
+                    }
+
                     <div class="d-flex justify-content-end mb-3">
                         <div class="click-btn btn-style506" (click)="nextStep()"
                             >Siguiente</div>
@@ -189,13 +212,15 @@
 
                     <div class="d-flex justify-content-between mb-3">
                         <button type="button" class="btn btn-primary" (click)="previousStep()">Anterior</button>
-                        <button type="submit" class="btn btn-warning" (click)="onRegister()">Registrarse</button>
+                        <button type="submit" class="btn btn-warning" 
+                                [disabled]="registerForm.invalid"
+                                (click)="onRegister()">Registrarse</button>
                     </div>
                 </div>
                 }
             </form>
 
-            @if(errorMessage){
+            @if(errorMessage && currentStep === 2){
             <span class="d-flex justify-content-center mt-3">
                 <div class="text-danger">
                     {{ errorMessage }}
