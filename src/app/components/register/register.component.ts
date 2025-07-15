@@ -125,16 +125,21 @@ export class RegisterComponent {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log('Archivo seleccionado:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        lastModified: file.lastModified
-      });
+      console.log('=== ARCHIVO SELECCIONADO ===');
+      console.log('Nombre original:', file.name);
+      console.log('Tipo MIME:', file.type);
+      console.log('Tamaño:', file.size, 'bytes');
+      console.log('Última modificación:', new Date(file.lastModified));
+      console.log('===============================');
       
-      // Manejo especial para archivos HEIC de iPhone
-      if (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
-        console.log('Archivo HEIC detectado de iPhone');
+      // Manejo especial para archivos HEIC/HEIF
+      if (file.name.toLowerCase().includes('.heic') || file.name.toLowerCase().includes('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
+        console.log('🍎 Archivo HEIC detectado (formato iOS)');
+      }
+      
+      // Detectar si es una conversión automática de Safari
+      if (file.type === 'image/heic' && !file.name.toLowerCase().includes('.heic')) {
+        console.log('⚠️ Safari convirtió automáticamente a HEIC');
       }
       
       this.selectedFile = file; 

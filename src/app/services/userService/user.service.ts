@@ -38,8 +38,18 @@ export class UserService {
   }
 
   uploadPhoto(photo: File): Observable<any> {
+    console.log('=== SUBIENDO FOTO ===');
+    console.log('Archivo a subir:', {
+      name: photo.name,
+      type: photo.type,
+      size: photo.size
+    });
+    
     const formData = new FormData();
     formData.append('file', photo);
+    
+    // Log del FormData (para debugging)
+    console.log('FormData creado para:', photo.name);
     
     // Headers específicos para mejor compatibilidad con iOS
     const headers = {

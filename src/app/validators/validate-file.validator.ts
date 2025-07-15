@@ -6,27 +6,45 @@ export function validateFile(): ValidatorFn {
       const file = control.value as File;
       if (!file) return null;
   
-      const maxSize = 5 * 1024 * 1024; // Aumentado a 5MB para archivos de iPhone
+      const maxSize = 5 * 1024 * 1024; // 5MB para archivos de iPhone
       if (file.size > maxSize) {
         return { maxSize: true };
       }
   
-      // Tipos de archivo permitidos, incluyendo HEIC de iPhone
+      // Tipos de archivo permitidos
       const allowedTypes = [
         'image/jpeg',
         'image/jpg', 
         'image/png',
         'image/gif',
         'image/webp',
-        'image/heic', // Formato nativo de iPhone
-        'image/heif'  // Formato relacionado con HEIC
+        'image/heic',
+        'image/heif'
       ];
       
-      const isValidType = allowedTypes.includes(file.type) || 
-                         file.name.toLowerCase().endsWith('.heic') ||
-                         file.name.toLowerCase().endsWith('.heif');
+      // Validación más flexible para archivos de iOS
+      const fileName = file.name.toLowerCase();
+      const isValidExtension = fileName.endsWith('.jpg') || 
+                              fileName.endsWith('.jpeg') || 
+                              fileName.endsWith('.png') || 
+                              fileName.endsWith('.gif') || 
+                              fileName.endsWith('.webp') || 
+                              fileName.endsWith('.heic') || 
+                              fileName.endsWith('.heif');
       
-      if (!isValidType && !file.type.startsWith('image/')) {
+      const isValidMimeType = allowedTypes.includes(file.type) || file.type.startsWith('image/');
+      
+      // Safari a veces no reporta el MIME type correctamente para HEIC
+      const isSafariHeicConversion = file.type === 'image/heic' || fileName.includes('heic');
+      
+      if (!isValidMimeType && !isValidExtension && !isSafariHeicConversion) {
+        console.log('Archivo rechazado:', {
+          name: file.name,
+          type: file.type,
+          isValidExtension,
+          isValidMimeType,
+          isSafariHeicConversion
+        });
         return { invalidFormat: true };
       }
   
