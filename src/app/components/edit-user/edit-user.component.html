@@ -104,7 +104,6 @@
                            id="inputPhoto" 
                            formControlName="photo"
                            accept="image/*,.heic,.heif"
-                           capture="environment"
                            (change)="onFileSelected($event)"
                            placeholder="Tamaño máximo: 5MB. Formatos permitidos: jpg, png, gif, heic"
                            [ngClass]="{'is-invalid': registerForm.get('photo')?.errors?.['maxSize'] || registerForm.get('photo')?.errors?.['invalidFormat']}" />
