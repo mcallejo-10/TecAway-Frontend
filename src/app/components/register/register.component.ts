@@ -125,6 +125,18 @@ export class RegisterComponent {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      console.log('Archivo seleccionado:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified
+      });
+      
+      // Manejo especial para archivos HEIC de iPhone
+      if (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+        console.log('Archivo HEIC detectado de iPhone');
+      }
+      
       this.selectedFile = file; 
       this.registerForm.get('photo')?.updateValueAndValidity();
     }
@@ -166,13 +178,32 @@ export class RegisterComponent {
 
   
   private uploadUserPhoto(photo: File): void {
+    console.log('Iniciando subida de foto:', {
+      name: photo.name,
+      type: photo.type,
+      size: photo.size
+    });
+    
     this.userService.uploadPhoto(photo).subscribe({
       next: () => {
+        console.log('Foto subida exitosamente');
         this.finishRegistration(this.registerForm.get('name')?.value!);
       },
       error: (error) => {
-        console.error('Error al subir la foto:', error);
-        this.toastr.warning('El usuario se creó pero hubo un error al subir la foto', 'Advertencia');
+        console.error('Error detallado al subir la foto:', error);
+        
+        // Mensajes específicos según el tipo de error
+        let errorMessage = 'El usuario se creó pero hubo un error al subir la foto';
+        
+        if (error.status === 413) {
+          errorMessage = 'El archivo es demasiado grande. El usuario se creó correctamente.';
+        } else if (error.status === 415) {
+          errorMessage = 'Formato de archivo no soportado. El usuario se creó correctamente.';
+        } else if (error.status === 0) {
+          errorMessage = 'Error de conexión al subir la foto. El usuario se creó correctamente.';
+        }
+        
+        this.toastr.warning(errorMessage, 'Advertencia');
         this.router.navigate(['/agregar-conocimientos']);
       }
     });

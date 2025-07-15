@@ -40,8 +40,17 @@ export class UserService {
   uploadPhoto(photo: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', photo);
+    
+    // Headers específicos para mejor compatibilidad con iOS
+    const headers = {
+      'Accept': 'application/json'
+      // No incluir Content-Type, Angular lo manejará automáticamente con FormData
+    };
+    
     return this.http.post<any>(this.myAppUrl + this.myApiUrl + 'upload-photo', formData, {
-      withCredentials: true
+      headers,
+      withCredentials: true,
+      reportProgress: true // Para poder mostrar progreso si es necesario
     });
   }
 

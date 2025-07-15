@@ -6,12 +6,27 @@ export function validateFile(): ValidatorFn {
       const file = control.value as File;
       if (!file) return null;
   
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const maxSize = 5 * 1024 * 1024; // Aumentado a 5MB para archivos de iPhone
       if (file.size > maxSize) {
         return { maxSize: true };
       }
   
-      if (!file.type.startsWith('image/')) {
+      // Tipos de archivo permitidos, incluyendo HEIC de iPhone
+      const allowedTypes = [
+        'image/jpeg',
+        'image/jpg', 
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'image/heic', // Formato nativo de iPhone
+        'image/heif'  // Formato relacionado con HEIC
+      ];
+      
+      const isValidType = allowedTypes.includes(file.type) || 
+                         file.name.toLowerCase().endsWith('.heic') ||
+                         file.name.toLowerCase().endsWith('.heif');
+      
+      if (!isValidType && !file.type.startsWith('image/')) {
         return { invalidFormat: true };
       }
   

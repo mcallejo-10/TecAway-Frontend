@@ -100,6 +100,18 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      console.log('Archivo seleccionado:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified
+      });
+      
+      // Manejo especial para archivos HEIC de iPhone
+      if (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+        console.log('Archivo HEIC detectado de iPhone');
+      }
+      
       this.selectedFile = file;
       this.registerForm.get('photo')?.updateValueAndValidity();
     }
@@ -137,13 +149,32 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
   }
 
   private uploadUserPhoto(photo: File): void {
+    console.log('Iniciando subida de foto:', {
+      name: photo.name,
+      type: photo.type,
+      size: photo.size
+    });
+    
     this.userService.uploadPhoto(photo).subscribe({
       next: () => {
+        console.log('Foto subida exitosamente');
         this.finishUpdate(this.registerForm.get('inputName')?.value!);
       },
       error: (error) => {
-        console.error('Error al subir la foto:', error);
-        this.toastr.warning('Los datos se actualizaron pero hubo un error al subir la foto', 'Advertencia');
+        console.error('Error detallado al subir la foto:', error);
+        
+        // Mensajes específicos según el tipo de error
+        let errorMessage = 'Los datos se actualizaron pero hubo un error al subir la foto';
+        
+        if (error.status === 413) {
+          errorMessage = 'El archivo es demasiado grande. Intenta con una imagen más pequeña.';
+        } else if (error.status === 415) {
+          errorMessage = 'Formato de archivo no soportado. Intenta convertir la imagen a JPG.';
+        } else if (error.status === 0) {
+          errorMessage = 'Error de conexión. Verifica tu conexión a internet e intenta nuevamente.';
+        }
+        
+        this.toastr.warning(errorMessage, 'Advertencia');
       }
     });
   }
