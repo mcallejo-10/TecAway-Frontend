@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<!-- Página principal -->
+<url>
+  <loc>https://tecaway.es/</loc>
+  <lastmod>2025-07-15T16:12:53+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+
+<!-- Buscar técnicos -->
+<url>
+  <loc>https://tecaway.es/buscar</loc>
+  <lastmod>2025-07-15T16:12:53+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+
+<!-- Login -->
+<url>
+  <loc>https://tecaway.es/login</loc>
+  <lastmod>2025-07-15T16:12:53+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+
+<!-- Registro -->
+<url>
+  <loc>https://tecaway.es/registro</loc>
+  <lastmod>2025-07-15T16:12:53+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+<!-- Política de privacidad -->
+<url>
+  <loc>https://tecaway.es/privacy-policy</loc>
+  <lastmod>2025-07-15T16:12:53+00:00</lastmod>
+  <priority>0.30</priority>
+</url>
+
+</urlset>
