@@ -84,7 +84,7 @@
             <div class="row g-0">
               <div class="col-2">
                 <div class="card-img">
-                  <img src="{{technician.photo}}" class="img" onerror="this.src='/assets/img/user_image.png'"
+                  <img [src]="technician.photo | cloudinaryTransform:300:300" class="img" onerror="this.src='/assets/img/user_image.png'"
                     alt="{{technician.name}} image">
                 </div>
               </div>

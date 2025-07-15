@@ -3,10 +3,11 @@ import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/authService/auth.service';
+import { CloudinaryTransformPipe } from '../../pipes/cloudinary-transform.pipe';
 
 @Component({
   selector: 'app-user-info',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CloudinaryTransformPipe],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'
 })

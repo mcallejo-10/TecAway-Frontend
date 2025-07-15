@@ -10,10 +10,11 @@ import { KnowledgeService } from '../../services/knowledgeService/knowledge.serv
 import { Knowledge } from '../../interfaces/knowledge';
 import { RouterLink, RouterModule, } from '@angular/router';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
+import { CloudinaryTransformPipe } from '../../pipes/cloudinary-transform.pipe';
 
 @Component({
   selector: 'app-technicians',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule,  LoadingBarComponent],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, CloudinaryTransformPipe],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
