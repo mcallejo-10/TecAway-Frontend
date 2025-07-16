@@ -9,12 +9,12 @@ import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge } from '../../interfaces/knowledge';
 import { RouterLink, RouterModule, } from '@angular/router';
-import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
-import { CloudinaryTransformPipe } from '../../pipes/cloudinary-transform.pipe';
+import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
+import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 
 @Component({
   selector: 'app-technicians',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, CloudinaryTransformPipe],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, UserAvatarComponent],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })

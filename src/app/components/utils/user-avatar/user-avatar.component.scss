@@ -1,0 +1,34 @@
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-image {
+  border-radius: 50%;
+  object-fit: cover;
+//   border: 2px solid #e9ecef;
+  transition: transform 0.2s ease;
+}
+
+.avatar-image:hover {
+  transform: scale(1.05);
+}
+
+.avatar-initials {
+  border-radius: 50%;
+  background: #FFC107;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-transform: uppercase;
+//   border: 2px solid #FFC107;
+  user-select: none;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.avatar-initials:hover {
+  transform: scale(1.05);
+}

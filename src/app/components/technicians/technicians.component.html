@@ -61,7 +61,11 @@
           <div class="row g-0">
             <div class="col-2">
               <div class="card-img">
-                <img src="/assets/img/user_image.png" class="img" alt="No technicians available">
+                <app-user-avatar 
+                  [photo]="null" 
+                  [name]="'Sin técnicos'" 
+                  [size]="80">
+                </app-user-avatar>
               </div>
             </div>
             <div class="col-10">
@@ -84,8 +88,11 @@
             <div class="row g-0">
               <div class="col-2">
                 <div class="card-img">
-                  <img [src]="technician.photo | cloudinaryTransform:300:300" class="img" onerror="this.src='/assets/img/user_image.png'"
-                    alt="{{technician.name}} image">
+                  <app-user-avatar 
+                    [photo]="technician.photo" 
+                    [name]="technician.name" 
+                    [size]="80">
+                  </app-user-avatar>
                 </div>
               </div>
               <div class="col-10">

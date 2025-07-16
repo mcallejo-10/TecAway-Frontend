@@ -3,9 +3,12 @@
     <div class="col-12">
       <div class="card mx-auto" style="max-width: 900px;">
         <div class="row no-gutters">
-          <div class="col-md-4 d-flex justify-content-center">
-            <img [src]="technician.photo | cloudinaryTransform:400:400" class="card-img" alt="Foto del técnico"
-              onerror="this.src='/assets/img/user_image.png'">
+          <div class="col-md-4 d-flex card-img justify-content-center">
+            <app-user-avatar 
+              [photo]="technician.photo" 
+              [name]="technician.name" 
+              [size]="180">
+            </app-user-avatar>
           </div>
 
           <div class="col-md-8">

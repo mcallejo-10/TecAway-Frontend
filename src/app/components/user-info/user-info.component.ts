@@ -3,11 +3,11 @@ import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/authService/auth.service';
-import { CloudinaryTransformPipe } from '../../pipes/cloudinary-transform.pipe';
+import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 
 @Component({
   selector: 'app-user-info',
-  imports: [CommonModule, RouterLink, CloudinaryTransformPipe],
+  imports: [CommonModule, RouterLink, UserAvatarComponent],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'
 })
@@ -49,7 +49,6 @@ export class UserInfoComponent {
       },
       error: (error) => {
         console.error('Error deleting account:', error);
-        // Aquí podrías añadir un mensaje de error para el usuario
       }
     });
   }

@@ -1,0 +1,19 @@
+<div class="avatar-container" [style.width.px]="size" [style.height.px]="size">
+  @if(hasValidPhoto) {
+    <img 
+      [src]="photo | cloudinaryTransform:size:size" 
+      [alt]="name + ' photo'"
+      class="avatar-image"
+      (error)="onImageError()"
+      [style.width.px]="size" 
+      [style.height.px]="size">
+  } @else {
+    <div 
+      class="avatar-initials"
+      [style.width.px]="size" 
+      [style.height.px]="size"
+      [style.font-size.px]="fontSize">
+      {{ initials }}
+    </div>
+  }
+</div>

@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CloudinaryTransformPipe } from '../../pipes/cloudinary-transform.pipe';
+import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 
 @Component({
   selector: 'app-technician-detail',
-  imports: [CommonModule, RouterLink, CloudinaryTransformPipe],
+  imports: [CommonModule, RouterLink, UserAvatarComponent],
   templateUrl: './technician-detail.component.html',
   styleUrl: './technician-detail.component.scss'
 })
