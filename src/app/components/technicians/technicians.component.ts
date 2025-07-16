@@ -39,6 +39,7 @@ export class TechniciansComponent {
   filteredTechnicians: User[] = [];
 
   constructor(private fb: FormBuilder) { }
+  
   // Función principal
 ngOnInit() {
   this.loading = true;

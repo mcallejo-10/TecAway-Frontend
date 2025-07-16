@@ -5,13 +5,12 @@
 
 .avatar-image {
   border-radius: 50%;
-  object-fit: cover;
-//   border: 2px solid #e9ecef;
-  transition: transform 0.2s ease;
+  object-fit: cover;  
 }
 
 .avatar-image:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  transition: transform 0.2s ;
 }
 
 .avatar-initials {
@@ -23,7 +22,6 @@
   justify-content: center;
   font-weight: 600;
   text-transform: uppercase;
-//   border: 2px solid #FFC107;
   user-select: none;
   transition: transform 0.2s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);

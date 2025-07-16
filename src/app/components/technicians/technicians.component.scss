@@ -133,12 +133,7 @@ $surface: #bebebe;
       margin: 12px;
       margin-left: 18px;
       margin-right: 18px;
-      max-width: 100px;
-      transition: all 0.3s ease;
-      
-      @media screen and (min-width: 768px) {
-        filter: grayscale(80%);
-      }
+      max-width: 120px; 
     }
   }
 
