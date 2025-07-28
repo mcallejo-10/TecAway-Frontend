@@ -1,4 +1,6 @@
-
+@if(loading == true) {
+<app-loading-bar message="Cargando conocimientos..."></app-loading-bar>
+} @if(loading == false) {
 <div class="container mt-4">
     <h2 class="mb-2 text-center">Añade tus conocimientos</h2>
     
@@ -32,3 +34,4 @@
       </div>
     </div>
   </div>
+}

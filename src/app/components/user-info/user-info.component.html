@@ -1,3 +1,7 @@
+@if(loading == true) {
+<app-loading-bar message="Cargando perfil..."></app-loading-bar>
+} @if(loading == false) {
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-12">
@@ -73,3 +77,4 @@
       </div>
     </div>
 </div>
+}

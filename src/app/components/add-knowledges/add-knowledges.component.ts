@@ -10,11 +10,12 @@ import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
 
 
 @Component({
   selector: 'app-add-knowledges',
-  imports: [],
+  imports: [LoadingBarComponent],
   templateUrl: './add-knowledges.component.html',
   styleUrl: './add-knowledges.component.scss',
 })
@@ -24,6 +25,7 @@ export class AddKnowledgesComponent {
   knowledgeService = inject(KnowledgeService);
   userKnowledgeService = inject(UserKnowledgeService);
 
+  loading: boolean = true;
   errorMessage: string = '';
 
   selectedKnowledges: number[] = [1];  // Mantenemos el 1 inicial
@@ -35,6 +37,7 @@ export class AddKnowledgesComponent {
   constructor(private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.userKnowledgeService.getUserKnowledgesById().subscribe((res: any) => {
       const backendKnowledges = res.data.map((userKnowledge: UserKnowledge) => userKnowledge.knowledge_id);
       this.userKnowledgeIds = [...backendKnowledges];
@@ -49,6 +52,7 @@ export class AddKnowledgesComponent {
       this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
         this.knowledgeService.setKnowledgeList(res.data);
         this.knowledgeList = this.knowledgeService.knowledgeList();
+        this.loading = false;
       });
     });
   }
