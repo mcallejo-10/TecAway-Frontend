@@ -73,7 +73,6 @@ ngOnInit() {
   });
 }
 
-// Función para cargar técnicos/usuarios
 private loadTechnicians(): void {
   this.userService.getUserList().subscribe((res: any) => {
     this.technicians = res.data;
@@ -81,30 +80,6 @@ private loadTechnicians(): void {
     this.filterService.setTechnicianList(this.technicians);
   });
 }
-
-// private loadSections(): void {
-//   this.sectionService.getSectionList().subscribe((res: any) => {
-//     this.sectionService.setSectionList(res.data);
-//     this.sectionList = this.sectionService.sectionList();
-    
-//     this.addSectionControls();
-//     this.filterService.setSelectedSections(this.sectionList);
-//   });
-// }
-
-
-
-
-// private loadKnowledges(): void {
-//   this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
-//     this.knowledgeList = res.data;
-    
-//     this.addKnowledgeControls();
-//     this.addConocimientosGenerales();
-    
-//     this.filterService.setSelectedKnowledges(this.knowledgeList);
-//   });
-// }
 
 private addSectionControls(): void {
   const sectionControls = this.sectionList.reduce((acc, section) => {
@@ -127,10 +102,6 @@ private addKnowledgeControls(): void {
   isCheckedSection(id: number): boolean {
     return this.selectedSections.some((section) => section.id_section === id);
   }
-
-  // isCheckedKnowledge(id: number): boolean {
-  //   return this.selectedKnowledges.some((knowledge) => knowledge.id_knowledge === id);
-  // }
 
 
   addConocimientosGenerales(): void {
