@@ -1,3 +1,19 @@
-<div class="progress">
+<div class="loading-container">
+  @if(showIcon) {
+    @if(useLogo) {
+      <div class="loading-logo">
+        <img [src]="logoPath" alt="TecAway Logo" class="logo-image">
+      </div>
+    } @else {
+      <div class="loading-icon">
+        <i class="bi {{ icon }}"></i>
+      </div>
+    }
+  }
+  <div class="progress">
     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
   </div>
+  @if(showMessage) {
+    <p class="loading-text">{{ message }}</p>
+  }
+</div>
