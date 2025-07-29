@@ -39,16 +39,16 @@
 
 .progress {
   height: 8px;
-  background-color: var(--surface);
+  background-color: #f0f0f0; // Valor fijo en lugar de var(--surface)
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid var(--jonquil);
+  border: 1px solid #FFC107; // Valor fijo en lugar de var(--jonquil)
   width: 300px;
   max-width: 90vw;
 }
 
 .progress-bar {
-  background-color: var(--jonquil);
+  background-color: #FFC107; // Valor fijo en lugar de var(--jonquil)
   transition: width 0.3s ease;
   
   &-striped {
@@ -71,7 +71,7 @@
 }
 
 .progress-bar-striped.progress-bar-animated {
-  background-color: var(--jonquil) !important;
+  background-color: #FFC107 !important; // Valor fijo en lugar de var(--jonquil)
 }
 
 @keyframes progress-bar-stripes {
@@ -90,7 +90,7 @@
     opacity: 1;
   }
   50% { 
-    transform: scale(1.2);
+    transform: scale(1.3);
     opacity: 0.8;
   }
   100% { 
