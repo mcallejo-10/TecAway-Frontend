@@ -221,4 +221,24 @@ private addKnowledgeControls(): void {
       this.closeFilter();
     }
   }
+
+  // 🆕 Método para calcular el tamaño del avatar según el breakpoint
+  getAvatarSize(): number {
+    if (typeof window === 'undefined') return 45; // SSR fallback
+    
+    const width = window.innerWidth;
+    
+    // Usar los mismos breakpoints que definimos en SCSS
+    if (width <= 575) {
+      return 80; // xs: tamaño móvil pequeño
+    } else if (width <= 767) {
+      return 70; // sm: móvil grande
+    } else if (width <= 991) {
+      return 45; // md: el problemático - MUY PEQUEÑO
+    } else if (width <= 1199) {
+      return 70; // lg: escritorio pequeño
+    } else {
+      return 100; // xl+: escritorio grande
+    }
+  }
 }

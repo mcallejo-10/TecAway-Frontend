@@ -12,7 +12,7 @@ import { CloudinaryTransformPipe } from '../../../pipes/cloudinary-transform.pip
 export class UserAvatarComponent implements OnInit, OnChanges {
   @Input() photo: string | null | undefined = null;
   @Input() name: string = '';
-  @Input() size: number = 120;
+  @Input() size: number = 50;
 
   hasValidPhoto = true;
 
@@ -25,9 +25,9 @@ export class UserAvatarComponent implements OnInit, OnChanges {
   }
 
   private checkPhotoValidity() {
-    this.hasValidPhoto = !!(this.photo && 
-                           this.photo !== '/assets/img/user_image.png' && 
-                           this.photo.trim() !== '');
+    this.hasValidPhoto = !!(this.photo &&
+      this.photo !== '/assets/img/user_image.png' &&
+      this.photo.trim() !== '');
   }
 
   onImageError() {
@@ -50,7 +50,11 @@ export class UserAvatarComponent implements OnInit, OnChanges {
   }
 
   get fontSize(): number {
-    // Calcular tamaño de fuente basado en el tamaño del avatar
-    return Math.max(this.size * 0.35, 12);
+    const baseFontSize = this.size * 0.4;
+    if (this.size <= 50) {
+      return Math.max(baseFontSize, 16);
+    } else {
+      return Math.max(baseFontSize, 26);
+    }
   }
 }
