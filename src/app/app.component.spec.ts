@@ -3,9 +3,8 @@ import { AppComponent } from './app.component';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthService } from './services/authService/auth.service';
-
+import { configureAngularTestingModule } from '../testing/angular-test-helpers';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -13,13 +12,14 @@ describe('AppComponent', () => {
   let authService: AuthService;
   
   beforeEach(async () => {
+    configureAngularTestingModule();
+    
     await TestBed.configureTestingModule({
       imports: [
         AppComponent,
         RouterOutlet,
         HeaderComponent,
-        FooterComponent,
-        HttpClientTestingModule
+        FooterComponent
       ],
       providers: [AuthService]
     }).compileComponents();

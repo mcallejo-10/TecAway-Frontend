@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserResponse } from '../../interfaces/user';
+import { configureAngularTestingModule } from '../../../testing/angular-test-helpers';
 
 describe('UserInfoComponent', () => {
   let component: UserInfoComponent;
@@ -12,6 +13,8 @@ describe('UserInfoComponent', () => {
   let userServiceMock: jasmine.SpyObj<UserService>;
 
   beforeEach(async () => {
+    configureAngularTestingModule();
+    
     userServiceMock = jasmine.createSpyObj('UserService', ['getUser', 'getUserInfo']);
     // Mock para getUserInfo
     userServiceMock.getUserInfo.and.returnValue(of({

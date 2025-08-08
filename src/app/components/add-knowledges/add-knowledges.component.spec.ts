@@ -11,6 +11,7 @@ import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { fakeAsync, tick } from '@angular/core/testing';
+import { configureAngularTestingModule, mockUserKnowledgeData } from '../../../testing/angular-test-helpers';
 
 describe('AddKnowledgesComponent', () => {
   let component: AddKnowledgesComponent;
@@ -20,12 +21,8 @@ describe('AddKnowledgesComponent', () => {
   let knowledgeServiceMock: jasmine.SpyObj<KnowledgeService>;
   let userKnowledgeServiceMock: jasmine.SpyObj<UserKnowledgeService>;
 
-  // ...
-  // Modificar la constante mock inicial
-  const mockUserKnowledges: UserKnowledge[] = [{
-    user_id: 1,
-    knowledge_id: 1
-  }];
+  // Mock data with proper structure
+  const mockUserKnowledgeResponse = mockUserKnowledgeData;
 
   const mockSections: Section[] = [{
     id_section: 1,
@@ -47,7 +44,7 @@ describe('AddKnowledgesComponent', () => {
 
     // Configurar retornos con los tipos correctos
     // Actualizado el retorno para devolver un solo objeto
-    userKnowledgeServiceMock.getUserKnowledgesById.and.returnValue(of(mockUserKnowledges));
+    userKnowledgeServiceMock.getUserKnowledgesById.and.returnValue(of(mockUserKnowledgeResponse));
 
     sectionServiceMock.getSectionList.and.returnValue(of(mockSections));
     sectionServiceMock.sectionList.and.returnValue(mockSections);
@@ -107,7 +104,7 @@ describe('AddKnowledgesComponent', () => {
   });
 
   it('should initialize lists on ngOnInit', fakeAsync(() => {
-userKnowledgeServiceMock.getUserKnowledgesById.and.returnValue(of(mockUserKnowledges[0]));
+    userKnowledgeServiceMock.getUserKnowledgesById.and.returnValue(of(mockUserKnowledgeResponse));
     sectionServiceMock.getSectionList.and.returnValue(of(mockSections));
     knowledgeServiceMock.getKnowledgeList.and.returnValue(of(mockKnowledges));
 

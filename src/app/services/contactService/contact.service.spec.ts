@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-
 import { ContactService } from './contact.service';
+import { configureServiceTestingModule } from '../../../testing/angular-test-helpers';
 
 describe('ContactService', () => {
   let service: ContactService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    configureServiceTestingModule();
     service = TestBed.inject(ContactService);
   });
 
