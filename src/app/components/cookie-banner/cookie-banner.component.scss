@@ -1,0 +1,150 @@
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  
+  background: rgba(33, 37, 41, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 3px solid #FFC107;
+  
+  animation: slideUp 0.4s ease-out;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.cookie-banner.fade-out {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.banner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+}
+
+.banner-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex: 1;
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+.cookie-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-top: 0.1rem;
+}
+
+.message-text {
+  color: #ffffff;
+  
+  .main-text {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    
+    strong {
+      color: #FFC107;
+    }
+  }
+  
+  .sub-text {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.info-btn {
+  color: #FFC107 !important;
+  text-decoration: none !important;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 193, 7, 0.1);
+  }
+}
+
+.accept-btn {
+  background-color: #FFC107;
+  border-color: #FFC107;
+  color: #212529;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  
+  &:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.4);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-content {
+    padding: 0.75rem 1rem;
+  }
+  
+  .banner-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .accept-btn {
+    width: 100%;
+  }
+}

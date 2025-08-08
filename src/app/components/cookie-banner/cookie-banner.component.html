@@ -1,0 +1,31 @@
+<div class="cookie-banner" *ngIf="isVisible">
+  <div class="banner-content">
+    
+    <div class="banner-message">
+      <span class="cookie-icon">🍪</span>
+      <div class="message-text">
+        <p class="main-text">
+          Usamos <strong>cookies técnicas</strong> necesarias para el funcionamiento de TecAway.
+        </p>
+        <p class="sub-text">
+          No recopilamos datos para publicidad ni tracking.
+        </p>
+      </div>
+    </div>
+
+    <div class="banner-actions">
+      <a routerLink="/privacy-policy" 
+         class="btn btn-link info-btn"
+         target="_blank">
+        Más información
+      </a>
+      
+      <button type="button" 
+              class="btn btn-warning accept-btn"
+              (click)="acceptCookies()">
+        Aceptar
+      </button>
+    </div>
+    
+  </div>
+</div>
