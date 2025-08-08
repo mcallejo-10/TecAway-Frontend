@@ -15,7 +15,34 @@ TecAway es una aplicación web desarrollada para facilitar la conexión entre t�
 
 - **Framework principal:** Angular 19
 - **Estilos:** Bootstrap, SCSS, y una plantilla personalizada de Bootswatch
+- **Testing:** Jest (unit tests) + Playwright (E2E tests)
 - **Versionado:** Git
+
+## Testing Stack 🧪
+
+Este proyecto utiliza un stack de testing moderno:
+
+- **Jest**: Framework de testing unitario rápido y potente
+- **Playwright**: Testing E2E cross-browser (Chromium, Firefox, Webkit)
+- **Cobertura**: 47.63% de código (24 suites, 33 tests unitarios + 6 tests E2E)
+
+### Comandos de Testing
+
+```bash
+# Tests unitarios
+npm test                    # Ejecutar todos los tests unitarios
+npm run test:jest:watch     # Modo watch para desarrollo
+npm run test:jest:coverage  # Generar reporte de cobertura
+
+# Tests E2E
+npm run e2e                 # Tests E2E en modo headless
+npm run e2e:headed          # Tests E2E con interfaz de navegador
+npm run e2e:ui              # Modo UI interactivo de Playwright
+npm run e2e:debug           # Modo debug para E2E
+```
+
+📚 **Documentación de Testing**: Ver [`TESTING.md`](./TESTING.md) para guías detalladas  
+📋 **Documentación de Migración**: Ver [`MIGRATION.md`](./MIGRATION.md) para detalles técnicos
 
 ## Estructura del Proyecto
 
@@ -67,9 +94,17 @@ src
 4. Inicia el servidor de desarrollo:
    ```bash
    ng serve
+   # or
+   npm start
    ```
 
-5. Abre [http://localhost:4200](http://localhost:4200) en tu navegador para ver la aplicación en ejecución.
+5. Para ejecutar tests:
+   ```bash
+   npm test              # Tests unitarios
+   npm run e2e           # Tests E2E
+   ```
+
+6. Abre [http://localhost:4200](http://localhost:4200) en tu navegador para ver la aplicación en ejecución.
 
 ## Contribución
 
