@@ -9,7 +9,7 @@ export class CookieService {
   private readonly CONSENT_DATE_KEY = 'tecaway-consent-date';
   
   constructor() {
-    console.log('🍪 CookieService initialized');
+    // CookieService initialized
   }
 
   isFirstVisit(): boolean {
@@ -22,8 +22,6 @@ export class CookieService {
     
     localStorage.setItem(this.CONSENT_KEY, 'accepted');
     localStorage.setItem(this.CONSENT_DATE_KEY, now);
-    
-    console.log('✅ Cookie consent accepted at:', now);
   }
 
   getCookieConsent(): {
@@ -42,6 +40,5 @@ export class CookieService {
   clearCookieConsent(): void {
     localStorage.removeItem(this.CONSENT_KEY);
     localStorage.removeItem(this.CONSENT_DATE_KEY);
-    console.log('🗑️ Cookie consent cleared');
   }
 }
