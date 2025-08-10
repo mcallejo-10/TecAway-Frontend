@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "lint": "ng lint",
     "test": "jest",
     "test:jest": "jest",
     "test:jest:watch": "jest --watch",
@@ -41,12 +42,16 @@
     "@angular/compiler-cli": "^19.0.6",
     "@playwright/test": "^1.54.2",
     "@types/jest": "^30.0.0",
+    "angular-eslint": "20.1.1",
+    "eslint": "^9.29.0",
+    "eslint-plugin-sonarjs": "^3.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "jest-preset-angular": "^15.0.0",
     "sass": "^1.83.1",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "typescript-eslint": "8.34.1"
   },
   "engines": {
     "node": "20.x"

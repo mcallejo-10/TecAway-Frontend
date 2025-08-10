@@ -35,9 +35,7 @@ export class CloudinaryTransformPipe implements PipeTransform {
       ].join(',');
 
       // Construir la nueva URL con transformaciones
-      const transformedUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${transformations}/${publicIdPart}`;
-
-      return transformedUrl;
+      return `https://res.cloudinary.com/${cloudName}/image/upload/${transformations}/${publicIdPart}`;
     } catch (error) {
       console.error('Error transformando imagen de Cloudinary:', error);
       return imageUrl;

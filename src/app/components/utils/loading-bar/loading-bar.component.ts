@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 
 export class LoadingBarComponent {
-  @Input() message: string = 'Cargando técnicos...';
-  @Input() showIcon: boolean = true;
-  @Input() showMessage: boolean = true;
+  @Input() message = 'Cargando técnicos...';
+  @Input() showIcon = true;
+  @Input() showMessage = true;
 }

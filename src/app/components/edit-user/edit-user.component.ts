@@ -15,9 +15,9 @@ import { validateFile } from '../../validators/validate-file.validator';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
-  errorMessage: string = '';
-  charCountTitle: number = 0;
-  charCountDescription: number = 0;
+  errorMessage = '';
+  charCountTitle = 0;
+  charCountDescription = 0;
   selectedFile: File | null = null;
 
   registerForm = new FormGroup({

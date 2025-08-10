@@ -11,8 +11,8 @@ import { CloudinaryTransformPipe } from '../../../pipes/cloudinary-transform.pip
 })
 export class UserAvatarComponent implements OnInit, OnChanges {
   @Input() photo: string | null | undefined = null;
-  @Input() name: string = '';
-  @Input() size: number = 50;
+  @Input() name = '';
+  @Input() size = 50;
 
   hasValidPhoto = true;
 

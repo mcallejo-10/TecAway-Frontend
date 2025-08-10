@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,9 +11,9 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
   templateUrl: './technician-detail.component.html',
   styleUrl: './technician-detail.component.scss'
 })
-export class TechnicianDetailComponent {
+export class TechnicianDetailComponent implements OnInit {
 
-  loading: boolean = true;
+  loading = true;
   technician: any = {};
   userService = inject(UserService);
   id: number;

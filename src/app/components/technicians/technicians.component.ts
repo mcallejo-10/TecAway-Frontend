@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { User } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
@@ -18,7 +18,7 @@ import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component'
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
-export class TechniciansComponent {
+export class TechniciansComponent implements OnInit {
 
   loading = true;
   technicians: User[] = [];
@@ -85,7 +85,7 @@ private addSectionControls(): void {
   const sectionControls = this.sectionList.reduce((acc, section) => {
     acc[section.id_section!] = new FormControl(false);
     return acc;
-  }, {} as { [key: string]: FormControl });
+  }, {} as Record<string, FormControl>);
   
   this.filterForm.addControl('sections', this.fb.group(sectionControls));
 }
@@ -94,7 +94,7 @@ private addKnowledgeControls(): void {
   const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
     acc[knowledge.id_knowledge!] = new FormControl(false);
     return acc;
-  }, {} as { [key: string]: FormControl });
+  }, {} as Record<string, FormControl>);
   
   this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
 }

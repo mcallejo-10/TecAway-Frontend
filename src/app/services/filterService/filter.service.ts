@@ -90,17 +90,15 @@ export class FilterService {
 
   filterByTown(town: string): number[] {
     const filteredUserIds = this.filteredBySections();
-    const filteredUserIdsByTown = filteredUserIds.filter(userId => {
+    return filteredUserIds.filter(userId => {
       const user = this.techniciansFiltred().find(t => t.id_user === userId);
       return user?.town === town;
     });
-    return filteredUserIdsByTown;
   }
 
   filterTechnicians(): number[] {
     const sectionFilteredIds = this.filteredBySections();
-    const knowledgeFilteredIds = this.filterByKnowledges(sectionFilteredIds);
-    return knowledgeFilteredIds
+    return this.filterByKnowledges(sectionFilteredIds)
 
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
@@ -19,14 +19,14 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
   templateUrl: './add-knowledges.component.html',
   styleUrl: './add-knowledges.component.scss',
 })
-export class AddKnowledgesComponent {
+export class AddKnowledgesComponent implements OnInit {
   userService = inject(UserService);
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
   userKnowledgeService = inject(UserKnowledgeService);
 
-  loading: boolean = true;
-  errorMessage: string = '';
+  loading = true;
+  errorMessage = '';
 
   selectedKnowledges: number[] = [1];  // Mantenemos el 1 inicial
   sectionList: Section[] = [];

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -12,13 +12,13 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'
 })
-export class UserInfoComponent {
-  loading: boolean = true;
+export class UserInfoComponent implements OnInit {
+  loading = true;
   technician: any = {};
   userService = inject(UserService);
   authService = inject(AuthService);
-  id: number = 0;
-  showDeleteModal: boolean = false;
+  id = 0;
+  showDeleteModal = false;
 
   constructor(
     private aRouter: ActivatedRoute,
