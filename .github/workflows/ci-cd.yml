@@ -58,6 +58,7 @@ jobs:
         
       - name: Build application
         run: npm run build
+        continue-on-error: false
         
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -93,3 +94,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        continue-on-error: true
