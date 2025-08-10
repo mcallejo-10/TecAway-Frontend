@@ -161,7 +161,7 @@ export class RegisterComponent {
 
       this.authService.registerUser(userData)
         .subscribe({
-          next: (response: User) => {
+          next: () => {
             if (this.selectedFile) { // Usamos selectedFile en lugar de registerForm.get('photo')
               this.uploadUserPhoto(this.selectedFile);
             } else {

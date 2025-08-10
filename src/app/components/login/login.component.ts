@@ -30,10 +30,9 @@ export class LoginComponent {
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
+  private router = inject(Router);
 
-  constructor(
-    private router: Router
-  ) {
+  constructor() {
     effect(() => {
       //signal
       this.isLogged = this.authService.isLogged();
@@ -81,7 +80,7 @@ export class LoginComponent {
     };
 
     this.authService.loginUser(credentials).subscribe({
-      next: (response) => {
+      next: () => {
         this.router.navigate(["/tu-cuenta"]);
       },
       error: (error) => {

@@ -4,7 +4,6 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { SectionService } from './section.service';
 import { Section } from '../../interfaces/section';
 
-/* eslint-disable sonarjs/no-duplicate-string */
 describe('SectionService', () => {
   let service: SectionService;
   let httpMock: HttpTestingController;

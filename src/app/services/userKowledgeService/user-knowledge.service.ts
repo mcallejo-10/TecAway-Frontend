@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
@@ -10,7 +10,9 @@ import { UserKnowledge } from '../../interfaces/user-knowledge';
 export class UserKnowledgeService {
   private myAppUrl: string;
   private myApiUrl: string;
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+  
+  constructor() {
         this.myAppUrl = environment.endpoint;
         this.myApiUrl = '/user-knowledge/';
    }

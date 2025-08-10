@@ -17,13 +17,10 @@ export class UserInfoComponent implements OnInit {
   technician: any = {};
   userService = inject(UserService);
   authService = inject(AuthService);
+  private aRouter = inject(ActivatedRoute);
+  private router = inject(Router);
   id = 0;
   showDeleteModal = false;
-
-  constructor(
-    private aRouter: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.loading = true;

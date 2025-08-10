@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../services/authService/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,12 +11,9 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   authService = inject(AuthService)
+  private router = inject(Router)
   isLogged = false;
-
-  constructor(
-    private router: Router,
-  ) { }
-
+  
   isDarkMode: boolean = localStorage.getItem('theme') === 'dark';
 
   ngOnInit() {

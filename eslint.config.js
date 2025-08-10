@@ -47,6 +47,13 @@ module.exports = tseslint.config(
     },
   },
   {
+    files: ["**/*.spec.ts", "**/*.test.ts"],
+    rules: {
+      // Deshabilitar strings duplicados en tests para mayor legibilidad
+      "sonarjs/no-duplicate-string": "off",
+    },
+  },
+  {
     files: ["**/*.html"],
     extends: [
       ...angular.configs.templateRecommended,

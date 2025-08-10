@@ -8,7 +8,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule }
 import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge } from '../../interfaces/knowledge';
-import { RouterLink, RouterModule, } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 
@@ -37,10 +37,8 @@ export class TechniciansComponent implements OnInit {
   selectedKnowledges: Knowledge[] = [];
   setFilteredIds: number[] = this.filterService.filterTechnicians();
   filteredTechnicians: User[] = [];
+  private fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) { }
-  
-  // Función principal
 ngOnInit() {
   this.loading = true;
   this.filterForm = this.fb.group({});

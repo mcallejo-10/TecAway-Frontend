@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
@@ -17,9 +17,9 @@ export class TechnicianDetailComponent implements OnInit {
   technician: any = {};
   userService = inject(UserService);
   id: number;
-
-  constructor(private aRouter: ActivatedRoute) {
-    this.id = Number(aRouter.snapshot.paramMap.get('id'));
+ private aRouter = inject(ActivatedRoute);
+  constructor() {
+    this.id = Number(this.aRouter.snapshot.paramMap.get('id'));
   }
 
   ngOnInit() {

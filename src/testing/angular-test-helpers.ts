@@ -32,8 +32,8 @@ export function configureAngularTestingModule() {
             queryParams: {},
             data: {},
             paramMap: {
-              get: (key: string) => null,
-              has: (key: string) => false
+              get: () => null,
+              has: () => false
             }
           },
           params: of({}),
