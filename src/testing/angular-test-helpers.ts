@@ -76,7 +76,7 @@ export const mockRouter = {
 /**
  * Mock para ActivatedRoute con parámetros configurables
  */
-export function createMockActivatedRoute(params: { [key: string]: any } = {}, queryParams: { [key: string]: any } = {}, data: { [key: string]: any } = {}) {
+export function createMockActivatedRoute(params: Record<string, any> = {}, queryParams: Record<string, any> = {}, data: Record<string, any> = {}) {
   return {
     snapshot: {
       params,

@@ -32,12 +32,11 @@
                 "input": "public"
               }
             ],
-            "styles": [   
+            "styles": [
               "node_modules/bootswatch/dist/lux/bootstrap.min.css",
-              "node_modules/ngx-toastr/toastr.css",           
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
             ],
-      
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
@@ -87,9 +86,22 @@
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
-
 }

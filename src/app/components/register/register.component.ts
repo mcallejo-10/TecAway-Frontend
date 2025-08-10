@@ -16,10 +16,10 @@ import { validateFile } from '../../validators/validate-file.validator';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  currentStep: number = 1;
-  errorMessage: string = '';
-  charCountTitle: number = 0;
-  charCountDescription: number = 0;
+  currentStep = 1;
+  errorMessage = '';
+  charCountTitle = 0;
+  charCountDescription = 0;
   selectedFile: File | null = null;
 
   registerForm = new FormGroup({

@@ -133,7 +133,7 @@
                             (input)="updateCharCount('title')"
                             [ngClass]="{'is-invalid': registerForm.get('title')?.invalid && registerForm.get('title')?.touched}" />
                         <span class="charcounter"
-                            [ngClass]="{'text-danger': charCountTitle != 0 && (charCountTitle < 20 || charCountTitle > 130)}">
+                            [ngClass]="{'text-danger': charCountTitle !== 0 && (charCountTitle < 20 || charCountTitle > 130)}">
                             Min 20 ({{charCountTitle}} / 130)
                         </span>
                         @if(registerForm.get('title')?.invalid && registerForm.get('title')?.touched) {
@@ -155,7 +155,7 @@
                             [ngClass]="{'is-invalid': registerForm.get('description')?.invalid && registerForm.get('description')?.touched}">
                 </textarea>
                         <span class="charcounter"
-                            [ngClass]="{'text-danger': charCountDescription != 0 && (charCountDescription < 50 || charCountDescription > 500)}">
+                            [ngClass]="{'text-danger': charCountDescription !== 0 && (charCountDescription < 50 || charCountDescription > 500)}">
                             Min 50 ({{charCountDescription}} / 500)
                         </span>
                         @if(registerForm.get('description')?.invalid && registerForm.get('description')?.touched) {

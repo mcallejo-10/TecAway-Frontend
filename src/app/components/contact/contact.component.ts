@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
@@ -15,8 +15,8 @@ import { ContactService } from '../../services/contactService/contact.service';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
-export class ContactComponent {
-  errorMessage: string = '';
+export class ContactComponent implements OnInit {
+  errorMessage = '';
   id: number;
   technician: User = {} as User;
 

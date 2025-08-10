@@ -19,10 +19,10 @@ import { UserService } from "../../services/userService/user.service";
   styleUrl: "./login.component.scss",
 })
 export class LoginComponent {
-  isValidEmail: boolean = false;
-  userExist: boolean = false;
+  isValidEmail = false;
+  userExist = false;
   errorMessage!: string;
-  isLogged: boolean = false;
+  isLogged = false;
 
   loginForm = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
