@@ -24,6 +24,8 @@ export class AddKnowledgesComponent implements OnInit {
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
   userKnowledgeService = inject(UserKnowledgeService);
+  private toastr =  inject(ToastrService);
+  private router =  inject(Router);
 
   loading = true;
   errorMessage = '';
@@ -33,8 +35,6 @@ export class AddKnowledgesComponent implements OnInit {
   knowledgeList: Knowledge[] = [];
   userKnowledgeIds: number[] = [];
   
-
-  constructor(private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.loading = true;

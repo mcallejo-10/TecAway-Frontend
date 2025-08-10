@@ -3,13 +3,11 @@ import { AppComponent } from './app.component';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { AuthService } from './services/authService/auth.service';
 import { configureAngularTestingModule } from '../testing/angular-test-helpers';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let authService: AuthService;
   
   beforeEach(async () => {
     configureAngularTestingModule();
@@ -21,12 +19,11 @@ describe('AppComponent', () => {
         HeaderComponent,
         FooterComponent
       ],
-      providers: [AuthService]
+      providers: []
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService);
     fixture.detectChanges();
   });
 

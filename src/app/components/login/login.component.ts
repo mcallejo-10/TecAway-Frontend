@@ -1,6 +1,5 @@
 import { Component, effect, inject } from "@angular/core";
 import { AuthService } from "../../services/authService/auth.service";
-import { User } from "../../interfaces/user";
 import { Router } from "@angular/router";
 import { LoginRequest } from "../../interfaces/login";
 import {
@@ -43,7 +42,7 @@ export class LoginComponent {
 
   checkEmailLogin() {
     this.authService.isLoggedIn();
-    if (this.isLogged == false) {
+    if (this.isLogged === false) {
 
       const email = this.loginForm.get('email')?.value?.toLowerCase() || '';
 
@@ -51,12 +50,12 @@ export class LoginComponent {
         next: (exist) => {
 
 
-          if (exist == true) {
+          if (exist === true) {
             this.userExist = true;
             this.isValidEmail = true;
             console.log("Usuario existe");
 
-          } else if (exist == false) {
+          } else if (exist === false) {
             this.userExist = false;
             this.isValidEmail = true;
             this.router.navigate(["/registro"]);

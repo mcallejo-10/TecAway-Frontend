@@ -1,6 +1,6 @@
-@if(loading == true) {
+@if(loading === true) {
 <app-loading-bar message="Cargando perfil..."></app-loading-bar>
-} @if(loading == false) {
+} @if(loading === false) {
 
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -27,9 +27,9 @@
                 </div>
                 <strong>Puede desplazarse largas distancias:</strong>
 
-                @if(technician.can_move == 1) {
+                @if(technician.can_move === 1) {
                 <span class="badge  bg-success">Si</span>}
-                @if(technician.can_move == 0) {
+                @if(technician.can_move === 0) {
                 <span class="badge  bg-danger">No</span>
                 }
               </div>
