@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Knowledge } from '../../interfaces/knowledge';
+import { Knowledge, KnowledgeListResponse } from '../../interfaces/knowledge';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,8 +19,8 @@ export class KnowledgeService {
 
   knowledgeList = signal<Knowledge[]>([]);
 
-  getKnowledgeList(): Observable<Knowledge[]> {
-    return this.http.get<Knowledge[]>(this.myAppUrl + this.myApiUrl);
+  getKnowledgeList(): Observable<KnowledgeListResponse> {
+    return this.http.get<KnowledgeListResponse>(this.myAppUrl + this.myApiUrl);
   }
 
   getKnowledgeById(id: number): Observable<Knowledge> {

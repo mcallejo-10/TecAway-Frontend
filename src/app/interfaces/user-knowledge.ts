@@ -3,4 +3,10 @@ export interface UserKnowledge {
     knowledge_id: number;
 }
 
+export interface UserKnowledgeListResponse {
+    code: number;
+    message: string;
+    data: UserKnowledge[];
+}
+
 

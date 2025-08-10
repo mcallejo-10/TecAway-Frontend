@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/authService/auth.service';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
+import { UserResponse } from '../../interfaces/user';
+import { UserInfoResponse } from '../../interfaces/user-info';
 
 @Component({
   selector: 'app-user-info',
@@ -14,7 +16,7 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
 })
 export class UserInfoComponent implements OnInit {
   loading = true;
-  technician: any = {};
+  technician: UserInfoResponse['data'] = {} as UserInfoResponse['data'];
   userService = inject(UserService);
   authService = inject(AuthService);
   private aRouter = inject(ActivatedRoute);
@@ -24,10 +26,10 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.userService.getUser().subscribe((res: any) => {
-      this.id = res.data.id_user;
+    this.userService.getUser().subscribe((res: UserResponse) => {
+      this.id = res.data.id_user!;
       console.log('ID USER', res.data);
-      this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
+      this.userService.getUserInfo(this.id).subscribe((res: UserInfoResponse) => {
         this.technician = res.data;
         this.loading = false;
       });

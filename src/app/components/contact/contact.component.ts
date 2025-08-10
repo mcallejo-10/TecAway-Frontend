@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { MessageData } from '../../interfaces/messageData';
-import { User } from '../../interfaces/user';
+import { User, UserResponse } from '../../interfaces/user';
 import { ContactService } from '../../services/contactService/contact.service';
 
 @Component({
@@ -54,7 +54,7 @@ export class ContactComponent implements OnInit {
   ngOnInit(): void {
     
     this.userService.getUserById(this.id).subscribe({
-      next: (response: any) => {
+      next: (response: UserResponse) => {
         this.technician = response.data;
       },
       error: (error: string) => {

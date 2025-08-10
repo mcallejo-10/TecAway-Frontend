@@ -1,13 +1,13 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
-import { User } from '../../interfaces/user';
+import { User, UserListResponse } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
 import { SectionService } from '../../services/sectionService/section.service';
-import { Section } from '../../interfaces/section';
+import { Section, SectionListResponse } from '../../interfaces/section';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
-import { Knowledge } from '../../interfaces/knowledge';
+import { Knowledge, KnowledgeListResponse } from '../../interfaces/knowledge';
 import { RouterModule } from '@angular/router';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
@@ -44,21 +44,21 @@ ngOnInit() {
   this.filterForm = this.fb.group({});
   
   this.sectionService.getSectionList().subscribe({
-    next: (sectionsRes: any) => {
+    next: (sectionsRes: SectionListResponse) => {
       this.sectionService.setSectionList(sectionsRes.data);
       this.sectionList = this.sectionService.sectionList();
       this.addSectionControls();
       this.filterService.setSelectedSections(this.sectionList);
 
       this.knowledgeService.getKnowledgeList().subscribe({
-        next: (knowledgesRes: any) => {
+        next: (knowledgesRes: KnowledgeListResponse) => {
           this.knowledgeList = knowledgesRes.data;
           this.addKnowledgeControls();
           this.addConocimientosGenerales();
           this.filterService.setSelectedKnowledges(this.knowledgeList);
 
           this.userService.getUserList().subscribe({
-            next: (techRes: any) => {
+            next: (techRes: UserListResponse) => {
               this.technicians = techRes.data;
               this.filteredTechnicians = this.technicians;
               this.filterService.setTechnicianList(this.technicians);
@@ -72,7 +72,7 @@ ngOnInit() {
 }
 
 private loadTechnicians(): void {
-  this.userService.getUserList().subscribe((res: any) => {
+  this.userService.getUserList().subscribe((res: UserListResponse) => {
     this.technicians = res.data;
     this.filteredTechnicians = this.technicians;
     this.filterService.setTechnicianList(this.technicians);
