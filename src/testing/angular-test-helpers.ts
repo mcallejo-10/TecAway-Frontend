@@ -32,8 +32,8 @@ export function configureAngularTestingModule() {
             queryParams: {},
             data: {},
             paramMap: {
-              get: (key: string) => null,
-              has: (key: string) => false
+              get: () => null,
+              has: () => false
             }
           },
           params: of({}),
@@ -76,7 +76,7 @@ export const mockRouter = {
 /**
  * Mock para ActivatedRoute con parámetros configurables
  */
-export function createMockActivatedRoute(params: Record<string, any> = {}, queryParams: Record<string, any> = {}, data: Record<string, any> = {}) {
+export function createMockActivatedRoute(params: { [key: string]: any } = {}, queryParams: { [key: string]: any } = {}, data: { [key: string]: any } = {}) {
   return {
     snapshot: {
       params,

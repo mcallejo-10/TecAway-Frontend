@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CookieService } from '../../services/cookieService/cookie.service';
@@ -13,8 +13,7 @@ import { CookieService } from '../../services/cookieService/cookie.service';
 export class CookieBannerComponent implements OnInit {
   
   isVisible = false;
-
-  constructor(private cookieService: CookieService) {}
+  private cookieService = inject(CookieService);
 
   ngOnInit(): void {
     this.isVisible = this.cookieService.isFirstVisit();

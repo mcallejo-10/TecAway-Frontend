@@ -4,14 +4,13 @@ import { UserService } from '../../services/userService/user.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { UserKnowledgeService } from '../../services/userKowledgeService/user-knowledge.service';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
-import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { fakeAsync, tick } from '@angular/core/testing';
-import { configureAngularTestingModule, mockUserKnowledgeData } from '../../../testing/angular-test-helpers';
+import { mockUserKnowledgeData } from '../../../testing/angular-test-helpers';
 
 describe('AddKnowledgesComponent', () => {
   let component: AddKnowledgesComponent;

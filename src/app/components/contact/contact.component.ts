@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { MessageData } from '../../interfaces/messageData';
-import { User } from '../../interfaces/user';
+import { User, UserResponse } from '../../interfaces/user';
 import { ContactService } from '../../services/contactService/contact.service';
 
 @Component({
@@ -19,6 +19,9 @@ export class ContactComponent implements OnInit {
   errorMessage = '';
   id: number;
   technician: User = {} as User;
+
+  // Constantes para mensajes duplicados
+  private readonly ERROR_SENDING_EMAIL = 'Error al enviar el email';
 
 
   registerForm = new FormGroup({
@@ -37,21 +40,21 @@ export class ContactComponent implements OnInit {
     ])
   });
 
-  private contactService = inject(ContactService)
-  private userService = inject(UserService)
+  private contactService = inject(ContactService);
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
+  private cdr = inject(ChangeDetectorRef);
+  private aRouter = inject(ActivatedRoute);
 
-  constructor(
-    private router: Router,
-    private toastr: ToastrService,
-    private cdr: ChangeDetectorRef,
-    private aRouter: ActivatedRoute) {
-    this.id = Number(aRouter.snapshot.paramMap.get('id'));
+  constructor() {
+    this.id = Number(this.aRouter.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
     
     this.userService.getUserById(this.id).subscribe({
-      next: (response: any) => {
+      next: (response: UserResponse) => {
         this.technician = response.data;
       },
       error: (error: string) => {
@@ -80,8 +83,8 @@ export class ContactComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al enviar el email', error);
-          this.toastr.error('Error al enviar el email');
-          this.errorMessage = 'Error al enviar el email';
+          this.toastr.error(this.ERROR_SENDING_EMAIL);
+          this.errorMessage = this.ERROR_SENDING_EMAIL;
         }
       });
     }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
-import { Section } from '../../interfaces/section';
+import { inject, Injectable, signal } from '@angular/core';
+import { Section, SectionListResponse } from '../../interfaces/section';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
@@ -10,15 +10,17 @@ import { environment } from '../../../environments/environment.development';
 export class SectionService {
   private myAppUrl: string;
   private myApiUrl: string;
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+  
+  constructor() {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/section';
   }
   sectionList = signal<Section[]>([]);
 
 
-  getSectionList(): Observable<Section[]> {
-    return this.http.get<Section[]>(this.myAppUrl + this.myApiUrl);
+  getSectionList(): Observable<SectionListResponse> {
+    return this.http.get<SectionListResponse>(this.myAppUrl + this.myApiUrl);
   }
 
   getSectionById(id: number): Observable<Section> {

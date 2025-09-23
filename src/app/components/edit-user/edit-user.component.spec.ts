@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed} from '@angular/core/testing';
 import { EditUserComponent } from './edit-user.component';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrModule } from 'ngx-toastr';

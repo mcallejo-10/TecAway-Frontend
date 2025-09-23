@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -50,12 +50,9 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
 
 
   private userService = inject(UserService)
-
-  constructor(
-    private router: Router,
-    private toastr: ToastrService,
-    private cdr: ChangeDetectorRef
-  ) { }
+  private router = inject(Router)
+  private toastr = inject(ToastrService)
+  private cdr = inject(ChangeDetectorRef)
 
   ngOnInit(): void {
     this.getUser();

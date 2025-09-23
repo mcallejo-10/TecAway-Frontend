@@ -66,13 +66,9 @@ export class RegisterComponent {
 
   private authService = inject(AuthService)
   private userService = inject(UserService)
-
-  constructor(
-    private router: Router,
-    private toastr: ToastrService,
-    private cdr: ChangeDetectorRef,
-  ) { }
-
+  private router = inject(Router)
+  private toastr = inject(ToastrService)
+  private cdr = inject(ChangeDetectorRef)
 
   validateFirstStep(): boolean {
     const controls = ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy'];
@@ -165,7 +161,7 @@ export class RegisterComponent {
 
       this.authService.registerUser(userData)
         .subscribe({
-          next: (response: User) => {
+          next: () => {
             if (this.selectedFile) { // Usamos selectedFile en lugar de registerForm.get('photo')
               this.uploadUserPhoto(this.selectedFile);
             } else {

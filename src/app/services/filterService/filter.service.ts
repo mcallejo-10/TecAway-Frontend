@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
@@ -53,7 +53,7 @@ export class FilterService {
     });
 
     const filteredUserIds = Array.from(userToKnowledgeMap.entries())
-      .filter(([userId, knowledgeIds]) =>
+      .filter(([, knowledgeIds]) =>
         sectionIds.every(sectionId =>
           knowledges.some(
             knowledge =>

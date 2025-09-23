@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { UserKnowledge } from '../../interfaces/user-knowledge';
+import { UserKnowledge, UserKnowledgeListResponse } from '../../interfaces/user-knowledge';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,9 @@ import { UserKnowledge } from '../../interfaces/user-knowledge';
 export class UserKnowledgeService {
   private myAppUrl: string;
   private myApiUrl: string;
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+  
+  constructor() {
         this.myAppUrl = environment.endpoint;
         this.myApiUrl = '/user-knowledge/';
    }
@@ -19,8 +21,8 @@ export class UserKnowledgeService {
       return this.http.get<UserKnowledge[]>(this.myAppUrl + this.myApiUrl);
     }
 
-    getUserKnowledgesById(): Observable<UserKnowledge[]> {
-      return this.http.get<UserKnowledge[]>(this.myAppUrl + this.myApiUrl + 'user'); 
+    getUserKnowledgesById(): Observable<UserKnowledgeListResponse> {
+      return this.http.get<UserKnowledgeListResponse>(this.myAppUrl + this.myApiUrl + 'user'); 
     }
 
     addKnowledge(knowledge_id: any): Observable<any> {

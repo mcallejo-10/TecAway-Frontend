@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
-import { Knowledge } from '../../interfaces/knowledge';
-import { Section } from '../../interfaces/section';
+import { Knowledge, KnowledgeListResponse } from '../../interfaces/knowledge';
+import { Section, SectionListResponse } from '../../interfaces/section';
 import { UserKnowledgeService } from '../../services/userKowledgeService/user-knowledge.service';
-import { UserKnowledge } from '../../interfaces/user-knowledge';
+import { UserKnowledge, UserKnowledgeListResponse } from '../../interfaces/user-knowledge';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +24,8 @@ export class AddKnowledgesComponent implements OnInit {
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
   userKnowledgeService = inject(UserKnowledgeService);
+  private toastr =  inject(ToastrService);
+  private router =  inject(Router);
 
   loading = true;
   errorMessage = '';
@@ -34,22 +36,20 @@ export class AddKnowledgesComponent implements OnInit {
   userKnowledgeIds: number[] = [];
   
 
-  constructor(private router: Router, private toastr: ToastrService) {}
-
   ngOnInit(): void {
     this.loading = true;
-    this.userKnowledgeService.getUserKnowledgesById().subscribe((res: any) => {
+    this.userKnowledgeService.getUserKnowledgesById().subscribe((res: UserKnowledgeListResponse) => {
       const backendKnowledges = res.data.map((userKnowledge: UserKnowledge) => userKnowledge.knowledge_id);
       this.userKnowledgeIds = [...backendKnowledges];
       
       this.selectedKnowledges = [...new Set([1, ...backendKnowledges])];
       
-      this.sectionService.getSectionList().subscribe((res: any) => {
+      this.sectionService.getSectionList().subscribe((res: SectionListResponse) => {
         this.sectionService.setSectionList(res.data);
         this.sectionList = this.sectionService.sectionList();
       });
       
-      this.knowledgeService.getKnowledgeList().subscribe((res: any) => {
+      this.knowledgeService.getKnowledgeList().subscribe((res: KnowledgeListResponse) => {
         this.knowledgeService.setKnowledgeList(res.data);
         this.knowledgeList = this.knowledgeService.knowledgeList();
         this.loading = false;

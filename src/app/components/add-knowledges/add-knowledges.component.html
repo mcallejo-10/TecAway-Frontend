@@ -1,6 +1,6 @@
-@if(loading == true) {
+@if(loading === true) {
 <app-loading-bar message="Cargando conocimientos..."></app-loading-bar>
-} @if(loading == false) {
+} @if(loading === false) {
 <div class="container mt-4">
     <h2 class="mb-2 text-center">Añade tus conocimientos</h2>
     
@@ -11,7 +11,7 @@
           
           <div class="d-flex flex-wrap gap-2 mt-3">
             @for (knowledge of knowledgeList; track knowledge.id_knowledge) {
-              @if(knowledge.section_id == section.id_section ) {
+              @if(knowledge.section_id === section.id_section ) {
                 <button 
                   type="button" 
                   class="btn btn-outline-warning knowledge-btn {{ isSelected(knowledge.id_knowledge!) ? 'active' : '' }}"

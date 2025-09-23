@@ -16,7 +16,7 @@ export class CloudinaryTransformPipe implements PipeTransform {
     }
 
     try {
-      const cloudinaryRegex = /https:\/\/res\.cloudinary\.com\/([^\/]+)\/image\/upload\/(.+)/;
+      const cloudinaryRegex = /https:\/\/res\.cloudinary\.com\/([^/]+)\/image\/upload\/(.+)/;
       const match = imageUrl.match(cloudinaryRegex);
 
       if (!match) {

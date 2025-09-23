@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { MessageData } from '../../interfaces/messageData';
 
@@ -9,10 +9,10 @@ import { MessageData } from '../../interfaces/messageData';
 export class ContactService {
   private myAppUrl: string;
   private myApiUrl: string;
-  
+  private http = inject(HttpClient)
 
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/api/contact/';
   }

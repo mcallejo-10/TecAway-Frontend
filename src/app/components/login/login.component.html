@@ -22,12 +22,12 @@
                 </div>
             </div>
 
-            @if(isValidEmail == false) {
+            @if(isValidEmail === false) {
             <div class="p-3 d-flex justify-content-center">
                 <button type="submit" (click)="checkEmailLogin()" class="click-btn btn-style506">Continue</button>
             </div>
             }
-            @if(userExist == true && isValidEmail == true) {
+            @if(userExist === true && isValidEmail === true) {
             <div class="form-group p-3">
                 <span class="d-flex">
                     <label class="form-label mb-0"  for="password">Password:</label>

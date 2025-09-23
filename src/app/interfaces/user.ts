@@ -17,4 +17,10 @@ export interface UserResponse {
     code: number;
     message: string;
     data: User;
-  }
+}
+
+export interface UserListResponse {
+    code: number;
+    message: string;
+    data: User[];
+}

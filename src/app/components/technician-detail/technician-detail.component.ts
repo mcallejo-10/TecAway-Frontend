@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
+import { UserInfoResponse } from '../../interfaces/user-info';
 
 @Component({
   selector: 'app-technician-detail',
@@ -14,17 +15,17 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
 export class TechnicianDetailComponent implements OnInit {
 
   loading = true;
-  technician: any = {};
+  technician: UserInfoResponse['data'] = {} as UserInfoResponse['data'];
   userService = inject(UserService);
   id: number;
-
-  constructor(private aRouter: ActivatedRoute) {
-    this.id = Number(aRouter.snapshot.paramMap.get('id'));
+ private aRouter = inject(ActivatedRoute);
+  constructor() {
+    this.id = Number(this.aRouter.snapshot.paramMap.get('id'));
   }
 
   ngOnInit() {
     this.loading = true
-    this.technician = this.userService.getUserInfo(this.id).subscribe((res: any) => {
+    this.userService.getUserInfo(this.id).subscribe((res: UserInfoResponse) => {
       this.technician = res.data;
       console.log(this.technician);
       this.loading = false

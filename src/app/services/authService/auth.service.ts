@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../interfaces/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
@@ -13,9 +13,10 @@ export class AuthService {
   private myAppUrl: string;
   private myApiUrl: string;
   isLogged = signal<boolean>(false);
+  private http = inject(HttpClient);
 
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/auth/';
   }
@@ -64,7 +65,7 @@ export class AuthService {
       loginRequest,
       this.httpOptions
     ).pipe(
-      tap(response => {
+      tap(() => {
         console.log('Login exitoso');
         this.isLogged.set(true);
       }),

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { User, UserResponse } from '../../interfaces/user';
+import { User, UserResponse, UserListResponse } from '../../interfaces/user';
 import { UserInfoResponse } from '../../interfaces/user-info';
 
 @Injectable({
@@ -12,7 +12,8 @@ export class UserService {
   private myAppUrl: string;
   private myApiUrl: string;
 
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient)
+  constructor() {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/user/';
   }
@@ -21,16 +22,16 @@ export class UserService {
     return this.http.post<boolean>(this.myAppUrl + this.myApiUrl + 'check-email', data);
   }
 
-  getUserList(): Observable<User[]> {
-    return this.http.get<User[]>(this.myAppUrl + this.myApiUrl + 'get-all-users');
+  getUserList(): Observable<UserListResponse> {
+    return this.http.get<UserListResponse>(this.myAppUrl + this.myApiUrl + 'get-all-users');
   }
 
   getUser(): Observable<UserResponse> {
     return this.http.get<UserResponse>(this.myAppUrl + this.myApiUrl);
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(this.myAppUrl + this.myApiUrl + 'get-user/' + id);
+  getUserById(id: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(this.myAppUrl + this.myApiUrl + 'get-user/' + id);
   }
 
   updateUser(user: User): Observable<any> {
