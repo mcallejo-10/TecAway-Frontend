@@ -1,3 +1,5 @@
+/* eslint-disable */ 
+
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';

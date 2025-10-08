@@ -8,7 +8,7 @@ export interface UserInfoResponse {
       title: string;
       description: string;
       town: string;
-      can_move: number;
+      can_move: boolean;
       photo?: string;
       sections: {
         section_name: string;
