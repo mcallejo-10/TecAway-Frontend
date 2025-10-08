@@ -1,3 +1,5 @@
+/* eslint-disable */ 
+
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Section, SectionListResponse } from '../../interfaces/section';

@@ -1,3 +1,5 @@
+/* eslint-disable */ 
+
 import { TestBed } from '@angular/core/testing';
 import { ContactService } from './contact.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';

@@ -77,37 +77,70 @@ export class AddKnowledgesComponent implements OnInit {
       return knowledge?.section_id === sectionId && id !== excludeKnowledgeId;
     });
   }
-  
+
   toggleKnowledge(knowledgeId: number): void {
-    if (knowledgeId === 1) return; // Conocimientos generales siempre marcado
-    
-    const index = this.selectedKnowledges.indexOf(knowledgeId);
-    const sectionId = this.getSectionFromKnowledge(knowledgeId);
-    
-    if (index === -1) {
-      // Añadir conocimiento
-      this.selectedKnowledges = [...this.selectedKnowledges, knowledgeId];
-      
-      // Añadir primer conocimiento de la sección si no está incluido
-      if (sectionId) {
-        const firstKnowledgeId = this.getFirstKnowledgeOfSection(sectionId);
-        if (firstKnowledgeId && !this.selectedKnowledges.includes(firstKnowledgeId)) {
-          this.selectedKnowledges = [...this.selectedKnowledges, firstKnowledgeId];
-        }
-      }
-    } else {
-      // Verificar si es el primer conocimiento de la sección
-      if (sectionId && knowledgeId === this.getFirstKnowledgeOfSection(sectionId)) {
-        // Solo permitir desmarcar si no hay otros conocimientos de la sección marcados
-        if (!this.hasOtherKnowledgesInSection(sectionId, knowledgeId)) {
-          this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
-        }
-      } else {
-        // No es el primer conocimiento, se puede desmarcar normalmente
-        this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
-      }
-    }
+  if (knowledgeId === 1) return; // Conocimientos generales siempre marcado
+
+  const index = this.selectedKnowledges.indexOf(knowledgeId);
+  const sectionId = this.getSectionFromKnowledge(knowledgeId);
+
+  if (index === -1) {
+    this.addKnowledge(knowledgeId, sectionId === null ? undefined : sectionId);
+    return;
   }
+
+  this.removeKnowledge(knowledgeId, sectionId === null ? undefined : sectionId);
+}
+
+private addKnowledge(knowledgeId: number, sectionId?: number): void {
+  this.selectedKnowledges = [...this.selectedKnowledges, knowledgeId];
+
+  if (!sectionId) return;
+
+  const firstKnowledgeId = this.getFirstKnowledgeOfSection(sectionId);
+  if (firstKnowledgeId && !this.selectedKnowledges.includes(firstKnowledgeId)) {
+    this.selectedKnowledges = [...this.selectedKnowledges, firstKnowledgeId];
+  }
+}
+
+private removeKnowledge(knowledgeId: number, sectionId?: number): void {
+  if (sectionId && knowledgeId === this.getFirstKnowledgeOfSection(sectionId)) {
+    if (this.hasOtherKnowledgesInSection(sectionId, knowledgeId)) return;
+  }
+
+  this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+}
+
+  // toggleKnowledge(knowledgeId: number): void {
+  //   if (knowledgeId === 1) return; // Conocimientos generales siempre marcado
+    
+  //   const index = this.selectedKnowledges.indexOf(knowledgeId);
+  //   const sectionId = this.getSectionFromKnowledge(knowledgeId);
+    
+  //   if (index === -1) {
+  //     // Añadir conocimiento
+  //     this.selectedKnowledges = [...this.selectedKnowledges, knowledgeId];
+      
+  //     // Añadir primer conocimiento de la sección si no está incluido
+  //     if (sectionId) {
+  //       const firstKnowledgeId = this.getFirstKnowledgeOfSection(sectionId);
+  //       if (firstKnowledgeId && !this.selectedKnowledges.includes(firstKnowledgeId)) {
+  //         this.selectedKnowledges = [...this.selectedKnowledges, firstKnowledgeId];
+  //       }
+  //     }
+  //   } else {
+  //     // Verificar si es el primer conocimiento de la sección
+  //     if (sectionId && knowledgeId === this.getFirstKnowledgeOfSection(sectionId)) {
+  //       // Solo permitir desmarcar si no hay otros conocimientos de la sección marcados
+  //       if (!this.hasOtherKnowledgesInSection(sectionId, knowledgeId)) {
+  //         this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+  //       }
+  //     } else {
+  //       // No es el primer conocimiento, se puede desmarcar normalmente
+  //       this.selectedKnowledges = this.selectedKnowledges.filter(id => id !== knowledgeId);
+  //     }
+  //   }
+  // }
 
   saveKnowledges(): void {
      if (!this.selectedKnowledges.includes(1)) {
