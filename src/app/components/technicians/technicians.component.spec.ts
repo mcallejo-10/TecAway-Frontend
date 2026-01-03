@@ -12,9 +12,13 @@ import { of } from 'rxjs';
 describe('TechniciansComponent', () => {
   let component: TechniciansComponent;
   let fixture: ComponentFixture<TechniciansComponent>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let filterServiceMock: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let userServiceMock: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let sectionServiceMock: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let knowledgeServiceMock: any;
 
   // PASO 1: Mock data - Datos de prueba realistas
@@ -22,7 +26,9 @@ describe('TechniciansComponent', () => {
     {
       id_user: 1,
       email: "tech1@test.com",
+      password: "hashedPassword123",
       name: "John Doe",
+      roles: ["user"],
       title: "Frontend Developer with 5 years experience",
       description: "Experienced developer specializing in Angular and React",
       town: "Barcelona",
@@ -31,7 +37,9 @@ describe('TechniciansComponent', () => {
     {
       id_user: 2,
       email: "tech2@test.com",
+      password: "hashedPassword456",
       name: "Jane Smith",
+      roles: ["user"],
       title: "Backend Developer specialized in Node.js",
       description: "Expert in Node.js and database management systems",
       town: "Madrid",
@@ -164,6 +172,7 @@ describe('TechniciansComponent', () => {
     });
 
     it('should add section when checkbox is checked', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedSections(1, event);
@@ -173,6 +182,7 @@ describe('TechniciansComponent', () => {
 
     it('should remove section when checkbox is unchecked', () => {
       component.selectedSections = [mockSections[0]];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: false } } as any;
 
       component.getSelectedSections(1, event);
@@ -182,6 +192,7 @@ describe('TechniciansComponent', () => {
 
     it('should not add duplicate sections', () => {
       component.selectedSections = [mockSections[0]];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedSections(1, event);
@@ -191,6 +202,7 @@ describe('TechniciansComponent', () => {
     });
 
     it('should call filterTechnicians after selection change', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedSections(1, event);
@@ -207,6 +219,7 @@ describe('TechniciansComponent', () => {
     });
 
     it('should add knowledge when checkbox is checked', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedKnowledges(1, event);
@@ -216,6 +229,7 @@ describe('TechniciansComponent', () => {
 
     it('should remove knowledge when checkbox is unchecked', () => {
       component.selectedKnowledges = [mockKnowledges[0]];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: false } } as any;
 
       component.getSelectedKnowledges(1, event);
@@ -224,6 +238,7 @@ describe('TechniciansComponent', () => {
     });
 
     it('should call filterTechnicians after knowledge selection', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedKnowledges(1, event);
