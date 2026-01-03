@@ -27,9 +27,9 @@
                 </div>
                 <strong>Puede desplazarse largas distancias:</strong>
 
-                @if(technician.can_move === 1) {
+                @if(technician.can_move === true) {
                 <span class="badge  bg-success">Si</span>}
-                @if(technician.can_move === 0) {
+                @if(technician.can_move === false) {
                 <span class="badge  bg-danger">No</span>
                 }
 
