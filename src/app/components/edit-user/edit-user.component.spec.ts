@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { UserResponse } from '../../interfaces/user';
+import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('EditUserComponent', () => {
   let component: EditUserComponent;
@@ -22,7 +23,7 @@ describe('EditUserComponent', () => {
       data: {
         id_user: 1,
         email: 'test.user@test.com',
-        password: 'TestPass123',
+        password: TEST_CREDENTIALS.MOCK_PASSWORD,
         name: 'Test User',
         roles: ['user'],
         title: 'Test Title',

@@ -9,8 +9,8 @@
 
     <div class="col-12 col-md-3" id="filter">
       <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
-      <div class="filter-overlay" (click)="closeFilter()"></div>
-      <div class="card filter-card ">
+      <div #filterOverlay class="filter-overlay" (click)="closeFilter()"></div>
+      <div #filterCard class="card filter-card ">
         <button class="filter-close" (click)="closeFilter()">×</button>
         <p class="filter-title">Puesto</p>
         <div id="filter-list">

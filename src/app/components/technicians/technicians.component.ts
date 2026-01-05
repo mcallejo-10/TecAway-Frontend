@@ -1,4 +1,7 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { UserService } from '../../services/userService/user.service';
 import { User, UserListResponse } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
@@ -19,6 +22,12 @@ import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component'
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent implements OnInit {
+  // Referencias al DOM para el filtro móvil
+  @ViewChild('filterCard') filterCard!: ElementRef<HTMLDivElement>;
+  @ViewChild('filterOverlay') filterOverlay!: ElementRef<HTMLDivElement>;
+
+  // Subject para optimizar eventos de resize con debounce
+  private resizeSubject = new Subject<void>();
 
   loading = true;
   technicians: User[] = [];
@@ -30,6 +39,7 @@ export class TechniciansComponent implements OnInit {
   filterService = inject(FilterService);
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
+  private renderer = inject(Renderer2);
 
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
@@ -38,6 +48,19 @@ export class TechniciansComponent implements OnInit {
   setFilteredIds: number[] = this.filterService.filterTechnicians();
   filteredTechnicians: User[] = [];
   private fb = inject(FormBuilder);
+
+  constructor() {
+    // Configurar debounce para resize - espera 300ms de inactividad antes de ejecutar
+    this.resizeSubject.pipe(
+      debounceTime(300),
+      takeUntilDestroyed() // Limpieza automática al destruir componente
+    ).subscribe(() => {
+      // Solo se ejecuta UNA VEZ después de que el usuario termina de redimensionar
+      if (window.innerWidth >= 768) {
+        this.closeFilter();
+      }
+    });
+  }
 
 ngOnInit() {
   this.loading = true;
@@ -97,6 +120,22 @@ private addKnowledgeControls(): void {
   this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
 }
 
+  // Helpers genéricos para reducir duplicación de código
+  private addItemToSelection<T>(
+    item: T | undefined,
+    selectedList: T[],
+    checkDuplicate: (item: T) => boolean
+  ): boolean {
+    if (!item || selectedList.some(checkDuplicate)) return false;
+    selectedList.push(item);
+    return true;
+  }
+
+  private applyFilters(): void {
+    const filteredIds = this.filterService.filterTechnicians();
+    this.filterTechniciansById(filteredIds);
+  }
+
   isCheckedSection(id: number): boolean {
     return this.selectedSections.some((section) => section.id_section === id);
   }
@@ -117,107 +156,78 @@ private addKnowledgeControls(): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      const section = this.sectionList.find(
-        (section) => section.id_section === id_section
-      );
-      if (section) {
-        if (!this.selectedSections.some(s => s.id_section === id_section)) {
-          this.selectedSections.push(section);
-        }
-        const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section!);
-
-        this.selectedKnowledges.push(knowledeService[0]);
+      const section = this.sectionList.find(s => s.id_section === id_section);
+      
+      if (this.addItemToSelection(section, this.selectedSections, s => s.id_section === id_section)) {
+        const knowledge = this.knowledgeList.find(k => k.knowledge === section!.section);
+        if (knowledge) this.selectedKnowledges.push(knowledge);
         this.filterService.setSelectedKnowledges(this.selectedKnowledges);
       }
       this.filterService.setSelectedSections(this.selectedSections);
-
     } else {
-      this.selectedSections = this.selectedSections.filter(
-        (section) => section.id_section !== id_section
-      );
+      this.selectedSections = this.selectedSections.filter(s => s.id_section !== id_section);
+      this.selectedKnowledges = this.selectedKnowledges.filter(k => k.section_id !== id_section);
+      
       if (this.selectedSections.length === 0) {
         this.ngOnInit();
-      } else {
-        this.filterService.setSelectedSections(this.selectedSections);
+        return;
       }
-      this.selectedKnowledges = this.selectedKnowledges.filter(
-        (knowledge) => knowledge.section_id !== id_section
-      );
+      
+      this.filterService.setSelectedSections(this.selectedSections);
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     }
-    this.filterService.filterTechnicians();
-    this.filterTechniciansById();
+    this.applyFilters();
   }
 
   getSelectedKnowledges(id_knowledge: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      const knowledge = this.knowledgeList.find(
-        (knowledge) => knowledge.id_knowledge === id_knowledge
-      );
-      if (knowledge) {
-        if (!this.selectedKnowledges.some(k => k.id_knowledge === id_knowledge)) {
-          this.selectedKnowledges.push(knowledge);
-        }
-      }
+      const knowledge = this.knowledgeList.find(k => k.id_knowledge === id_knowledge);
+      this.addItemToSelection(knowledge, this.selectedKnowledges, k => k.id_knowledge === id_knowledge);
       this.filterService.setSelectedKnowledges(this.selectedKnowledges);
-      this.filterService.filterTechnicians();
+    } else {
+      this.selectedKnowledges = this.selectedKnowledges.filter(k => k.id_knowledge !== id_knowledge);
+      
+      const knowledgesToSet = this.selectedKnowledges.length === 0 
+        ? this.knowledgeList 
+        : this.selectedKnowledges;
+      this.filterService.setSelectedKnowledges(knowledgesToSet);
     }
-    else {
-      this.selectedKnowledges = this.selectedKnowledges.filter(
-        (knowledge) => knowledge.id_knowledge !== id_knowledge
-      );
-      if (this.selectedKnowledges.length === 0) {
-        this.filterService.setSelectedKnowledges(this.knowledgeList);
-      } else {
-        this.filterService.setSelectedKnowledges(this.selectedKnowledges);
-      }
-
-      this.filterService.filterTechnicians();
-    }
-    this.filterTechniciansById()
+    this.applyFilters();
   }
 
-  filterTechniciansById(): void {
-    const filtredIds = this.filterService.filterTechnicians();
-
+  filterTechniciansById(filteredIds: number[]): void {
     const filteredTechnicians = this.technicians.filter(
-      (technician) => technician.id_user && filtredIds.includes(technician.id_user)
+      (technician) => technician.id_user && filteredIds.includes(technician.id_user)
     );
     this.filterService.techniciansFiltred.set(filteredTechnicians);
-    this.filterService.filterTechnicians();
-    this.filterService.techniciansFiltred();
   }
 
 
-  toggleFilter() {
-    const filterCard = document.querySelector('.filter-card');
-    const overlay = document.querySelector('.filter-overlay');
+  // Método unificado para controlar la visibilidad del filtro - elimina duplicación
+  private setFilterVisibility(show: boolean): void {
+    if (!this.filterCard || !this.filterOverlay) return;
+    
+    const action = show ? 'addClass' : 'removeClass';
+    this.renderer[action](this.filterCard.nativeElement, 'show');
+    this.renderer[action](this.filterOverlay.nativeElement, 'show');
+    document.body.style.overflow = show ? 'hidden' : '';
+  }
 
-    if (filterCard && overlay) {
-      filterCard.classList.toggle('show');
-      overlay.classList.toggle('show');
-      document.body.style.overflow = filterCard.classList.contains('show') ? 'hidden' : '';
-    }
+  toggleFilter() {
+    const isShown = this.filterCard.nativeElement.classList.contains('show');
+    this.setFilterVisibility(!isShown);
   }
 
   closeFilter() {
-    const filterCard = document.querySelector('.filter-card');
-    const overlay = document.querySelector('.filter-overlay');
-
-    if (filterCard && overlay) {
-      filterCard.classList.remove('show');
-      overlay.classList.remove('show');
-      document.body.style.overflow = '';
-    }
+    this.setFilterVisibility(false);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
-    if (window.innerWidth >= 768) {
-      this.closeFilter();
-    }
+    // Solo emite evento al Subject, el debounce se encarga del resto
+    this.resizeSubject.next();
   }
 
   // 🆕 Método para calcular el tamaño del avatar según el breakpoint

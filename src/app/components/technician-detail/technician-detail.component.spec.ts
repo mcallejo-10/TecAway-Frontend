@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { User } from '../../interfaces/user';
+import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('TechnicianDetailComponent', () => {
   let component: TechnicianDetailComponent;
@@ -17,7 +18,7 @@ describe('TechnicianDetailComponent', () => {
     const mockUser: User = {
       id_user: 1,
       email: 'test.user@test.com',
-      password: 'TestPass123',
+      password: TEST_CREDENTIALS.MOCK_PASSWORD,
       name: 'Test User Name',
       roles: ['user'],
       title: 'This is a valid title that meets the minimum length requirement of 20 chars',
