@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { signal } from '@angular/core';
 import { of } from 'rxjs';
+import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('TechniciansComponent', () => {
   let component: TechniciansComponent;
@@ -26,7 +27,7 @@ describe('TechniciansComponent', () => {
     {
       id_user: 1,
       email: "tech1@test.com",
-      password: "hashedPassword123",
+      password: TEST_CREDENTIALS.HASHED_PASSWORD_1,
       name: "John Doe",
       roles: ["user"],
       title: "Frontend Developer with 5 years experience",
@@ -37,7 +38,7 @@ describe('TechniciansComponent', () => {
     {
       id_user: 2,
       email: "tech2@test.com",
-      password: "hashedPassword456",
+      password: TEST_CREDENTIALS.HASHED_PASSWORD_2,
       name: "Jane Smith",
       roles: ["user"],
       title: "Backend Developer specialized in Node.js",
@@ -278,10 +279,10 @@ describe('TechniciansComponent', () => {
     });
 
     it('should filter technicians by IDs from filter service', () => {
-      filterServiceMock.filterTechnicians.mockReturnValue([1]);
+      const filteredIds = [1];
       const setSpy = jest.spyOn(filterServiceMock.techniciansFiltred, 'set');
 
-      component.filterTechniciansById();
+      component.filterTechniciansById(filteredIds);
 
       expect(setSpy).toHaveBeenCalledWith(
         expect.arrayContaining([mockTechnicians[0]])
@@ -289,10 +290,10 @@ describe('TechniciansComponent', () => {
     });
 
     it('should handle empty filter results', () => {
-      filterServiceMock.filterTechnicians.mockReturnValue([]);
+      const filteredIds: number[] = [];
       const setSpy = jest.spyOn(filterServiceMock.techniciansFiltred, 'set');
 
-      component.filterTechniciansById();
+      component.filterTechniciansById(filteredIds);
 
       expect(setSpy).toHaveBeenCalledWith([]);
     });

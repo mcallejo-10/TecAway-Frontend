@@ -6,6 +6,7 @@ import { UserService } from '../../services/userService/user.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { TEST_CREDENTIALS, TEST_USERS } from '../../../testing/test-constants';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -111,16 +112,16 @@ describe('RegisterComponent', () => {
     describe('password field', () => {
       it('should require at least one uppercase letter', () => {
         const passwordControl = component.registerForm.get('password');
-        passwordControl?.setValue('lowercase123');
+        passwordControl?.setValue(TEST_CREDENTIALS.LOWERCASE_PASSWORD);
         expect(passwordControl?.hasError('pattern')).toBe(true);
         
-        passwordControl?.setValue('Password123');
+        passwordControl?.setValue(TEST_CREDENTIALS.VALID_PASSWORD);
         expect(passwordControl?.valid).toBe(true);
       });
 
       it('should require minimum 4 characters', () => {
         const passwordControl = component.registerForm.get('password');
-        passwordControl?.setValue('P1');
+        passwordControl?.setValue(TEST_CREDENTIALS.SHORT_PASSWORD);
         expect(passwordControl?.hasError('minlength')).toBe(true);
       });
     });
@@ -128,8 +129,8 @@ describe('RegisterComponent', () => {
     describe('confirmPassword and MustMatch validator', () => {
       it('should fail when passwords do not match', () => {
         component.registerForm.patchValue({
-          password: 'Password123',
-          confirmPassword: 'Different123'
+          password: TEST_CREDENTIALS.VALID_PASSWORD,
+          confirmPassword: TEST_CREDENTIALS.ALTERNATIVE_PASSWORD
         });
         
         // El validador MustMatch añade error a confirmPassword, no al form group
@@ -139,8 +140,8 @@ describe('RegisterComponent', () => {
 
       it('should pass when passwords match', () => {
         component.registerForm.patchValue({
-          password: 'Password123',
-          confirmPassword: 'Password123'
+          password: TEST_CREDENTIALS.VALID_PASSWORD,
+          confirmPassword: TEST_CREDENTIALS.VALID_PASSWORD
         });
         
         const confirmPasswordControl = component.registerForm.get('confirmPassword');
@@ -177,10 +178,10 @@ describe('RegisterComponent', () => {
       it('should check email existence when first step is valid', () => {
         // Llenar correctamente el paso 1
         component.registerForm.patchValue({
-          name: 'John Doe',
-          email: 'john@example.com',
-          password: 'Password123',
-          confirmPassword: 'Password123',
+          name: TEST_USERS.JOHN_NAME,
+          email: TEST_USERS.JOHN_EMAIL,
+          password: TEST_CREDENTIALS.VALID_PASSWORD,
+          confirmPassword: TEST_CREDENTIALS.VALID_PASSWORD,
           acceptPrivacyPolicy: true
         });
         
@@ -194,7 +195,7 @@ describe('RegisterComponent', () => {
         component.nextStep();
 
         expect(userServiceMock.checkEmailExists).toHaveBeenCalledWith({ 
-          email: 'john@example.com' 
+          email: TEST_USERS.JOHN_EMAIL 
         });
         expect(component.currentStep).toBe(2);
         expect(component.errorMessage).toBe('');
@@ -202,10 +203,10 @@ describe('RegisterComponent', () => {
 
       it('should show error if email already exists', () => {
         component.registerForm.patchValue({
-          name: 'John Doe',
-          email: 'existing@example.com',
-          password: 'Password123',
-          confirmPassword: 'Password123',
+          name: TEST_USERS.JOHN_NAME,
+          email: TEST_USERS.EXISTING_EMAIL,
+          password: TEST_CREDENTIALS.VALID_PASSWORD,
+          confirmPassword: TEST_CREDENTIALS.VALID_PASSWORD,
           acceptPrivacyPolicy: true
         });
         
@@ -223,10 +224,10 @@ describe('RegisterComponent', () => {
 
       it('should convert email to lowercase', () => {
         component.registerForm.patchValue({
-          name: 'John Doe',
-          email: 'JOHN@EXAMPLE.COM',
-          password: 'Password123',
-          confirmPassword: 'Password123',
+          name: TEST_USERS.JOHN_NAME,
+          email: TEST_USERS.JOHN_EMAIL_UPPER,
+          password: TEST_CREDENTIALS.VALID_PASSWORD,
+          confirmPassword: TEST_CREDENTIALS.VALID_PASSWORD,
           acceptPrivacyPolicy: true
         });
         
@@ -237,7 +238,7 @@ describe('RegisterComponent', () => {
         component.nextStep();
 
         expect(userServiceMock.checkEmailExists).toHaveBeenCalledWith({ 
-          email: 'john@example.com' 
+          email: TEST_USERS.JOHN_EMAIL 
         });
       });
     });

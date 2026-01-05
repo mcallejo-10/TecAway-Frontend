@@ -11,6 +11,7 @@ import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { of } from 'rxjs';
+import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('FilterService', () => {
   let service: FilterService;
@@ -41,7 +42,7 @@ describe('FilterService', () => {
     {
       id_user: 1,
       email: 'user1@test.com',
-      password: 'pass123',
+      password: TEST_CREDENTIALS.SIMPLE_PASSWORD,
       name: 'Usuario 1',
       title: 'Frontend Developer',
       description: 'Especialista en Angular',
@@ -53,7 +54,7 @@ describe('FilterService', () => {
     {
       id_user: 2,
       email: 'user2@test.com',
-      password: 'pass123',
+      password: TEST_CREDENTIALS.SIMPLE_PASSWORD,
       name: 'Usuario 2',
       title: 'Fullstack Developer',
       description: 'Angular y Node.js',

@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { provideRouter, Router } from '@angular/router';
 import { signal } from '@angular/core';
+import { TEST_CREDENTIALS, TEST_USERS } from '../../../testing/test-constants';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -140,8 +141,8 @@ describe('LoginComponent', () => {
 
   describe('userLogin', () => {
     beforeEach(() => {
-      component.loginForm.get('email')?.setValue('test@example.com');
-      component.loginForm.get('password')?.setValue('password123');
+      component.loginForm.get('email')?.setValue(TEST_USERS.EMAIL);
+      component.loginForm.get('password')?.setValue(TEST_CREDENTIALS.VALID_PASSWORD);
     });
 
     it('should login user successfully and navigate to account', () => {
@@ -150,21 +151,21 @@ describe('LoginComponent', () => {
       component.userLogin();
 
       expect(authServiceMock.loginUser).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123'
+        email: TEST_USERS.EMAIL,
+        password: TEST_CREDENTIALS.VALID_PASSWORD
       });
       expect(router.navigate).toHaveBeenCalledWith(['/tu-cuenta']);
     });
 
     it('should convert email to lowercase on login', () => {
       authServiceMock.loginUser.mockReturnValue(of(undefined));
-      component.loginForm.get('email')?.setValue('TEST@EXAMPLE.COM');
+      component.loginForm.get('email')?.setValue(TEST_USERS.EMAIL_UPPERCASE);
 
       component.userLogin();
 
       expect(authServiceMock.loginUser).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123'
+        email: TEST_USERS.EMAIL,
+        password: TEST_CREDENTIALS.VALID_PASSWORD
       });
     });
 
