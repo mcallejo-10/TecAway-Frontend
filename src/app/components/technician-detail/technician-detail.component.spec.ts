@@ -10,10 +10,14 @@ import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 describe('TechnicianDetailComponent', () => {
   let component: TechnicianDetailComponent;
   let fixture: ComponentFixture<TechnicianDetailComponent>;
-  let userServiceMock: jasmine.SpyObj<UserService>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let userServiceMock: any;
 
   beforeEach(async () => {
-    userServiceMock = jasmine.createSpyObj('UserService', ['getUserById', 'getUserInfo']);
+    userServiceMock = {
+      getUserById: jest.fn(),
+      getUserInfo: jest.fn()
+    };
     
     const mockUser: User = {
       id_user: 1,
@@ -28,8 +32,8 @@ describe('TechnicianDetailComponent', () => {
     };
 
     // Configurar ambos mocks
-    userServiceMock.getUserById.and.returnValue(of(mockUser));
-    userServiceMock.getUserInfo.and.returnValue(of({
+    userServiceMock.getUserById.mockReturnValue(of(mockUser));
+    userServiceMock.getUserInfo.mockReturnValue(of({
       code: 1,
       message: "Secciones y conocimientos del usuario obtenidos correctamente",
       data: {

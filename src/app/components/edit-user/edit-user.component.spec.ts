@@ -11,13 +11,18 @@ import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 describe('EditUserComponent', () => {
   let component: EditUserComponent;
   let fixture: ComponentFixture<EditUserComponent>;
-  let userServiceMock: jasmine.SpyObj<UserService>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let userServiceMock: any;
 
   beforeEach(async () => {
-    userServiceMock = jasmine.createSpyObj('UserService', ['getUser', 'updateUser', 'uploadPhoto']);
+    userServiceMock = {
+      getUser: jest.fn(),
+      updateUser: jest.fn(),
+      uploadPhoto: jest.fn()
+    };
     
     // Updated mock to match UserResponse type
-    userServiceMock.getUser.and.returnValue(of({
+    userServiceMock.getUser.mockReturnValue(of({
       code: 200,
       message: "User Detail",
       data: {
@@ -31,8 +36,8 @@ describe('EditUserComponent', () => {
         town: 'Test Town',
         can_move: false,
         photo: 'https://example.com/photo.jpg',
-        created_at: '2025-01-20T23:30:02.000Z',
-        updated_at: '2025-01-31T16:02:51.000Z'
+        created_at: new Date('2025-01-20T23:30:02.000Z'),
+        updated_at: new Date('2025-01-31T16:02:51.000Z')
       }
     } as UserResponse));
 
