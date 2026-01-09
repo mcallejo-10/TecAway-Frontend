@@ -19,11 +19,6 @@ export class FilterService {
   private stateService = inject(TechnicianStateService);
   private userKnowledgeService = inject(UserKnowledgeService);
   private knowledgeService = inject(KnowledgeService);
-
-  // ⚠️ DEPRECATED: Mantener por compatibilidad temporal
-  serviceLoading = signal<boolean>(true);
-  techniciansFiltred = signal<User[]>([]);
-  filteredIds = signal<number[]>([]);
   
   userKnowledgeList = signal<UserKnowledge[]>([]);
   allKnowledges: Knowledge[] = this.knowledgeService.knowledgeList();
@@ -100,7 +95,7 @@ export class FilterService {
   filterByTown(town: string): number[] {
     const filteredUserIds = this.filteredBySections();
     return filteredUserIds.filter(userId => {
-      const user = this.techniciansFiltred().find(t => t.id_user === userId);
+      const user = this.stateService.allTechnicians().find(t => t.id_user === userId);
       return user?.town === town;
     });
   }
@@ -110,22 +105,6 @@ export class FilterService {
     return this.filterByKnowledges(sectionFilteredIds)
   }
 
-  // ⚠️ DEPRECATED: Usar stateService.setSelectedSections() directamente
-  setSelectedSections(sections: Section[]) {
-    this.stateService.setSelectedSections(sections);
-  }
-
-  // ⚠️ DEPRECATED: Usar stateService.setSelectedKnowledges() directamente
-  setSelectedKnowledges(knowledges: Knowledge[]) {
-    this.stateService.setSelectedKnowledges(knowledges);
-  }
-
-  // En filter.service.ts
-  setTechnicianList(technicians: User[]): void {
-    const sortedTechnicians = this.sortTechniciansByDate(technicians);
-    this.techniciansFiltred.set(sortedTechnicians);
-  }
-  
   private sortTechniciansByDate(technicians: User[]): User[] {
     return technicians.sort((a: User, b: User) => {
       return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();

@@ -64,17 +64,9 @@ describe('TechniciansComponent', () => {
   ];
 
   beforeEach(async () => {
-    // PASO 2: Crear signal que sea CALLABLE (como el real)
-    const techSignal = signal(mockTechnicians);
-    const sectionSignal = signal(mockSections);
-    
     filterServiceMock = {
       getTechnicians: jest.fn(),
-      filterTechnicians: jest.fn(),
-      setTechnicianList: jest.fn(),
-      setSelectedSections: jest.fn(),
-      setSelectedKnowledges: jest.fn(),
-      techniciansFiltred: techSignal // Signal completo, no solo .set
+      filterTechnicians: jest.fn()
     };
 
     userServiceMock = {
@@ -84,7 +76,7 @@ describe('TechniciansComponent', () => {
     sectionServiceMock = {
       getSectionList: jest.fn(),
       setSectionList: jest.fn(),
-      sectionList: sectionSignal
+      sectionList: signal(mockSections)
     };
 
     knowledgeServiceMock = {
@@ -305,22 +297,21 @@ describe('TechniciansComponent', () => {
 
     it('should filter technicians by IDs from filter service', () => {
       const filteredIds = [1];
-      const setSpy = jest.spyOn(filterServiceMock.techniciansFiltred, 'set');
 
       component.filterTechniciansById(filteredIds);
 
-      expect(setSpy).toHaveBeenCalledWith(
-        expect.arrayContaining([mockTechnicians[0]])
-      );
+      // 🔄 Verificamos que se actualizó el estado
+      expect(stateService.filteredTechnicians()).toContainEqual(mockTechnicians[0]);
+      expect(stateService.filteredTechnicians().length).toBe(1);
     });
 
     it('should handle empty filter results', () => {
       const filteredIds: number[] = [];
-      const setSpy = jest.spyOn(filterServiceMock.techniciansFiltred, 'set');
 
       component.filterTechniciansById(filteredIds);
 
-      expect(setSpy).toHaveBeenCalledWith([]);
+      // 🔄 Verificamos que el estado tiene un array vacío
+      expect(stateService.filteredTechnicians()).toEqual([]);
     });
   });
 

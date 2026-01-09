@@ -99,9 +99,8 @@ ngOnInit() {
 
           this.userService.getUserList().subscribe({
             next: (techRes: UserListResponse) => {
-              // 🔄 Guardamos técnicos en el STATE SERVICE
+              // ✅ Guardamos técnicos en el estado (se ordenan automáticamente)
               this.state.setAllTechnicians(techRes.data);
-              this.filterService.setTechnicianList(techRes.data);
               
               // ✅ Finalizamos carga
               this.state.setLoading(false);
@@ -234,8 +233,7 @@ ngOnInit() {
       (technician) => technician.id_user && filteredIds.includes(technician.id_user)
     );
     
-    // 🔄 Actualizamos AMBOS servicios (por ahora, luego refactorizaremos FilterService)
-    this.filterService.techniciansFiltred.set(filteredTechnicians);
+    // ✅ Solo actualizamos el estado centralizado
     this.state.setFilteredTechnicians(filteredTechnicians);
   }
 

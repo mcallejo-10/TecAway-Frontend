@@ -129,12 +129,14 @@ export class TechnicianStateService {
   /**
    * Establece la lista completa de técnicos
    * Llamado típicamente cuando se cargan los datos del servidor
+   * Los técnicos se ordenan automáticamente por fecha de creación (más recientes primero)
    */
   setAllTechnicians(technicians: User[]): void {
-    this._allTechnicians.set(technicians);
+    const sortedTechnicians = this.sortTechniciansByDate(technicians);
+    this._allTechnicians.set(sortedTechnicians);
     // Al inicio, la lista filtrada es igual a la completa
     if (this._filteredTechnicians().length === 0) {
-      this._filteredTechnicians.set(technicians);
+      this._filteredTechnicians.set(sortedTechnicians);
     }
   }
   
@@ -144,6 +146,16 @@ export class TechnicianStateService {
    */
   setFilteredTechnicians(technicians: User[]): void {
     this._filteredTechnicians.set(technicians);
+  }
+  
+  /**
+   * Ordena técnicos por fecha de creación (más recientes primero)
+   * @private
+   */
+  private sortTechniciansByDate(technicians: User[]): User[] {
+    return [...technicians].sort((a: User, b: User) => {
+      return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
+    });
   }
   
   /**
