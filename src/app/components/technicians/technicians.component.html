@@ -1,6 +1,7 @@
-@if(loading === true) {
+<!-- 🔄 Ahora usamos state.isLoading() en lugar de loading -->
+@if(state.isLoading() === true) {
 <app-loading-bar message="Cargando técnicos/as..."></app-loading-bar>
-} @if(loading === false) {
+} @if(state.isLoading() === false) {
 
 <div class="container container-fluid mt-2">
 
@@ -19,6 +20,7 @@
             @if(section.section !== 'Conocimientos generales') {
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="{{ 'section-' + section.id_section }}"
+                [checked]="isCheckedSection(section.id_section!)"
                 (change)="getSelectedSections(section.id_section!, $event)">
               <label class="form-check-label" for="'section-' + section.id_section">{{ section.section }}
               </label>
@@ -37,6 +39,7 @@
           @if(knowledge.section_id === section.id_section && knowledge.knowledge !== section.section) {
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="{{ 'knowledge-' + knowledge.id_knowledge }}"
+              [checked]="isCheckedKnowledge(knowledge.id_knowledge!)"
               (change)="getSelectedKnowledges(knowledge.id_knowledge!, $event)">
             <label class="form-check-label" for="'knowledge-' + knowledge.id_knowledge">{{ knowledge.knowledge }}
             </label>
@@ -56,7 +59,8 @@
 
 
     <section class="col-12 col-md-9">
-      @if(filterService.techniciansFiltred().length === 0 ) {
+      <!-- 🔄 Ahora usamos state.filteredTechnicians() -->
+      @if(state.filteredTechnicians().length === 0 ) {
       <div class="col-12 card-link">
         <div class="card card-technician">
           <div class="row g-0">
@@ -82,7 +86,8 @@
       }
 
 
-      @for(technician of filterService.techniciansFiltred(); track technician.id_user) {
+      <!-- 🔄 Iteramos sobre state.filteredTechnicians() -->
+      @for(technician of state.filteredTechnicians(); track technician.id_user) {
 
       <div class="col-12 card-link">
         <a [routerLink]="['/user', technician.id_user]">

@@ -1,11 +1,10 @@
-/* eslint-disable */ 
-
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { FilterService } from './filter.service';
 import { UserKnowledgeService } from '../userKowledgeService/user-knowledge.service';
 import { KnowledgeService } from '../knowledgeService/knowledge.service';
+import { TechnicianStateService } from '../state/technician-state.service';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
@@ -15,8 +14,11 @@ import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('FilterService', () => {
   let service: FilterService;
+  let stateService: TechnicianStateService;
   let httpMock: HttpTestingController;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let userKnowledgeServiceSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let knowledgeServiceSpy: any;
 
   // Mock data
@@ -66,14 +68,19 @@ describe('FilterService', () => {
   ];
 
   beforeEach(() => {
-    const userKnowledgeSpy = jasmine.createSpyObj('UserKnowledgeService', ['getUserKnowledgeList']);
-    const knowledgeSpy = jasmine.createSpyObj('KnowledgeService', ['knowledgeList']);
+    const userKnowledgeSpy = {
+      getUserKnowledgeList: jest.fn()
+    };
+    const knowledgeSpy = {
+      knowledgeList: jest.fn()
+    };
 
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         FilterService,
+        TechnicianStateService, // 🆕 Añadido el servicio de estado real
         { provide: UserKnowledgeService, useValue: userKnowledgeSpy },
         { provide: KnowledgeService, useValue: knowledgeSpy }
       ]
@@ -82,12 +89,13 @@ describe('FilterService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     userKnowledgeServiceSpy = TestBed.inject(UserKnowledgeService);
     knowledgeServiceSpy = TestBed.inject(KnowledgeService);
+    stateService = TestBed.inject(TechnicianStateService); // 🆕 Inyectamos el servicio de estado
 
     // Setup mocks
-    userKnowledgeServiceSpy.getUserKnowledgeList.and.returnValue(
+    (userKnowledgeServiceSpy.getUserKnowledgeList as jest.Mock).mockReturnValue(
       of({ data: mockUserKnowledges })
     );
-    knowledgeServiceSpy.knowledgeList.and.returnValue(mockKnowledges);
+    (knowledgeServiceSpy.knowledgeList as jest.Mock).mockReturnValue(mockKnowledges);
 
     service = TestBed.inject(FilterService);
   });
@@ -106,20 +114,22 @@ describe('FilterService', () => {
   });
 
   describe('Setters', () => {
-    it('should set selected sections', () => {
+    it('should set selected sections via state service', () => {
       const sections = [mockSections[0]]; // Solo Frontend
       
       service.setSelectedSections(sections);
       
-      expect(service.selectedSections()).toEqual(sections);
+      // 🔄 Ahora verificamos en el stateService
+      expect(stateService.selectedSections()).toEqual(sections);
     });
 
-    it('should set selected knowledges', () => {
+    it('should set selected knowledges via state service', () => {
       const knowledges = [mockKnowledges[0], mockKnowledges[1]]; // Angular y TypeScript
       
       service.setSelectedKnowledges(knowledges);
       
-      expect(service.selectedKnowledges()).toEqual(knowledges);
+      // 🔄 Ahora verificamos en el stateService
+      expect(stateService.selectedKnowledges()).toEqual(knowledges);
     });
 
     it('should set technician list and sort by date', () => {

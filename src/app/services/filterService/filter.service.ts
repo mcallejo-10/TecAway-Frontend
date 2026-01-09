@@ -1,12 +1,13 @@
 /* eslint-disable */ 
 
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
 import { UserKnowledgeService } from '../userKowledgeService/user-knowledge.service';
 import { UserKnowledge } from '../../interfaces/user-knowledge';
 import { KnowledgeService } from '../knowledgeService/knowledge.service';
+import { TechnicianStateService } from '../state/technician-state.service';
 
 
 @Injectable({
@@ -14,18 +15,22 @@ import { KnowledgeService } from '../knowledgeService/knowledge.service';
 })
 export class FilterService {
 
+  // 🔄 Inyectamos el servicio de estado centralizado
+  private stateService = inject(TechnicianStateService);
+  private userKnowledgeService = inject(UserKnowledgeService);
+  private knowledgeService = inject(KnowledgeService);
+
+  // ⚠️ DEPRECATED: Mantener por compatibilidad temporal
+  serviceLoading = signal<boolean>(true);
+  techniciansFiltred = signal<User[]>([]);
+  filteredIds = signal<number[]>([]);
+  
+  userKnowledgeList = signal<UserKnowledge[]>([]);
+  allKnowledges: Knowledge[] = this.knowledgeService.knowledgeList();
+
   constructor() {
     this.loadUserKnowledgeList(); // Cargar los datos
   }
-  serviceLoading = signal<boolean>(true);
-  techniciansFiltred = signal<User[]>([]);
-  selectedSections: WritableSignal<Section[]> = signal([]);
-  selectedKnowledges = signal<Knowledge[]>([]);
-  userKnowledgeList = signal<UserKnowledge[]>([]);
-  filteredIds = signal<number[]>([]);
-  userKnowledgeService = inject(UserKnowledgeService);
-  knowledgeService = inject(KnowledgeService);
-  allKnowledges: Knowledge[] = this.knowledgeService.knowledgeList();
 
   loadUserKnowledgeList() {
     this.userKnowledgeService.getUserKnowledgeList().subscribe((res: any) => {
@@ -35,8 +40,9 @@ export class FilterService {
 
 
   filteredBySections(): number[] {
-    const sections = this.selectedSections();
-    const knowledges = this.selectedKnowledges();
+    // 🔄 Ahora leemos del estado centralizado
+    const sections = this.stateService.selectedSections();
+    const knowledges = this.stateService.selectedKnowledges();
 
     const sectionIds = sections.map(section => section.id_section);
 
@@ -70,8 +76,9 @@ export class FilterService {
   }
 
   filterByKnowledges(userIds: number[]): number[] {
-    const selectedKnowledgeIds = this.selectedKnowledges().map(knowledge => knowledge.id_knowledge);
-    const selectedSectionIds = this.selectedSections().map(section => section.id_section);
+    // 🔄 Ahora leemos del estado centralizado
+    const selectedKnowledgeIds = this.stateService.selectedKnowledges().map(knowledge => knowledge.id_knowledge);
+    const selectedSectionIds = this.stateService.selectedSections().map(section => section.id_section);
 
     return userIds.filter(userId => {
       const userKnowledge = this.userKnowledgeList().filter(uk => uk.user_id === userId);
@@ -101,20 +108,18 @@ export class FilterService {
   filterTechnicians(): number[] {
     const sectionFilteredIds = this.filteredBySections();
     return this.filterByKnowledges(sectionFilteredIds)
-
   }
 
-  // setTechnicianList(techniciansList: User[]) {
-  //   this.techniciansFiltred.set(techniciansList);
-  // }
-
+  // ⚠️ DEPRECATED: Usar stateService.setSelectedSections() directamente
   setSelectedSections(sections: Section[]) {
-    this.selectedSections.set(sections);
+    this.stateService.setSelectedSections(sections);
   }
 
+  // ⚠️ DEPRECATED: Usar stateService.setSelectedKnowledges() directamente
   setSelectedKnowledges(knowledges: Knowledge[]) {
-    this.selectedKnowledges.set(knowledges);
+    this.stateService.setSelectedKnowledges(knowledges);
   }
+
   // En filter.service.ts
   setTechnicianList(technicians: User[]): void {
     const sortedTechnicians = this.sortTechniciansByDate(technicians);

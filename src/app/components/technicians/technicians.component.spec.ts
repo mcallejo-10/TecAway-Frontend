@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TechniciansComponent } from './technicians.component';
 import { FilterService } from '../../services/filterService/filter.service';
+import { TechnicianStateService } from '../../services/state/technician-state.service';
 import { UserService } from '../../services/userService/user.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
@@ -13,6 +14,7 @@ import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 describe('TechniciansComponent', () => {
   let component: TechniciansComponent;
   let fixture: ComponentFixture<TechniciansComponent>;
+  let stateService: TechnicianStateService;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let filterServiceMock: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,6 +104,7 @@ describe('TechniciansComponent', () => {
       ],
       providers: [
         provideRouter([]),
+        TechnicianStateService, // ✨ Proveemos el servicio real de estado
         { provide: FilterService, useValue: filterServiceMock },
         { provide: UserService, useValue: userServiceMock },
         { provide: SectionService, useValue: sectionServiceMock },
@@ -111,6 +114,7 @@ describe('TechniciansComponent', () => {
 
     fixture = TestBed.createComponent(TechniciansComponent);
     component = fixture.componentInstance;
+    stateService = TestBed.inject(TechnicianStateService); // 🔄 Inyectamos el servicio
   });
 
   it('should create', () => {
@@ -145,8 +149,9 @@ describe('TechniciansComponent', () => {
 
       setTimeout(() => {
         expect(userServiceMock.getUserList).toHaveBeenCalled();
-        expect(component.technicians).toEqual(mockTechnicians);
-        expect(component.loading).toBe(false);
+        // 🔄 Ahora verificamos el estado del servicio
+        expect(stateService.allTechnicians()).toEqual(mockTechnicians);
+        expect(stateService.isLoading()).toBe(false);
         done();
       }, 100);
     });
@@ -155,7 +160,8 @@ describe('TechniciansComponent', () => {
       component.ngOnInit();
 
       setTimeout(() => {
-        const hasConocimientos = component.selectedSections.some(
+        // 🔄 Verificamos en el estado del servicio
+        const hasConocimientos = stateService.selectedSections().some(
           s => s.section === 'Conocimientos generales'
         );
         expect(hasConocimientos).toBe(true);
@@ -169,7 +175,9 @@ describe('TechniciansComponent', () => {
     beforeEach(() => {
       component.sectionList = mockSections;
       component.knowledgeList = mockKnowledges;
-      component.selectedSections = [];
+      // 🔄 Limpiamos el estado
+      stateService.setSelectedSections([]);
+      stateService.setSelectedKnowledges([]);
     });
 
     it('should add section when checkbox is checked', () => {
@@ -178,27 +186,34 @@ describe('TechniciansComponent', () => {
 
       component.getSelectedSections(1, event);
 
-      expect(component.selectedSections).toContainEqual(mockSections[0]);
+      // 🔄 Verificamos en el estado
+      expect(stateService.selectedSections()).toContainEqual(mockSections[0]);
     });
 
     it('should remove section when checkbox is unchecked', () => {
-      component.selectedSections = [mockSections[0]];
+      // Primero añadimos una sección
+      stateService.setSelectedSections([mockSections[0]]);
+      
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: false } } as any;
 
       component.getSelectedSections(1, event);
 
-      expect(component.selectedSections).not.toContainEqual(mockSections[0]);
+      // 🔄 Verificamos que se eliminó del estado
+      expect(stateService.selectedSections()).not.toContainEqual(mockSections[0]);
     });
 
     it('should not add duplicate sections', () => {
-      component.selectedSections = [mockSections[0]];
+      // Añadimos una sección
+      stateService.setSelectedSections([mockSections[0]]);
+      
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: true } } as any;
 
       component.getSelectedSections(1, event);
 
-      const count = component.selectedSections.filter(s => s.id_section === 1).length;
+      // 🔄 Verificamos que no hay duplicados en el estado
+      const count = stateService.selectedSections().filter(s => s.id_section === 1).length;
       expect(count).toBe(1);
     });
 
@@ -216,7 +231,8 @@ describe('TechniciansComponent', () => {
   describe('getSelectedKnowledges', () => {
     beforeEach(() => {
       component.knowledgeList = mockKnowledges;
-      component.selectedKnowledges = [];
+      // 🔄 Limpiamos el estado
+      stateService.setSelectedKnowledges([]);
     });
 
     it('should add knowledge when checkbox is checked', () => {
@@ -225,17 +241,22 @@ describe('TechniciansComponent', () => {
 
       component.getSelectedKnowledges(1, event);
 
-      expect(component.selectedKnowledges).toContainEqual(mockKnowledges[0]);
+      // 🔄 Verificamos en el estado
+      expect(stateService.selectedKnowledges()).toContainEqual(mockKnowledges[0]);
     });
 
     it('should remove knowledge when checkbox is unchecked', () => {
-      component.selectedKnowledges = [mockKnowledges[0]];
+      // Primero añadimos DOS conocimientos para que al eliminar uno no quede vacía la lista
+      stateService.setSelectedKnowledges([mockKnowledges[0], mockKnowledges[1]]);
+      
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const event = { target: { checked: false } } as any;
 
       component.getSelectedKnowledges(1, event);
 
-      expect(component.selectedKnowledges).not.toContainEqual(mockKnowledges[0]);
+      // 🔄 Verificamos que se eliminó del estado
+      expect(stateService.selectedKnowledges()).not.toContainEqual(mockKnowledges[0]);
+      expect(stateService.selectedKnowledges()).toContainEqual(mockKnowledges[1]);
     });
 
     it('should call filterTechnicians after knowledge selection', () => {
@@ -251,7 +272,8 @@ describe('TechniciansComponent', () => {
   // PASO 7: Tests de helper functions
   describe('Helper functions', () => {
     it('should check if section is selected', () => {
-      component.selectedSections = [mockSections[0]];
+      // 🔄 Establecemos el estado
+      stateService.setSelectedSections([mockSections[0]]);
 
       expect(component.isCheckedSection(1)).toBe(true);
       expect(component.isCheckedSection(2)).toBe(false);
@@ -260,12 +282,14 @@ describe('TechniciansComponent', () => {
     it('should add Conocimientos generales section', () => {
       component.sectionList = mockSections;
       component.knowledgeList = mockKnowledges;
-      component.selectedSections = [];
-      component.selectedKnowledges = [];
+      // 🔄 Limpiamos el estado
+      stateService.setSelectedSections([]);
+      stateService.setSelectedKnowledges([]);
 
       component.addConocimientosGenerales();
 
-      const hasSection = component.selectedSections.some(
+      // 🔄 Verificamos en el estado
+      const hasSection = stateService.selectedSections().some(
         s => s.section === 'Conocimientos generales'
       );
       expect(hasSection).toBe(true);
@@ -275,7 +299,8 @@ describe('TechniciansComponent', () => {
   // PASO 8: Tests de filtrado de técnicos por ID
   describe('filterTechniciansById', () => {
     beforeEach(() => {
-      component.technicians = mockTechnicians;
+      // 🔄 Establecemos los técnicos en el estado
+      stateService.setAllTechnicians(mockTechnicians);
     });
 
     it('should filter technicians by IDs from filter service', () => {
