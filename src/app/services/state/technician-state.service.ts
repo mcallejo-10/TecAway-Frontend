@@ -2,6 +2,7 @@ import { Injectable, signal, computed, WritableSignal } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
+import { Coordinates } from '../location/location.service';
 
 /**
  * 🎯 TechnicianStateService
@@ -10,7 +11,7 @@ import { Knowledge } from '../../interfaces/knowledge';
  * 
  * RESPONSABILIDADES:
  * ✅ Mantener la lista completa de técnicos
- * ✅ Mantener los filtros seleccionados (secciones, conocimientos)
+ * ✅ Mantener los filtros seleccionados (secciones, conocimientos, ubicación, distancia)
  * ✅ Mantener la lista filtrada (resultado final)
  * ✅ Proporcionar signals reactivas para que los componentes se actualicen automáticamente
  * 
@@ -54,6 +55,16 @@ export class TechnicianStateService {
    */
   private _isLoading: WritableSignal<boolean> = signal(true);
   
+  /**
+   * 📍 Ubicación del usuario para búsqueda por distancia
+   */
+  private _userLocation: WritableSignal<Coordinates | null> = signal(null);
+  
+  /**
+   * 📏 Radio de búsqueda en kilómetros (null = sin límite)
+   */
+  private _searchRadius: WritableSignal<number | null> = signal(null);
+  
   // ========================================
   // 📖 GETTERS PÚBLICOS (read-only)
   // ========================================
@@ -84,6 +95,16 @@ export class TechnicianStateService {
    */
   readonly isLoading = this._isLoading.asReadonly();
   
+  /**
+   * 📍 Ubicación del usuario
+   */
+  readonly userLocation = this._userLocation.asReadonly();
+  
+  /**
+   * 📏 Radio de búsqueda en km
+   */
+  readonly searchRadius = this._searchRadius.asReadonly();
+  
   // ========================================
   // 🧮 COMPUTED SIGNALS (valores derivados)
   // ========================================
@@ -101,11 +122,19 @@ export class TechnicianStateService {
   
   /**
    * ¿Hay filtros activos?
-   * True si hay al menos una sección o conocimiento seleccionado
+   * True si hay al menos una sección, conocimiento o filtro de distancia activo
    */
   readonly hasActiveFilters = computed(() => 
     this._selectedSections().length > 0 || 
-    this._selectedKnowledges().length > 0
+    this._selectedKnowledges().length > 0 ||
+    (this._userLocation() !== null && this._searchRadius() !== null)
+  );
+  
+  /**
+   * ¿Hay filtro de ubicación activo?
+   */
+  readonly hasLocationFilter = computed(() => 
+    this._userLocation() !== null && this._searchRadius() !== null
   );
   
   /**
@@ -173,12 +202,29 @@ export class TechnicianStateService {
   }
   
   /**
+   * 📍 Establece la ubicación del usuario para búsqueda por distancia
+   */
+  setUserLocation(location: Coordinates | null): void {
+    this._userLocation.set(location);
+  }
+  
+  /**
+   * 📏 Establece el radio de búsqueda en kilómetros
+   * @param radius Radio en km, o null para sin límite
+   */
+  setSearchRadius(radius: number | null): void {
+    this._searchRadius.set(radius);
+  }
+  
+  /**
    * Limpia todos los filtros
    * Restaura la lista filtrada a la lista completa
    */
   clearFilters(): void {
     this._selectedSections.set([]);
     this._selectedKnowledges.set([]);
+    this._userLocation.set(null);
+    this._searchRadius.set(null);
     this._filteredTechnicians.set(this._allTechnicians());
   }
   

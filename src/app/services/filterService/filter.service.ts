@@ -41,10 +41,6 @@ export class FilterService {
 
     const sectionIds = sections.map(section => section.id_section);
 
-    // const filteredKnowledgeIds = knowledges
-    //   .filter(knowledge => sectionIds.includes(knowledge.section_id))
-    //   .map(knowledge => knowledge.id_knowledge);
-
     const userToKnowledgeMap = new Map<number, number[]>();
 
     this.userKnowledgeList().forEach(userKnowledge => {

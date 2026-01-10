@@ -11,6 +11,12 @@ export interface User {
     roles: string[];
     created_at?: Date;
     updated_at?: Date;
+    
+    // 📍 Ubicación geográfica para búsqueda por distancia
+    latitude?: number;
+    longitude?: number;
+    address?: string; // Dirección completa (opcional, para mostrar)
+    postal_code?: string; // Código postal (útil para búsquedas)
 }
 
 export interface UserResponse {
