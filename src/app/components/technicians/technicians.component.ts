@@ -3,8 +3,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { UserService } from '../../services/userService/user.service';
-import { User, UserListResponse } from '../../interfaces/user';
+import { UserListResponse } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
+import { TechnicianStateService } from '../../services/state/technician-state.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { Section, SectionListResponse } from '../../interfaces/section';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,25 +30,36 @@ export class TechniciansComponent implements OnInit {
   // Subject para optimizar eventos de resize con debounce
   private resizeSubject = new Subject<void>();
 
-  loading = true;
-  technicians: User[] = [];
-
-  filterForm!: FormGroup;
-  formBuilder = inject(FormBuilder);
-
+  // 🎯 ESTADO CENTRALIZADO - Ahora viene del TechnicianStateService
+  // Ya NO necesitamos estas variables locales:
+  // ❌ loading, technicians, filteredTechnicians, selectedSections, selectedKnowledges
+  
+  // Inyección de servicios
+  private fb = inject(FormBuilder);
+  private renderer = inject(Renderer2);
+  
   userService = inject(UserService);
   filterService = inject(FilterService);
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
-  private renderer = inject(Renderer2);
+  
+  // ✨ NUEVO: Servicio de estado centralizado
+  state = inject(TechnicianStateService);
 
+  // Variables locales que SÍ son específicas del componente
+  filterForm!: FormGroup;
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
-  selectedSections: Section[] = [];
-  selectedKnowledges: Knowledge[] = [];
-  setFilteredIds: number[] = this.filterService.filterTechnicians();
-  filteredTechnicians: User[] = [];
-  private fb = inject(FormBuilder);
+
+  isCheckedSection(id: number): boolean {
+    // 🔄 Ahora usamos el estado del servicio en lugar de variable local
+    return this.state.selectedSections().some((section) => section.id_section === id);
+  }
+
+  isCheckedKnowledge(id: number): boolean {
+    // 🔄 Verificamos si el conocimiento está seleccionado
+    return this.state.selectedKnowledges().some((knowledge) => knowledge.id_knowledge === id);
+  }
 
   constructor() {
     // Configurar debounce para resize - espera 300ms de inactividad antes de ejecutar
@@ -63,7 +75,8 @@ export class TechniciansComponent implements OnInit {
   }
 
 ngOnInit() {
-  this.loading = true;
+  // Inicializar estado de carga
+  this.state.setLoading(true);
   this.filterForm = this.fb.group({});
   
   this.sectionService.getSectionList().subscribe({
@@ -71,21 +84,26 @@ ngOnInit() {
       this.sectionService.setSectionList(sectionsRes.data);
       this.sectionList = this.sectionService.sectionList();
       this.addSectionControls();
-      this.filterService.setSelectedSections(this.sectionList);
 
       this.knowledgeService.getKnowledgeList().subscribe({
         next: (knowledgesRes: KnowledgeListResponse) => {
           this.knowledgeList = knowledgesRes.data;
           this.addKnowledgeControls();
+          
+          // Añadir Conocimientos generales por defecto
           this.addConocimientosGenerales();
-          this.filterService.setSelectedKnowledges(this.knowledgeList);
+          
+          // 🔄 Guardamos en el estado las secciones/conocimientos iniciales
+          this.state.setSelectedSections(this.state.selectedSections());
+          this.state.setSelectedKnowledges(this.state.selectedKnowledges());
 
           this.userService.getUserList().subscribe({
             next: (techRes: UserListResponse) => {
-              this.technicians = techRes.data;
-              this.filteredTechnicians = this.technicians;
-              this.filterService.setTechnicianList(this.technicians);
-              this.loading = false; // Solo se ejecuta cuando todo ha terminado
+              // ✅ Guardamos técnicos en el estado (se ordenan automáticamente)
+              this.state.setAllTechnicians(techRes.data);
+              
+              // ✅ Finalizamos carga
+              this.state.setLoading(false);
             }
           });
         }
@@ -94,33 +112,29 @@ ngOnInit() {
   });
 }
 
-private loadTechnicians(): void {
-  this.userService.getUserList().subscribe((res: UserListResponse) => {
-    this.technicians = res.data;
-    this.filteredTechnicians = this.technicians;
-    this.filterService.setTechnicianList(this.technicians);
-  });
-}
-
-private addSectionControls(): void {
-  const sectionControls = this.sectionList.reduce((acc, section) => {
-    acc[section.id_section!] = new FormControl(false);
-    return acc;
-  }, {} as Record<string, FormControl>);
+  // ========================================
+  // 🔧 MÉTODOS AUXILIARES PRIVADOS
+  // ========================================
   
-  this.filterForm.addControl('sections', this.fb.group(sectionControls));
-}
+  private addSectionControls(): void {
+    const sectionControls = this.sectionList.reduce((acc, section) => {
+      acc[section.id_section!] = new FormControl(false);
+      return acc;
+    }, {} as Record<string, FormControl>);
+    
+    this.filterForm.addControl('sections', this.fb.group(sectionControls));
+  }
 
-private addKnowledgeControls(): void {
-  const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
-    acc[knowledge.id_knowledge!] = new FormControl(false);
-    return acc;
-  }, {} as Record<string, FormControl>);
-  
-  this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
-}
+  private addKnowledgeControls(): void {
+    const knowledgeControls = this.knowledgeList.reduce((acc, knowledge) => {
+      acc[knowledge.id_knowledge!] = new FormControl(false);
+      return acc;
+    }, {} as Record<string, FormControl>);
+    
+    this.filterForm.addControl('knowledges', this.fb.group(knowledgeControls));
+  }
 
-  // Helpers genéricos para reducir duplicación de código
+  // Helper genérico para reducir duplicación de código
   private addItemToSelection<T>(
     item: T | undefined,
     selectedList: T[],
@@ -131,13 +145,10 @@ private addKnowledgeControls(): void {
     return true;
   }
 
+  // Método auxiliar simplificado - ya no necesitamos recargar todo
   private applyFilters(): void {
     const filteredIds = this.filterService.filterTechnicians();
     this.filterTechniciansById(filteredIds);
-  }
-
-  isCheckedSection(id: number): boolean {
-    return this.selectedSections.some((section) => section.id_section === id);
   }
 
 
@@ -146,62 +157,84 @@ private addKnowledgeControls(): void {
       (section) => section.section === 'Conocimientos generales'
     );
     if (section) {
-      this.selectedSections.push(section);                    
-      const knowledeService = this.knowledgeList.filter(k => k.knowledge === section.section);     
-      this.selectedKnowledges.push(knowledeService[0]);      
+      const selectedSections = [section];
+      const knowledgeService = this.knowledgeList.filter(k => k.knowledge === section.section);
+      const selectedKnowledges = knowledgeService;
+      
+      // 🔄 Guardamos en el estado
+      this.state.setSelectedSections(selectedSections);
+      this.state.setSelectedKnowledges(selectedKnowledges);
     }
   }
 
   getSelectedSections(id_section: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
+    
+    // 🔄 Trabajamos con el estado del servicio
+    let selectedSections = [...this.state.selectedSections()];
+    let selectedKnowledges = [...this.state.selectedKnowledges()];
 
     if (isChecked) {
       const section = this.sectionList.find(s => s.id_section === id_section);
       
-      if (this.addItemToSelection(section, this.selectedSections, s => s.id_section === id_section)) {
-        const knowledge = this.knowledgeList.find(k => k.knowledge === section!.section);
-        if (knowledge) this.selectedKnowledges.push(knowledge);
-        this.filterService.setSelectedKnowledges(this.selectedKnowledges);
+      if (section && !selectedSections.some(s => s.id_section === id_section)) {
+        selectedSections.push(section);
+        
+        const knowledge = this.knowledgeList.find(k => k.knowledge === section.section);
+        if (knowledge) {
+          selectedKnowledges.push(knowledge);
+        }
       }
-      this.filterService.setSelectedSections(this.selectedSections);
     } else {
-      this.selectedSections = this.selectedSections.filter(s => s.id_section !== id_section);
-      this.selectedKnowledges = this.selectedKnowledges.filter(k => k.section_id !== id_section);
+      selectedSections = selectedSections.filter(s => s.id_section !== id_section);
+      selectedKnowledges = selectedKnowledges.filter(k => k.section_id !== id_section);
       
-      if (this.selectedSections.length === 0) {
+      if (selectedSections.length === 0) {
         this.ngOnInit();
         return;
       }
-      
-      this.filterService.setSelectedSections(this.selectedSections);
-      this.filterService.setSelectedKnowledges(this.selectedKnowledges);
     }
+    
+    // 🔄 Actualizamos SOLO el estado centralizado (FilterService lo lee de allí)
+    this.state.setSelectedSections(selectedSections);
+    this.state.setSelectedKnowledges(selectedKnowledges);
+    
     this.applyFilters();
   }
 
   getSelectedKnowledges(id_knowledge: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
+    
+    // 🔄 Trabajamos con el estado del servicio
+    let selectedKnowledges = [...this.state.selectedKnowledges()];
 
     if (isChecked) {
       const knowledge = this.knowledgeList.find(k => k.id_knowledge === id_knowledge);
-      this.addItemToSelection(knowledge, this.selectedKnowledges, k => k.id_knowledge === id_knowledge);
-      this.filterService.setSelectedKnowledges(this.selectedKnowledges);
+      if (knowledge && !selectedKnowledges.some(k => k.id_knowledge === id_knowledge)) {
+        selectedKnowledges.push(knowledge);
+      }
     } else {
-      this.selectedKnowledges = this.selectedKnowledges.filter(k => k.id_knowledge !== id_knowledge);
+      selectedKnowledges = selectedKnowledges.filter(k => k.id_knowledge !== id_knowledge);
       
-      const knowledgesToSet = this.selectedKnowledges.length === 0 
-        ? this.knowledgeList 
-        : this.selectedKnowledges;
-      this.filterService.setSelectedKnowledges(knowledgesToSet);
+      if (selectedKnowledges.length === 0) {
+        selectedKnowledges = this.knowledgeList;
+      }
     }
+    
+    // 🔄 Actualizamos SOLO el estado centralizado (FilterService lo lee de allí)
+    this.state.setSelectedKnowledges(selectedKnowledges);
+    
     this.applyFilters();
   }
 
   filterTechniciansById(filteredIds: number[]): void {
-    const filteredTechnicians = this.technicians.filter(
+    const allTechs = this.state.allTechnicians(); // 🔄 Leemos del estado
+    const filteredTechnicians = allTechs.filter(
       (technician) => technician.id_user && filteredIds.includes(technician.id_user)
     );
-    this.filterService.techniciansFiltred.set(filteredTechnicians);
+    
+    // ✅ Solo actualizamos el estado centralizado
+    this.state.setFilteredTechnicians(filteredTechnicians);
   }
 
 

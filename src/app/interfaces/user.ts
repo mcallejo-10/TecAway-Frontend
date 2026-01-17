@@ -5,8 +5,17 @@ export interface User {
     name: string;
     title?: string;
     description?: string;
-    town?: string;
+    
+    // 📍 Ubicación geográfica
+    town?: string;              // Ciudad específica (ej: "Barcelona") - OPCIONAL
+    country: string;            // Código ISO país (ej: "ES", "AR", "MX") - OBLIGATORIO
     can_move?: boolean;
+    
+    // 📍 Coordenadas (generadas automáticamente desde backend si hay town)
+    latitude?: number;
+    longitude?: number;
+    postal_code?: string;
+    
     photo?: string;
     roles: string[];
     created_at?: Date;

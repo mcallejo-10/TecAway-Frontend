@@ -58,6 +58,11 @@ export class RegisterComponent {
       Validators.required,
       Validators.minLength(2)
     ]),
+    country: new FormControl('ES', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(2)
+    ]),
     can_move: new FormControl(false),
     photo: new FormControl('', validateFile),
     acceptPrivacyPolicy: new FormControl(false, [Validators.requiredTrue]),
@@ -157,6 +162,7 @@ export class RegisterComponent {
         title: (this.registerForm.get('title')?.value || '').trim(),
         description: (this.registerForm.get('description')?.value || '').trim(),
         town: (this.registerForm.get('town')?.value || '').trim(),
+        country: (this.registerForm.get('country')?.value || 'ES').trim(),
         can_move: this.registerForm.get('can_move')?.value || false,
         roles: ['user']
       };

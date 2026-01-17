@@ -1,11 +1,10 @@
-/* eslint-disable */ 
-
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { FilterService } from './filter.service';
 import { UserKnowledgeService } from '../userKowledgeService/user-knowledge.service';
 import { KnowledgeService } from '../knowledgeService/knowledge.service';
+import { TechnicianStateService } from '../state/technician-state.service';
 import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
@@ -15,8 +14,11 @@ import { TEST_CREDENTIALS } from '../../../testing/test-constants';
 
 describe('FilterService', () => {
   let service: FilterService;
+  let stateService: TechnicianStateService;
   let httpMock: HttpTestingController;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let userKnowledgeServiceSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let knowledgeServiceSpy: any;
 
   // Mock data
@@ -66,14 +68,19 @@ describe('FilterService', () => {
   ];
 
   beforeEach(() => {
-    const userKnowledgeSpy = jasmine.createSpyObj('UserKnowledgeService', ['getUserKnowledgeList']);
-    const knowledgeSpy = jasmine.createSpyObj('KnowledgeService', ['knowledgeList']);
+    const userKnowledgeSpy = {
+      getUserKnowledgeList: jest.fn()
+    };
+    const knowledgeSpy = {
+      knowledgeList: jest.fn()
+    };
 
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         FilterService,
+        TechnicianStateService, // 🆕 Añadido el servicio de estado real
         { provide: UserKnowledgeService, useValue: userKnowledgeSpy },
         { provide: KnowledgeService, useValue: knowledgeSpy }
       ]
@@ -82,12 +89,13 @@ describe('FilterService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     userKnowledgeServiceSpy = TestBed.inject(UserKnowledgeService);
     knowledgeServiceSpy = TestBed.inject(KnowledgeService);
+    stateService = TestBed.inject(TechnicianStateService); // 🆕 Inyectamos el servicio de estado
 
     // Setup mocks
-    userKnowledgeServiceSpy.getUserKnowledgeList.and.returnValue(
+    (userKnowledgeServiceSpy.getUserKnowledgeList as jest.Mock).mockReturnValue(
       of({ data: mockUserKnowledges })
     );
-    knowledgeServiceSpy.knowledgeList.and.returnValue(mockKnowledges);
+    (knowledgeServiceSpy.knowledgeList as jest.Mock).mockReturnValue(mockKnowledges);
 
     service = TestBed.inject(FilterService);
   });
@@ -105,45 +113,17 @@ describe('FilterService', () => {
     expect(service.userKnowledgeList()).toEqual(mockUserKnowledges);
   });
 
-  describe('Setters', () => {
-    it('should set selected sections', () => {
-      const sections = [mockSections[0]]; // Solo Frontend
-      
-      service.setSelectedSections(sections);
-      
-      expect(service.selectedSections()).toEqual(sections);
-    });
-
-    it('should set selected knowledges', () => {
-      const knowledges = [mockKnowledges[0], mockKnowledges[1]]; // Angular y TypeScript
-      
-      service.setSelectedKnowledges(knowledges);
-      
-      expect(service.selectedKnowledges()).toEqual(knowledges);
-    });
-
-    it('should set technician list and sort by date', () => {
-      service.setTechnicianList(mockUsers);
-      
-      const sortedUsers = service.techniciansFiltred();
-      expect(sortedUsers.length).toBe(2);
-      // Usuario 2 debe estar primero (fecha más reciente)
-      expect(sortedUsers[0].id_user).toBe(2);
-      expect(sortedUsers[1].id_user).toBe(1);
-    });
-  });
-
   describe('Filtering Methods', () => {
     beforeEach(() => {
       // Setup data para filtrado
-      service.setSelectedSections(mockSections); // Frontend y Backend
-      service.setSelectedKnowledges(mockKnowledges); // Todos los conocimientos
+      stateService.setSelectedSections(mockSections); // Frontend y Backend
+      stateService.setSelectedKnowledges(mockKnowledges); // Todos los conocimientos
     });
 
     it('should filter users by sections correctly', () => {
       // Solo sección Frontend (id: 1)
-      service.setSelectedSections([mockSections[0]]);
-      service.setSelectedKnowledges([mockKnowledges[0]]); // Angular
+      stateService.setSelectedSections([mockSections[0]]);
+      stateService.setSelectedKnowledges([mockKnowledges[0]]); // Angular
       
       const filteredIds = service.filteredBySections();
       
@@ -154,8 +134,8 @@ describe('FilterService', () => {
 
     it('should filter users by multiple sections', () => {
       // Frontend y Backend
-      service.setSelectedSections(mockSections);
-      service.setSelectedKnowledges([
+      stateService.setSelectedSections(mockSections);
+      stateService.setSelectedKnowledges([
         mockKnowledges[0], // Angular (Frontend)
         mockKnowledges[2]  // Node.js (Backend)
       ]);
@@ -171,7 +151,7 @@ describe('FilterService', () => {
       const userIds = [1, 2]; // Ambos usuarios
       
       // Filtrar solo usuarios con Angular
-      service.setSelectedKnowledges([mockKnowledges[0]]); // Angular
+      stateService.setSelectedKnowledges([mockKnowledges[0]]); // Angular
       
       const filteredIds = service.filterByKnowledges(userIds);
       
@@ -184,7 +164,7 @@ describe('FilterService', () => {
       const userIds = [1, 2];
       
       // Filtrar usuarios que tengan Angular Y TypeScript
-      service.setSelectedKnowledges([
+      stateService.setSelectedKnowledges([
         mockKnowledges[0], // Angular
         mockKnowledges[1]  // TypeScript
       ]);
@@ -200,8 +180,8 @@ describe('FilterService', () => {
       const userIds = [1, 2];
       
       // Solo secciones seleccionadas, sin conocimientos específicos
-      service.setSelectedSections([mockSections[0]]); // Frontend
-      service.setSelectedKnowledges([]); // Sin conocimientos específicos
+      stateService.setSelectedSections([mockSections[0]]); // Frontend
+      stateService.setSelectedKnowledges([]); // Sin conocimientos específicos
       
       const filteredIds = service.filterByKnowledges(userIds);
       
@@ -212,8 +192,8 @@ describe('FilterService', () => {
 
     it('should combine section and knowledge filtering in main filter', () => {
       // Setup: Frontend + Angular específicamente
-      service.setSelectedSections([mockSections[0]]); // Frontend
-      service.setSelectedKnowledges([mockKnowledges[0]]); // Angular
+      stateService.setSelectedSections([mockSections[0]]); // Frontend
+      stateService.setSelectedKnowledges([mockKnowledges[0]]); // Angular
       
       const filteredIds = service.filterTechnicians();
       
@@ -224,8 +204,8 @@ describe('FilterService', () => {
 
     it('should return empty array when no matches in main filter', () => {
       // Setup imposible: Backend + Angular (Angular está en Frontend)
-      service.setSelectedSections([mockSections[1]]); // Backend
-      service.setSelectedKnowledges([mockKnowledges[0]]); // Angular (Frontend)
+      stateService.setSelectedSections([mockSections[1]]); // Backend
+      stateService.setSelectedKnowledges([mockKnowledges[0]]); // Angular (Frontend)
       
       const filteredIds = service.filterTechnicians();
       
@@ -234,12 +214,13 @@ describe('FilterService', () => {
     });
 
     it('should filter by town correctly', () => {
-      // Setup datos de técnicos primero
-      service.setTechnicianList(mockUsers);
+      // Setup datos de técnicos en el stateService
+      stateService.setAllTechnicians(mockUsers);
+      stateService.setFilteredTechnicians(mockUsers);
       
       // Mock manualmente el resultado esperado de filteredBySections
-      service.setSelectedSections([mockSections[0]]); // Frontend
-      service.setSelectedKnowledges([mockKnowledges[0]]); // Angular
+      stateService.setSelectedSections([mockSections[0]]); // Frontend
+      stateService.setSelectedKnowledges([mockKnowledges[0]]); // Angular
       
       const madridUsers = service.filterByTown('Madrid');
       const barcelonaUsers = service.filterByTown('Barcelona');
@@ -249,9 +230,9 @@ describe('FilterService', () => {
     });
 
     it('should return empty array when town not found', () => {
-      service.setTechnicianList(mockUsers);
-      service.setSelectedSections([mockSections[0]]);
-      service.setSelectedKnowledges([mockKnowledges[0]]);
+      stateService.setAllTechnicians(mockUsers);
+      stateService.setSelectedSections([mockSections[0]]);
+      stateService.setSelectedKnowledges([mockKnowledges[0]]);
       
       const sevillaUsers = service.filterByTown('Sevilla');
       
@@ -259,8 +240,8 @@ describe('FilterService', () => {
     });
 
     it('should handle empty sections and knowledges', () => {
-      service.setSelectedSections([]);
-      service.setSelectedKnowledges([]);
+      stateService.setSelectedSections([]);
+      stateService.setSelectedKnowledges([]);
       
       const filteredIds = service.filteredBySections();
       
@@ -270,7 +251,7 @@ describe('FilterService', () => {
 
     it('should handle empty userIds in filterByKnowledges', () => {
       const emptyUserIds: number[] = [];
-      service.setSelectedKnowledges([mockKnowledges[0]]);
+      stateService.setSelectedKnowledges([mockKnowledges[0]]);
       
       const filteredIds = service.filterByKnowledges(emptyUserIds);
       
