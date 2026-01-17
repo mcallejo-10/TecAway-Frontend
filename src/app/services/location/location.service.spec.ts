@@ -159,18 +159,95 @@ describe('LocationService', () => {
   });
 
   describe('geocodeAddress', () => {
-    it('should return null (not yet implemented)', async () => {
-      const result = await service.geocodeAddress('Calle Mayor 1, Madrid');
-      
+    it('should geocode address using Nominatim', async () => {
+      // Mock fetch response
+      const mockResponse = [{
+        lat: '40.4168',
+        lon: '-3.7038',
+        display_name: 'Madrid, España'
+      }];
+
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => mockResponse
+      } as Response);
+
+      const result = await service.geocodeAddress('Madrid, España');
+
+      expect(result).toEqual({
+        latitude: 40.4168,
+        longitude: -3.7038
+      });
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('nominatim.openstreetmap.org/search'),
+        expect.any(Object)
+      );
+    });
+
+    it('should return null if no results found', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => []
+      } as Response);
+
+      const result = await service.geocodeAddress('Dirección Inexistente XYZ123');
+
       expect(result).toBeNull();
+    });
+
+    it('should handle fetch errors gracefully', async () => {
+      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+
+      const result = await service.geocodeAddress('Madrid');
+
+      expect(result).toBeNull();
+    });
+
+    it('should include country code if provided', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => [{
+          lat: '-34.6037',
+          lon: '-58.3816'
+        }]
+      } as Response);
+
+      await service.geocodeAddress('Buenos Aires', 'AR');
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('Buenos%20Aires%2C%20AR'),
+        expect.any(Object)
+      );
     });
   });
 
   describe('reverseGeocode', () => {
-    it('should return null (not yet implemented)', async () => {
+    it('should reverse geocode coordinates', async () => {
+      const mockResponse = {
+        display_name: 'Puerta del Sol, Madrid, España'
+      };
+
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => mockResponse
+      } as Response);
+
       const coords: Coordinates = { latitude: 40.4168, longitude: -3.7038 };
       const result = await service.reverseGeocode(coords);
-      
+
+      expect(result).toBe('Puerta del Sol, Madrid, España');
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('nominatim.openstreetmap.org/reverse'),
+        expect.any(Object)
+      );
+    });
+
+    it('should return null on error', async () => {
+      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+
+      const coords: Coordinates = { latitude: 40.4168, longitude: -3.7038 };
+      const result = await service.reverseGeocode(coords);
+
       expect(result).toBeNull();
     });
   });
