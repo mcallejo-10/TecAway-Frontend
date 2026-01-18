@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { FilterService } from '../../services/filterService/filter.service';
 import { TechnicianStateService } from '../../services/state/technician-state.service';
 import { DistanceFilterService } from '../../services/distance-filter/distance-filter.service';
 import { TechnicianSortService, SortType } from '../../services/sort/technician-sort.service';
-import { LocationService } from '../../services/location/location.service';
+import { LocationService, LocationSuggestion } from '../../services/location/location.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { Section, SectionListResponse } from '../../interfaces/section';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,6 +32,10 @@ export class TechniciansComponent implements OnInit {
 
   // Subject para optimizar eventos de resize con debounce
   private resizeSubject = new Subject<void>();
+  
+  // 🔍 Subjects para optimizar búsqueda de ubicación
+  private locationInputSubject = new Subject<string>();
+  private radiusChangeSubject = new Subject<number>();
 
   // 🎯 ESTADO CENTRALIZADO - Ahora viene del TechnicianStateService
   // Ya NO necesitamos estas variables locales:
@@ -56,6 +60,10 @@ export class TechniciansComponent implements OnInit {
   filterForm!: FormGroup;
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
+  
+  // 🔍 Autocomplete de ubicaciones
+  locationSuggestions = signal<LocationSuggestion[]>([]);
+  showSuggestions = signal<boolean>(false);
 
   isCheckedSection(id: number): boolean {
     // 🔄 Ahora usamos el estado del servicio en lugar de variable local
@@ -77,6 +85,38 @@ export class TechniciansComponent implements OnInit {
       if (window.innerWidth >= 768) {
         this.closeFilter();
       }
+    });
+
+    // 🔍 Debounce para input de ubicación (esperar 500ms después de que el usuario deja de escribir)
+    this.locationInputSubject.pipe(
+      debounceTime(500),
+      takeUntilDestroyed()
+    ).subscribe(async (query) => {
+      if (!query || query.trim().length < 2) {
+        this.locationSuggestions.set([]);
+        this.showSuggestions.set(false);
+        return;
+      }
+
+      try {
+        const suggestions = await this.locationService.getLocationSuggestions(query);
+        this.locationSuggestions.set(suggestions);
+        this.showSuggestions.set(suggestions.length > 0);
+      } catch (error) {
+        console.error('Error obteniendo sugerencias:', error);
+        this.locationSuggestions.set([]);
+        this.showSuggestions.set(false);
+      }
+    });
+
+    // 🎯 Debounce para slider de radio (esperar 300ms después de que el usuario deja de mover)
+    this.radiusChangeSubject.pipe(
+      debounceTime(300),
+      takeUntilDestroyed()
+    ).subscribe((radius) => {
+      this.state.setSearchRadius(radius);
+      // 🔄 Volver a aplicar todos los filtros para asegurar que parte de la lista correcta
+      this.applyFilters();
     });
   }
 
@@ -153,9 +193,19 @@ ngOnInit() {
 
   // Método auxiliar simplificado - ya no necesitamos recargar todo
   private applyFilters(): void {
-    const filteredIds = this.filterService.filterTechnicians();
-    this.filterTechniciansById(filteredIds);
-    // 🆕 Después de filtrar por sección/conocimiento, aplicar distancia y ordenamiento
+    const hasLocationFilter = this.state.userLocation() !== null && this.state.searchRadius() !== null;
+    const hasSectionFilters = this.state.selectedSections().length > 0;
+    
+    if (hasSectionFilters) {
+      // Si hay filtros de sección/conocimiento, aplicarlos primero
+      const filteredIds = this.filterService.filterTechnicians();
+      this.filterTechniciansById(filteredIds);
+    } else {
+      // Si NO hay filtros de sección, usar todos los técnicos
+      this.state.setFilteredTechnicians(this.state.allTechnicians());
+    }
+    
+    // Después de filtrar por sección/conocimiento, aplicar distancia y ordenamiento
     this.applyDistanceFilter();
   }
 
@@ -309,9 +359,12 @@ ngOnInit() {
       return;
     }
 
-    const currentFiltered = this.state.filteredTechnicians();
+    // 🔑 IMPORTANTE: Siempre partir de la lista actual (ya filtrada por secciones si aplica)
+    // NO partir de una lista previamente filtrada por distancia
+    const currentList = this.state.filteredTechnicians();
+    
     const distanceFiltered = this.distanceFilterService.filterByDistance(
-      currentFiltered,
+      currentList,
       userLocation,
       searchRadius
     );
@@ -357,6 +410,7 @@ ngOnInit() {
       this.state.setUserLocation(location);
       // Establecer radio por defecto (ej: 20km)
       this.state.setSearchRadius(20);
+      this.state.setSearchLocation('Tu ubicación'); // 🆕 Texto para geolocalización
       this.applyFilters();
     } catch (error) {
       console.error('Error al obtener ubicación:', error);
@@ -367,11 +421,101 @@ ngOnInit() {
   }
 
   /**
-   * Actualiza el radio de búsqueda
+   * Busca ubicación por ciudad/país escrito manualmente
+   * Llama al backend para geocodificar (convertir ciudad → coordenadas)
+   */
+  async searchByLocation(locationQuery: string): Promise<void> {
+    if (!locationQuery || locationQuery.trim() === '') {
+      alert('Por favor, introduce una ciudad o país');
+      return;
+    }
+
+    try {
+      this.state.setLoading(true);
+      
+      // Llamar al backend para geocodificar
+      const coords = await this.locationService.geocodeLocation(locationQuery);
+      
+      if (!coords) {
+        alert(`No se encontró la ubicación: "${locationQuery}".\nIntenta con otra ciudad o sé más específico (ej: "Barcelona, España")`);
+        return;
+      }
+
+      // Actualizar el estado con las coordenadas obtenidas
+      this.state.setUserLocation(coords);
+      this.state.setSearchRadius(20); // Radio por defecto: 20 km
+      this.state.setSearchLocation(locationQuery.trim()); // 🏙️ Guardar el nombre de la ciudad
+      
+      // Ocultar sugerencias
+      this.showSuggestions.set(false);
+      
+      // Aplicar filtros
+      this.applyFilters();
+      
+    } catch (error) {
+      console.error('Error al buscar ubicación:', error);
+      alert('Hubo un error al buscar la ubicación. Por favor, inténtalo de nuevo.');
+    } finally {
+      this.state.setLoading(false);
+    }
+  }
+
+  /**
+   * 🔍 Maneja el input de búsqueda de ubicación para autocomplete
+   * Se ejecuta mientras el usuario escribe (con debounce)
+   */
+  onLocationInput(query: string): void {
+    // Emitir al subject, el debounce se encarga del resto
+    this.locationInputSubject.next(query);
+  }
+
+  /**
+   * 📍 Selecciona una sugerencia del dropdown
+   * Actualiza el input y busca directamente
+   */
+  selectLocationSuggestion(suggestion: LocationSuggestion, inputElement: HTMLInputElement): void {
+    // Formatear como "Ciudad, País"
+    const locationText = `${suggestion.city}, ${suggestion.country}`;
+    
+    // Actualizar el input visualmente
+    inputElement.value = locationText;
+    
+    // Ocultar dropdown
+    this.showSuggestions.set(false);
+    this.locationSuggestions.set([]);
+    
+    // Usar directamente las coordenadas de la sugerencia
+    this.state.setUserLocation({
+      latitude: suggestion.latitude,
+      longitude: suggestion.longitude
+    });
+    this.state.setSearchRadius(20);
+    this.state.setSearchLocation(locationText);
+    
+    // Aplicar filtros
+    this.applyFilters();
+  }
+
+  /**
+   * Limpia el filtro de ubicación/distancia
+   */
+  clearLocationFilter(): void {
+    this.state.setUserLocation(null);
+    this.state.setSearchRadius(null);
+    this.state.setSearchLocation(null);
+    // Volver a ordenar por reciente si estaba ordenado por distancia
+    if (this.state.sortType() === 'distance') {
+      this.state.setSortType('recent');
+    }
+    this.applyFilters();
+  }
+
+  /**
+   * Actualiza el radio de búsqueda (con debounce)
    */
   onSearchRadiusChange(radius: number): void {
-    this.state.setSearchRadius(radius);
-    this.applyDistanceFilter();
+    // Emitir al subject, el debounce se encarga del resto
+    this.radiusChangeSubject.next(radius);
   }
 
   /**

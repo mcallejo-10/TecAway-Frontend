@@ -13,6 +13,23 @@
       <div #filterOverlay class="filter-overlay" (click)="closeFilter()"></div>
       <div #filterCard class="card filter-card ">
         <button class="filter-close" (click)="closeFilter()">×</button>
+        
+        <!-- 🔤 PARTE 1: SELECTOR DE ORDENAMIENTO -->
+        <p class="filter-title">Ordenar por</p>
+        <div class="mb-3">
+          <select 
+            #sortSelect
+            class="form-select"
+            [value]="state.sortType()"
+            (change)="onSortTypeChange(sortSelect.value)">
+            <option value="recent">Más recientes</option>
+            <option value="name">Por nombre (A-Z)</option>
+            @if(state.hasLocationFilter()) {
+              <option value="distance">Más cercanos</option>
+            }
+          </select>
+        </div>
+
         <p class="filter-title">Puesto</p>
         <div id="filter-list">
           <form [formGroup]="filterForm">
@@ -49,10 +66,91 @@
           }
           }
         </div>
-        <!-- <p class="filter-title">Ciudad/Provincia</p>
-        <div id="filtre-city">
-          <input type="text">
-        </div> -->
+
+        <!-- 🗺️ PARTE 2: CONTROLES DE UBICACIÓN Y DISTANCIA -->
+        <p class="filter-title">Buscar por distancia</p>
+        
+        <div class="mb-3">
+          <!-- Input para escribir ciudad/país manualmente -->
+          <!-- 🔍 Búsqueda por ubicación -->
+          <div class="input-group mb-2 position-relative">
+            <input 
+              #locationInput
+              type="text" 
+              class="form-control"
+              placeholder="Ej: Barcelona"
+              (input)="onLocationInput(locationInput.value)"
+              (keyup.enter)="searchByLocation(locationInput.value)">
+            <button 
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="searchByLocation(locationInput.value)">
+              🔍
+            </button>
+            
+            <!-- Dropdown de sugerencias -->
+            @if(showSuggestions()) {
+              <div class="dropdown-menu show w-100 position-absolute" style="top: 100%; z-index: 1000; max-height: 300px; overflow-y: auto;">
+                @for(suggestion of locationSuggestions(); track suggestion.display_name) {
+                  <button 
+                    type="button"
+                    class="dropdown-item"
+                    (click)="selectLocationSuggestion(suggestion, locationInput)">
+                    <div>
+                      <strong>{{ suggestion.city }}</strong>, {{ suggestion.country }}
+                    </div>
+                    @if(suggestion.state) {
+                      <small class="text-muted">{{ suggestion.state }}</small>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+          
+          <!-- Botón alternativo para usar ubicación del navegador -->
+          <button 
+            type="button"
+            class="btn btn-outline-primary btn-sm w-100"
+            (click)="requestUserLocation()">
+            📍 Usar mi ubicación actual
+          </button>
+        </div>
+        
+        <!-- Slider de radio (solo si HAY ubicación activa) -->
+        @if(state.hasLocationFilter()) {
+          <div class="mb-3">            <!-- Indicador del radio actual -->
+            <div class="d-flex justify-content-between mb-2">
+              <small class="text-muted">Radio de búsqueda:</small>
+              <strong>{{ state.searchRadius() }} km</strong>
+            </div>
+            
+            <!-- Slider para ajustar el radio -->
+            <input 
+              #radiusSlider
+              type="range" 
+              class="form-range"
+              min="5"
+              max="1500"
+              step="5"
+              [value]="state.searchRadius()"
+              (input)="onSearchRadiusChange(+radiusSlider.value)">
+            
+            <!-- Etiquetas de rango -->
+            <div class="d-flex justify-content-between">
+              <small class="text-muted">5 km</small>
+              <small class="text-muted">1500 km</small>
+            </div>
+            
+            <!-- Botón para limpiar filtro de ubicación -->
+            <button 
+              type="button"
+              class="btn btn-outline-danger btn-sm w-100 mt-2"
+              (click)="clearLocationFilter()">
+              ✕ Quitar filtro de distancia
+            </button>
+          </div>
+        }
       </div>
     </div>
 

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { DistanceFilterService } from './distance-filter.service';
 import { LocationService, Coordinates } from '../location/location.service';
 import { User } from '../../interfaces/user';
@@ -64,7 +65,11 @@ describe('DistanceFilterService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DistanceFilterService, LocationService]
+      providers: [
+        DistanceFilterService,
+        LocationService,
+        provideHttpClient()
+      ]
     });
     service = TestBed.inject(DistanceFilterService);
   });

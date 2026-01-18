@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 /**
  * Interfaz para coordenadas geográficas
@@ -30,6 +33,9 @@ export interface Location {
   providedIn: 'root'
 })
 export class LocationService {
+
+  private http = inject(HttpClient);
+  private apiUrl = environment.endpoint;
 
   /**
    * Obtiene la ubicación actual del usuario usando el API de Geolocalización del navegador
@@ -202,6 +208,76 @@ export class LocationService {
   }
 
   /**
+   * 🆕 Geocodifica una ubicación usando el backend
+   * Convierte "Madrid, España" → { latitude: 40.4168, longitude: -3.7038 }
+   * 
+   * @param locationQuery Ciudad, país o dirección (ej: "Barcelona" o "Madrid, España")
+   * @returns Coordenadas o null si no se encuentra
+   */
+  async geocodeLocation(locationQuery: string): Promise<Coordinates | null> {
+    try {
+      // Validar que no esté vacío
+      if (!locationQuery || locationQuery.trim() === '') {
+        console.warn('⚠️ Query de ubicación vacía');
+        return null;
+      }
+
+      console.log('🌍 Geocodificando:', locationQuery);
+
+      const response = await firstValueFrom(
+        this.http.post<{ latitude: number; longitude: number }>(
+          `${this.apiUrl}/api/geocode`,
+          { location: locationQuery.trim() }
+        )
+      );
+
+      if (response && response.latitude && response.longitude) {
+        console.log('✅ Coordenadas obtenidas:', response);
+        return {
+          latitude: response.latitude,
+          longitude: response.longitude
+        };
+      }
+
+      console.warn('⚠️ No se encontraron coordenadas para:', locationQuery);
+      return null;
+
+    } catch (error) {
+      console.error('❌ Error geocodificando ubicación:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 🔍 Obtiene sugerencias de ciudades/países desde el backend
+   * Usado para autocomplete mientras el usuario escribe
+   * 
+   * @param query Texto de búsqueda (mínimo 2 caracteres)
+   * @param limit Número máximo de resultados (default: 5)
+   * @returns Array de sugerencias con coordenadas
+   */
+  async getLocationSuggestions(query: string, limit = 5): Promise<LocationSuggestion[]> {
+    try {
+      if (!query || query.trim().length < 2) {
+        return [];
+      }
+
+      const response = await firstValueFrom(
+        this.http.get<LocationSuggestion[]>(
+          `${this.apiUrl}/api/geocode/autocomplete`,
+          { params: { query: query.trim(), limit: limit.toString() } }
+        )
+      );
+
+      return response || [];
+
+    } catch (error) {
+      console.error('❌ Error obteniendo sugerencias:', error);
+      return [];
+    }
+  }
+
+  /**
    * Formatea la distancia para mostrar al usuario
    * @param distanceKm Distancia en kilómetros
    * @returns String formateado (ej: "5.2 km" o "850 m")
@@ -212,4 +288,16 @@ export class LocationService {
     }
     return `${distanceKm.toFixed(1)} km`;
   }
+}
+
+/**
+ * 🌍 Interfaz para sugerencias de ubicación (autocomplete)
+ */
+export interface LocationSuggestion {
+  display_name: string;  // "Barcelona, Cataluña, España"
+  city: string;          // "Barcelona"
+  state?: string;        // "Cataluña"
+  country: string;       // "España"
+  latitude: number;
+  longitude: number;
 }

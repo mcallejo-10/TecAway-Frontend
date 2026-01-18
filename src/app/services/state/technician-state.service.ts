@@ -70,6 +70,11 @@ export class TechnicianStateService {
    * 🔤 Tipo de ordenamiento actual (reciente, nombre, distancia)
    */
   private _sortType: WritableSignal<SortType> = signal('recent');
+
+  /**
+   * 🏙️ Nombre de la ciudad/ubicación buscada (para mostrar en UI)
+   */
+  private _searchLocation: WritableSignal<string | null> = signal(null);
   
   // ========================================
   // 📖 GETTERS PÚBLICOS (read-only)
@@ -100,6 +105,11 @@ export class TechnicianStateService {
    * Estado de carga
    */
   readonly isLoading = this._isLoading.asReadonly();
+
+  /**
+   * Nombre de la ciudad/ubicación buscada
+   */
+  readonly searchLocation = this._searchLocation.asReadonly();
   
   /**
    * 📍 Ubicación del usuario
@@ -233,6 +243,13 @@ export class TechnicianStateService {
   setSortType(sortType: SortType): void {
     this._sortType.set(sortType);
   }
+
+  /**
+   * 🏙️ Establece el nombre de la ubicación buscada
+   */
+  setSearchLocation(location: string | null): void {
+    this._searchLocation.set(location);
+  }
   
   /**
    * Limpia todos los filtros
@@ -243,6 +260,7 @@ export class TechnicianStateService {
     this._selectedKnowledges.set([]);
     this._userLocation.set(null);
     this._searchRadius.set(null);
+    this._searchLocation.set(null);
     this._filteredTechnicians.set(this._allTechnicians());
   }
   

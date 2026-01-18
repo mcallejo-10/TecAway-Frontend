@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TechnicianSortService, SortType } from './technician-sort.service';
 import { LocationService, Coordinates } from '../location/location.service';
 import { User } from '../../interfaces/user';
@@ -63,7 +64,11 @@ describe('TechnicianSortService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TechnicianSortService, LocationService]
+      providers: [
+        TechnicianSortService,
+        LocationService,
+        provideHttpClient()
+      ]
     });
     service = TestBed.inject(TechnicianSortService);
   });

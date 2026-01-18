@@ -44,21 +44,19 @@ export class DistanceFilterService {
 
     return technicians.filter(tech => {
       // Si el técnico no tiene coordenadas, no se incluye en búsqueda por distancia
-      if (
-        !tech.latitude ||
-        !tech.longitude ||
-        !this.locationService.isValidCoordinates({
-          latitude: tech.latitude,
-          longitude: tech.longitude
-        })
-      ) {
+      if (!tech.latitude || !tech.longitude) {
         return false;
       }
 
+      // Convertir a número (pueden venir como string desde la DB)
       const techCoords: Coordinates = {
-        latitude: tech.latitude!,
-        longitude: tech.longitude!
+        latitude: +tech.latitude,
+        longitude: +tech.longitude
       };
+
+      if (!this.locationService.isValidCoordinates(techCoords)) {
+        return false;
+      }
 
       const distance = this.locationService.calculateDistance(userLocation, techCoords);
       
@@ -66,15 +64,9 @@ export class DistanceFilterService {
         return false;
       }
 
-      // Si el técnico puede desplazarse, solo importa que esté en el país
-      // (el país se determina en backend, aquí aceptamos cualquiera dentro del radio)
-      if (tech.can_move) {
-        // Si puede desplazarse, es más flexible: aceptamos hasta el doble del radio
-        return distance <= radiusKm * 2;
-      }
-
-      // Si NO puede desplazarse, debe estar dentro del radio exacto
-      return distance <= radiusKm;
+      // Si puede desplazarse: mínimo 1000km o el doble del radio si es mayor
+      const maxDistance = tech.can_move ? Math.max(1000, radiusKm * 2) : radiusKm;
+      return distance <= maxDistance;
     });
   }
 
