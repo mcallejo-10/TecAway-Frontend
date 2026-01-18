@@ -6,6 +6,9 @@ import { UserService } from '../../services/userService/user.service';
 import { UserListResponse } from '../../interfaces/user';
 import { FilterService } from '../../services/filterService/filter.service';
 import { TechnicianStateService } from '../../services/state/technician-state.service';
+import { DistanceFilterService } from '../../services/distance-filter/distance-filter.service';
+import { TechnicianSortService, SortType } from '../../services/sort/technician-sort.service';
+import { LocationService } from '../../services/location/location.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { Section, SectionListResponse } from '../../interfaces/section';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,6 +45,9 @@ export class TechniciansComponent implements OnInit {
   filterService = inject(FilterService);
   sectionService = inject(SectionService);
   knowledgeService = inject(KnowledgeService);
+  distanceFilterService = inject(DistanceFilterService);
+  technicianSortService = inject(TechnicianSortService);
+  locationService = inject(LocationService);
   
   // ✨ NUEVO: Servicio de estado centralizado
   state = inject(TechnicianStateService);
@@ -149,6 +155,8 @@ ngOnInit() {
   private applyFilters(): void {
     const filteredIds = this.filterService.filterTechnicians();
     this.filterTechniciansById(filteredIds);
+    // 🆕 Después de filtrar por sección/conocimiento, aplicar distancia y ordenamiento
+    this.applyDistanceFilter();
   }
 
 
@@ -281,5 +289,97 @@ ngOnInit() {
     } else {
       return 100; // xl+: escritorio grande
     }
+  }
+
+  // ========================================
+  // 🆕 FILTRADO Y ORDENAMIENTO
+  // ========================================
+
+  /**
+   * Aplica filtrado por distancia si hay ubicación del usuario
+   * Llamado después de aplicar filtros de sección/conocimiento
+   */
+  applyDistanceFilter(): void {
+    const userLocation = this.state.userLocation();
+    const searchRadius = this.state.searchRadius();
+
+    if (!userLocation || searchRadius === null) {
+      // Si no hay ubicación/radio, no hay que filtrar por distancia
+      this.applySorting();
+      return;
+    }
+
+    const currentFiltered = this.state.filteredTechnicians();
+    const distanceFiltered = this.distanceFilterService.filterByDistance(
+      currentFiltered,
+      userLocation,
+      searchRadius
+    );
+
+    this.state.setFilteredTechnicians(distanceFiltered);
+    this.applySorting();
+  }
+
+  /**
+   * Aplica el ordenamiento actual a la lista filtrada
+   * Llamado después de cualquier cambio en filtros o tipo de ordenamiento
+   */
+  applySorting(): void {
+    const currentFiltered = this.state.filteredTechnicians();
+    const sortType = this.state.sortType();
+    const userLocation = this.state.userLocation();
+
+    const sorted = this.technicianSortService.sort(
+      currentFiltered,
+      sortType,
+      userLocation || undefined
+    );
+
+    this.state.setFilteredTechnicians(sorted);
+  }
+
+  /**
+   * Maneja cambio en el tipo de ordenamiento desde la UI
+   */
+  onSortTypeChange(sortType: string): void {
+    this.state.setSortType(sortType as SortType);
+    this.applySorting();
+  }
+
+  /**
+   * Solicita ubicación del usuario y actualiza el estado
+   * Llamado cuando usuario habilita búsqueda por distancia
+   */
+  async requestUserLocation(): Promise<void> {
+    try {
+      this.state.setLoading(true);
+      const location = await this.locationService.getCurrentPosition();
+      this.state.setUserLocation(location);
+      // Establecer radio por defecto (ej: 20km)
+      this.state.setSearchRadius(20);
+      this.applyFilters();
+    } catch (error) {
+      console.error('Error al obtener ubicación:', error);
+      alert('No se pudo obtener tu ubicación. Por favor, verifica los permisos.');
+    } finally {
+      this.state.setLoading(false);
+    }
+  }
+
+  /**
+   * Actualiza el radio de búsqueda
+   */
+  onSearchRadiusChange(radius: number): void {
+    this.state.setSearchRadius(radius);
+    this.applyDistanceFilter();
+  }
+
+  /**
+   * Limpia todos los filtros incluyendo distancia
+   */
+  clearAllFilters(): void {
+    this.state.clearFilters();
+    this.state.setSortType('recent');
+    this.state.setAllTechnicians(this.state.allTechnicians());
   }
 }

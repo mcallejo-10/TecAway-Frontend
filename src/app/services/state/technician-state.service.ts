@@ -3,6 +3,7 @@ import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
 import { Coordinates } from '../location/location.service';
+import { SortType } from '../sort/technician-sort.service';
 
 /**
  * 🎯 TechnicianStateService
@@ -64,6 +65,11 @@ export class TechnicianStateService {
    * 📏 Radio de búsqueda en kilómetros (null = sin límite)
    */
   private _searchRadius: WritableSignal<number | null> = signal(null);
+
+  /**
+   * 🔤 Tipo de ordenamiento actual (reciente, nombre, distancia)
+   */
+  private _sortType: WritableSignal<SortType> = signal('recent');
   
   // ========================================
   // 📖 GETTERS PÚBLICOS (read-only)
@@ -104,6 +110,11 @@ export class TechnicianStateService {
    * 📏 Radio de búsqueda en km
    */
   readonly searchRadius = this._searchRadius.asReadonly();
+
+  /**
+   * 🔤 Tipo de ordenamiento actual
+   */
+  readonly sortType = this._sortType.asReadonly();
   
   // ========================================
   // 🧮 COMPUTED SIGNALS (valores derivados)
@@ -214,6 +225,13 @@ export class TechnicianStateService {
    */
   setSearchRadius(radius: number | null): void {
     this._searchRadius.set(radius);
+  }
+
+  /**
+   * 🔤 Establece el tipo de ordenamiento
+   */
+  setSortType(sortType: SortType): void {
+    this._sortType.set(sortType);
   }
   
   /**
