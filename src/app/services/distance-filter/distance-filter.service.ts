@@ -66,6 +66,7 @@ export class DistanceFilterService {
 
       // Si puede desplazarse: mínimo 1000km o el doble del radio si es mayor
       const maxDistance = tech.can_move ? Math.max(1000, radiusKm * 2) : radiusKm;
+      
       return distance <= maxDistance;
     });
   }

@@ -193,7 +193,6 @@ ngOnInit() {
 
   // Método auxiliar simplificado - ya no necesitamos recargar todo
   private applyFilters(): void {
-    const hasLocationFilter = this.state.userLocation() !== null && this.state.searchRadius() !== null;
     const hasSectionFilters = this.state.selectedSections().length > 0;
     
     if (hasSectionFilters) {

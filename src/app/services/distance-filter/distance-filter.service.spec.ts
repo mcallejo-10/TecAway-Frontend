@@ -100,8 +100,10 @@ describe('DistanceFilterService', () => {
       
       const result = service.filterByDistance(mockTechnicians, madridCoords, 20);
       
-      expect(result.length).toBe(2); // Madrid y Nearby
+      // Con can_move=true, Barcelona entra (límite 1000km)
+      expect(result.length).toBe(3); // Madrid, Barcelona (can_move), y Nearby
       expect(result.some(t => t.id_user === 1)).toBe(true);
+      expect(result.some(t => t.id_user === 2)).toBe(true); // Barcelona con can_move
       expect(result.some(t => t.id_user === 4)).toBe(true);
     });
 
@@ -113,13 +115,13 @@ describe('DistanceFilterService', () => {
     });
 
     it('should be more flexible with mobile technicians (can_move=true)', () => {
-      // Barcelona está a 504 km, pero puede desplazarse
-      // Con radio 20 km normal, pero 40 km para móviles (2x)
+      // Barcelona está a 504 km, puede desplazarse
+      // Con can_move=true, el límite es Math.max(1000, radiusKm * 2)
       
       const result = service.filterByDistance(mockTechnicians, madridCoords, 250);
       
-      // Tech Barcelona debería estar excluido (504 km > 500 km)
-      expect(result.some(t => t.id_user === 2)).toBe(false);
+      // Tech Barcelona SÍ entra porque can_move=true da límite de 1000km
+      expect(result.some(t => t.id_user === 2)).toBe(true);
     });
 
     it('should include mobile technicians within 2x radius', () => {
@@ -230,9 +232,10 @@ describe('DistanceFilterService', () => {
     it('should handle very small radius', () => {
       const result = service.filterByDistance(mockTechnicians, madridCoords, 0.05);
       
-      // Solo el mismo punto exactamente
-      expect(result.length).toBe(1);
-      expect(result[0].id_user).toBe(1);
+      // Madrid + Barcelona (can_move=true tiene límite mínimo 1000km)
+      expect(result.length).toBe(2);
+      expect(result.some(t => t.id_user === 1)).toBe(true); // Madrid
+      expect(result.some(t => t.id_user === 2)).toBe(true); // Barcelona con can_move
     });
 
     it('should handle very large radius', () => {
