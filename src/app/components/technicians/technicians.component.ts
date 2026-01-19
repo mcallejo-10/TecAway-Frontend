@@ -18,10 +18,11 @@ import { Knowledge, KnowledgeListResponse } from '../../interfaces/knowledge';
 import { RouterModule } from '@angular/router';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
+import { DropdownComponent, DropdownOption } from '../utils/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-technicians',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, UserAvatarComponent],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, UserAvatarComponent, DropdownComponent],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })
@@ -64,6 +65,12 @@ export class TechniciansComponent implements OnInit {
   // 🔍 Autocomplete de ubicaciones
   locationSuggestions = signal<LocationSuggestion[]>([]);
   showSuggestions = signal<boolean>(false);
+
+  // 🎨 Opciones para el dropdown de ordenamiento
+  sortOptions: DropdownOption[] = [
+    { value: 'recent', label: 'Más recientes' },
+    { value: 'name', label: 'Por nombre (A-Z)' }
+  ];
 
   isCheckedSection(id: number): boolean {
     // 🔄 Ahora usamos el estado del servicio en lugar de variable local

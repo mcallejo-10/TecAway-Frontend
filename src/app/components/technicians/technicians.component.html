@@ -14,20 +14,13 @@
       <div #filterCard class="card filter-card ">
         <button class="filter-close" (click)="closeFilter()">×</button>
         
-        <!-- 🔤 PARTE 1: SELECTOR DE ORDENAMIENTO -->
         <p class="filter-title">Ordenar por</p>
-        <div class="mb-3">
-          <select 
-            #sortSelect
-            class="form-select"
-            [value]="state.sortType()"
-            (change)="onSortTypeChange(sortSelect.value)">
-            <option value="recent">Más recientes</option>
-            <option value="name">Por nombre (A-Z)</option>
-            @if(state.hasLocationFilter()) {
-              <option value="distance">Más cercanos</option>
-            }
-          </select>
+        <div class="sort-dropdown-wrapper">
+          <app-dropdown
+            [options]="sortOptions"
+            [selectedValue]="state.sortType()"
+            (selectionChange)="onSortTypeChange($event)">
+          </app-dropdown>
         </div>
 
         <p class="filter-title">Puesto</p>
