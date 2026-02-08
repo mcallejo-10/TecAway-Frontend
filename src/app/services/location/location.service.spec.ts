@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { LocationService, Coordinates } from './location.service';
 
 describe('LocationService', () => {
@@ -6,7 +7,10 @@ describe('LocationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LocationService]
+      providers: [
+        LocationService,
+        provideHttpClient()
+      ]
     });
     service = TestBed.inject(LocationService);
   });

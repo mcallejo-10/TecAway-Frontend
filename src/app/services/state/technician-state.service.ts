@@ -3,6 +3,7 @@ import { User } from '../../interfaces/user';
 import { Section } from '../../interfaces/section';
 import { Knowledge } from '../../interfaces/knowledge';
 import { Coordinates } from '../location/location.service';
+import { SortType } from '../sort/technician-sort.service';
 
 /**
  * 🎯 TechnicianStateService
@@ -64,6 +65,16 @@ export class TechnicianStateService {
    * 📏 Radio de búsqueda en kilómetros (null = sin límite)
    */
   private _searchRadius: WritableSignal<number | null> = signal(null);
+
+  /**
+   * 🔤 Tipo de ordenamiento actual (reciente, nombre, distancia)
+   */
+  private _sortType: WritableSignal<SortType> = signal('recent');
+
+  /**
+   * 🏙️ Nombre de la ciudad/ubicación buscada (para mostrar en UI)
+   */
+  private _searchLocation: WritableSignal<string | null> = signal(null);
   
   // ========================================
   // 📖 GETTERS PÚBLICOS (read-only)
@@ -94,6 +105,11 @@ export class TechnicianStateService {
    * Estado de carga
    */
   readonly isLoading = this._isLoading.asReadonly();
+
+  /**
+   * Nombre de la ciudad/ubicación buscada
+   */
+  readonly searchLocation = this._searchLocation.asReadonly();
   
   /**
    * 📍 Ubicación del usuario
@@ -104,6 +120,11 @@ export class TechnicianStateService {
    * 📏 Radio de búsqueda en km
    */
   readonly searchRadius = this._searchRadius.asReadonly();
+
+  /**
+   * 🔤 Tipo de ordenamiento actual
+   */
+  readonly sortType = this._sortType.asReadonly();
   
   // ========================================
   // 🧮 COMPUTED SIGNALS (valores derivados)
@@ -215,6 +236,20 @@ export class TechnicianStateService {
   setSearchRadius(radius: number | null): void {
     this._searchRadius.set(radius);
   }
+
+  /**
+   * 🔤 Establece el tipo de ordenamiento
+   */
+  setSortType(sortType: SortType): void {
+    this._sortType.set(sortType);
+  }
+
+  /**
+   * 🏙️ Establece el nombre de la ubicación buscada
+   */
+  setSearchLocation(location: string | null): void {
+    this._searchLocation.set(location);
+  }
   
   /**
    * Limpia todos los filtros
@@ -225,6 +260,7 @@ export class TechnicianStateService {
     this._selectedKnowledges.set([]);
     this._userLocation.set(null);
     this._searchRadius.set(null);
+    this._searchLocation.set(null);
     this._filteredTechnicians.set(this._allTechnicians());
   }
   

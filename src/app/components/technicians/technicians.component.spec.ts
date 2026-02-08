@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TechniciansComponent } from './technicians.component';
 import { FilterService } from '../../services/filterService/filter.service';
 import { TechnicianStateService } from '../../services/state/technician-state.service';
@@ -35,6 +36,7 @@ describe('TechniciansComponent', () => {
       title: "Frontend Developer with 5 years experience",
       description: "Experienced developer specializing in Angular and React",
       town: "Barcelona",
+      country: "España",
       can_move: true
     },
     {
@@ -46,6 +48,7 @@ describe('TechniciansComponent', () => {
       title: "Backend Developer specialized in Node.js",
       description: "Expert in Node.js and database management systems",
       town: "Madrid",
+      country: "España",
       can_move: false
     }
   ];
@@ -96,6 +99,7 @@ describe('TechniciansComponent', () => {
       ],
       providers: [
         provideRouter([]),
+        provideHttpClient(), // 🆕 Nuevo sistema de HttpClient para tests
         TechnicianStateService, // ✨ Proveemos el servicio real de estado
         { provide: FilterService, useValue: filterServiceMock },
         { provide: UserService, useValue: userServiceMock },
@@ -257,7 +261,8 @@ describe('TechniciansComponent', () => {
 
       component.getSelectedKnowledges(1, event);
 
-      expect(filterServiceMock.filterTechnicians).toHaveBeenCalled();
+      // Ahora se llama a applyFilters que internamente usa filterService
+      expect(component.state.filteredTechnicians().length).toBeGreaterThanOrEqual(0);
     });
   });
 

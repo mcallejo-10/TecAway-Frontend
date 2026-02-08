@@ -1,11 +1,9 @@
-// Variables
 $primary-color: #ffc107;
 $card-border-color: $primary-color;
 $mobile-breakpoint: 768px;
 $tablet-breakpoint: 576px;
 $surface: #bebebe;
 
-// Mixins
 @mixin mobile {
   @media (max-width: $mobile-breakpoint) {
     @content;
@@ -68,6 +66,13 @@ $surface: #bebebe;
     font-size: 1rem;
     font-weight: 700;
     margin: 1rem 0 0;
+  }
+  
+  .sort-dropdown-wrapper {
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+    overflow: visible !important;
   }
 }
 
