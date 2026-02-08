@@ -10,10 +10,11 @@ import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { validateFile } from '../../validators/validate-file.validator';
+import { LocationSearchComponent, LocationData } from '../utils/location-search/location-search.component';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink, LocationSearchComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -58,6 +59,8 @@ export class RegisterComponent {
       Validators.required,
       Validators.minLength(2)
     ]),
+    latitude: new FormControl<number | null>(null, [Validators.required]),
+    longitude: new FormControl<number | null>(null, [Validators.required]),
     country: new FormControl('ES', [
       Validators.required,
       Validators.minLength(2),
@@ -83,6 +86,14 @@ export class RegisterComponent {
       this.registerForm.get(control)?.valid &&
       this.registerForm.get(control)?.touched
     );
+  }
+
+  onLocationSelected(location: LocationData): void {
+    this.registerForm.patchValue({
+      town: location.city,
+      latitude: location.latitude,
+      longitude: location.longitude
+    });
   }
 
   nextStep(): void {

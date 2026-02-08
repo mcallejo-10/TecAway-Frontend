@@ -1,0 +1,30 @@
+<div class="location-search-container">
+  <div class="input-wrapper position-relative">
+    <input 
+      type="text" 
+      class="form-control"
+      [placeholder]="placeholder"
+      [value]="inputValue()"
+      [required]="required"
+      (input)="onInput($any($event.target).value)"
+      (keydown)="onKeyDown($event)">
+    
+    @if(showSuggestions()) {
+      <div class="suggestions-menu">
+        @for(suggestion of locationSuggestions(); track suggestion.display_name) {
+          <button 
+            type="button"
+            class="suggestion-item"
+            (click)="selectSuggestion(suggestion)">
+            <div class="suggestion-main">
+              <strong>{{ suggestion.city }}</strong>, {{ suggestion.country }}
+            </div>
+            @if(suggestion.state) {
+              <small class="suggestion-detail">{{ suggestion.state }}</small>
+            }
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>
