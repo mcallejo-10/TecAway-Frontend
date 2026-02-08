@@ -17,7 +17,7 @@
         <p class="filter-title">Ordenar por</p>
         <div class="sort-dropdown-wrapper">
           <app-dropdown
-            [options]="sortOptions"
+            [options]="sortOptions()"
             [selectedValue]="state.sortType()"
             (selectionChange)="onSortTypeChange($event)">
           </app-dropdown>

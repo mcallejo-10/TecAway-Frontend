@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2, signal, effect } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -66,11 +66,11 @@ export class TechniciansComponent implements OnInit {
   locationSuggestions = signal<LocationSuggestion[]>([]);
   showSuggestions = signal<boolean>(false);
 
-  // 🎨 Opciones para el dropdown de ordenamiento
-  sortOptions: DropdownOption[] = [
+  // 🎨 Opciones para el dropdown de ordenamiento (reactivo)
+  sortOptions = signal<DropdownOption[]>([
     { value: 'recent', label: 'Más recientes' },
     { value: 'name', label: 'Por nombre (A-Z)' }
-  ];
+  ]);
 
   isCheckedSection(id: number): boolean {
     // 🔄 Ahora usamos el estado del servicio en lugar de variable local
@@ -83,6 +83,21 @@ export class TechniciansComponent implements OnInit {
   }
 
   constructor() {
+    // 🎨 Effect para actualizar opciones de ordenamiento según filtro de ubicación
+    effect(() => {
+      const hasLocation = this.state.hasLocationFilter();
+      const baseOptions: DropdownOption[] = [
+        { value: 'recent', label: 'Más recientes' },
+        { value: 'name', label: 'Por nombre (A-Z)' }
+      ];
+      
+      if (hasLocation) {
+        baseOptions.push({ value: 'distance', label: 'Más cercanos' });
+      }
+      
+      this.sortOptions.set(baseOptions);
+    });
+    
     // Configurar debounce para resize - espera 300ms de inactividad antes de ejecutar
     this.resizeSubject.pipe(
       debounceTime(300),
