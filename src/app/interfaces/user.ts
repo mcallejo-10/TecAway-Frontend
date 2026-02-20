@@ -6,11 +6,11 @@ export interface User {
     title?: string;
     description?: string;
     
-    // Ubicación geográfica (todas obligatorias, vienen del autocomplete del backend)
+    // Ubicación geográfica (las coords son opcionales para usuarios históricos sin geocodificación)
     city: string;
     country: string;
-    latitude: number;
-    longitude: number;
+    latitude?: number;
+    longitude?: number;
     can_move?: boolean;
     postal_code?: string;
     

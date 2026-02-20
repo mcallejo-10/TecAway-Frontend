@@ -35,8 +35,10 @@ describe('TechniciansComponent', () => {
       roles: ["user"],
       title: "Frontend Developer with 5 years experience",
       description: "Experienced developer specializing in Angular and React",
-      town: "Barcelona",
-      country: "España",
+      city: "Barcelona",
+      country: "ES",
+      latitude: 41.3851,
+      longitude: 2.1734,
       can_move: true
     },
     {
@@ -47,8 +49,10 @@ describe('TechniciansComponent', () => {
       roles: ["user"],
       title: "Backend Developer specialized in Node.js",
       description: "Expert in Node.js and database management systems",
-      town: "Madrid",
-      country: "España",
+      city: "Madrid",
+      country: "ES",
+      latitude: 40.4168,
+      longitude: -3.7038,
       can_move: false
     }
   ];

@@ -27,7 +27,10 @@ describe('TechnicianDetailComponent', () => {
       roles: ['user'],
       title: 'This is a valid title that meets the minimum length requirement of 20 chars',
       description: 'This is a valid description that meets the minimum length requirement of 30 characters',
-      town: 'Barcelona',
+      city: 'Barcelona',
+      country: 'ES',
+      latitude: 41.3851,
+      longitude: 2.1734,
       can_move: false
     };
 
@@ -42,7 +45,10 @@ describe('TechnicianDetailComponent', () => {
         email: "test.user@test.com",
         title: "This is a valid title that meets the minimum length requirement of 20 chars",
         description: "This is a valid description that meets the minimum length requirement of 30 characters",
-        town: "Barcelona",
+        city: "Barcelona",
+        country: "ES",
+        latitude: 41.3851,
+        longitude: 2.1734,
         can_move: 1,
         photo: "https://example.com/photo.jpg",
         sections: [

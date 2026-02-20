@@ -41,7 +41,8 @@ describe('UserService', () => {
           name: 'Usuario 1',
           title: 'Developer',
           description: 'Test user 1',
-          town: 'Madrid',
+          city: 'Madrid',
+          country: 'ES',
           can_move: true,
           roles: ['user']
         },
@@ -52,7 +53,8 @@ describe('UserService', () => {
           name: 'Usuario 2',
           title: 'Designer',
           description: 'Test user 2',
-          town: 'Barcelona',
+          city: 'Barcelona',
+          country: 'ES',
           can_move: false,
           roles: ['user']
         }
@@ -113,7 +115,8 @@ describe('UserService', () => {
         name: 'Usuario Actual',
         title: 'Senior Developer',
         description: 'Usuario logueado actualmente',
-        town: 'Madrid',
+        city: 'Madrid',
+        country: 'ES',
         can_move: true,
         roles: ['user', 'admin']
       };
@@ -167,7 +170,8 @@ describe('UserService', () => {
         name: 'Usuario 123',
         title: 'Frontend Developer',
         description: 'Usuario específico por ID',
-        town: 'Barcelona',
+        city: 'Barcelona',
+        country: 'ES',
         can_move: false,
         roles: ['user']
       };
@@ -301,7 +305,8 @@ describe('UserService', () => {
         name: 'Usuario Actualizado',
         title: 'Senior Frontend Developer',
         description: 'Descripción actualizada del usuario',
-        town: 'Valencia',
+        city: 'Valencia',
+        country: 'ES',
         can_move: true,
         roles: ['user', 'admin']
       };
@@ -334,7 +339,8 @@ describe('UserService', () => {
         name: '',
         title: '',
         description: '',
-        town: '',
+        city: '',
+        country: 'ES',
         can_move: false,
         roles: []
       };

@@ -18,7 +18,7 @@ describe('TechnicianSortService', () => {
       email: 'zoe@test.com',
       password: TEST_CREDENTIALS.HASHED_PASSWORD_1,
       name: 'Zoe Martinez',
-      town: 'Madrid',
+      city: 'Madrid',
       country: 'ES',
       roles: ['user'],
       created_at: new Date('2025-01-10'),
@@ -30,7 +30,7 @@ describe('TechnicianSortService', () => {
       email: 'alice@test.com',
       password: TEST_CREDENTIALS.HASHED_PASSWORD_2,
       name: 'Alice García',
-      town: 'Barcelona',
+      city: 'Barcelona',
       country: 'ES',
       roles: ['user'],
       created_at: new Date('2025-01-15'),
@@ -42,7 +42,7 @@ describe('TechnicianSortService', () => {
       email: 'bob@test.com',
       password: TEST_CREDENTIALS.SIMPLE_PASSWORD,
       name: 'Bob López',
-      town: 'Valencia',
+      city: 'Valencia',
       country: 'ES',
       roles: ['user'],
       created_at: new Date('2025-01-05')
@@ -53,7 +53,7 @@ describe('TechnicianSortService', () => {
       email: 'carlo@test.com',
       password: TEST_CREDENTIALS.SIMPLE_PASSWORD,
       name: 'Carlo Rossi',
-      town: 'Madrid',
+      city: 'Madrid',
       country: 'ES',
       roles: ['user'],
       created_at: new Date('2025-01-12'),
@@ -140,7 +140,7 @@ describe('TechnicianSortService', () => {
         email: 'test@test.com',
         password: 'test',
         name: 'Test User',
-        town: 'Test',
+        city: 'Test',
         country: 'ES',
         roles: ['user']
         // Sin created_at
@@ -170,7 +170,7 @@ describe('TechnicianSortService', () => {
           email: 'test1@test.com',
           password: 'test',
           name: 'Ángel',
-          town: 'Test',
+          city: 'Test',
           country: 'ES',
           roles: ['user']
         },
@@ -179,7 +179,7 @@ describe('TechnicianSortService', () => {
           email: 'test2@test.com',
           password: 'test',
           name: 'Antonio',
-          town: 'Test',
+          city: 'Test',
           country: 'ES',
           roles: ['user']
         }

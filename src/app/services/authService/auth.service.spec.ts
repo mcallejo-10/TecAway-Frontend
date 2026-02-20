@@ -167,7 +167,10 @@ describe('AuthService', () => {
         name: 'Test User',
         title: 'Developer',
         description: 'A test user for registration',
-        town: 'Test City',
+        city: 'Test City',
+        country: 'ES',
+        latitude: 40.4168,
+        longitude: -3.7038,
         can_move: true,
         roles: ['user']
       };
@@ -192,7 +195,10 @@ describe('AuthService', () => {
         name: 'Test User',
         title: 'Developer',
         description: 'A test user',
-        town: 'Test City',
+        city: 'Test City',
+        country: 'ES',
+        latitude: 40.4168,
+        longitude: -3.7038,
         can_move: false,
         roles: ['user']
       };
@@ -277,7 +283,10 @@ describe('AuthService', () => {
         name: 'Test User',
         title: 'Developer',
         description: 'A test user',
-        town: 'Test City',
+        city: 'Test City',
+        country: 'ES',
+        latitude: 40.4168,
+        longitude: -3.7038,
         can_move: false,
         roles: ['user']
       };
@@ -301,7 +310,10 @@ describe('AuthService', () => {
         name: 'Test User',
         title: 'Developer',
         description: 'A test user',
-        town: 'Test City',
+        city: 'Test City',
+        country: 'ES',
+        latitude: 40.4168,
+        longitude: -3.7038,
         can_move: false,
         roles: ['user']
       };
