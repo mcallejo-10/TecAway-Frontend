@@ -7,12 +7,12 @@ export interface UserInfoResponse {
       email: string;
       title: string;
       description: string;
-      town?: string;              // 📍 Opcional si hay country
-      country: string;            // 📍 Código ISO país (ES, AR, etc)
+      city: string;
+      country: string;
       can_move: boolean;
       photo?: string;
-      latitude?: number;          // 📍 Generado automáticamente desde backend
-      longitude?: number;         // 📍 Generado automáticamente desde backend
+      latitude: number;
+      longitude: number;
       sections: {
         section_name: string;
         section_knowledges: {

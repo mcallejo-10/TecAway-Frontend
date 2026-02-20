@@ -80,8 +80,8 @@
                     <span class="d-flex">
                         <label htmlFor="inputTown" class="form-label">Ciudad o provincia</label>
                     </span>
-                    <input type="text" class="form-control" id="inputTown" formControlName="town"
-                        [ngClass]="{'is-invalid': registerForm.get('town')?.invalid && registerForm.get('town')?.touched}" />
+                    <input type="text" class="form-control" id="inputTown" formControlName="city"
+                        [ngClass]="{'is-invalid': registerForm.get('city')?.invalid && registerForm.get('city')?.touched}" />
                     @if(registerForm.get('town')?.invalid && registerForm.get('town')?.touched) {
                     <div class="text-danger">
                         @if(registerForm.get('town')?.errors?.['required']) { Ciudad obligatoria }

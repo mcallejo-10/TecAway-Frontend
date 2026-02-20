@@ -175,9 +175,9 @@
                             [required]="true"
                             (locationSelected)="onLocationSelected($event)">
                         </app-location-search>
-                        @if(registerForm.get('town')?.invalid && registerForm.get('town')?.touched) {
+                        @if(registerForm.get('city')?.invalid && registerForm.get('city')?.touched) {
                         <div class="text-danger mt-2">
-                            @if(registerForm.get('town')?.errors?.['required']) { Ciudad obligatoria. Selecciona una ubicación de las sugerencias. }
+                            @if(registerForm.get('city')?.errors?.['required']) { Ciudad obligatoria. Selecciona una ubicación de las sugerencias. }
                             @if(registerForm.get('latitude')?.errors?.['required'] || registerForm.get('longitude')?.errors?.['required']) { 
                                 Por favor, selecciona una ubicación de la lista de sugerencias. 
                             }
