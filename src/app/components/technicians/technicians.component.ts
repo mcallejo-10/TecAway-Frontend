@@ -454,18 +454,20 @@ ngOnInit() {
     try {
       this.state.setLoading(true);
       
-      // Llamar al backend para geocodificar
-      const coords = await this.locationService.geocodeLocation(locationQuery);
+      // Llamar al backend para geocodificar (autocomplete, tomamos el primer resultado)
+      const suggestions = await this.locationService.getLocationSuggestions(locationQuery.trim(), 1);
       
-      if (!coords) {
+      if (!suggestions || suggestions.length === 0) {
         alert(`No se encontró la ubicación: "${locationQuery}".\nIntenta con otra ciudad o sé más específico (ej: "Barcelona, España")`);
         return;
       }
 
+      const first = suggestions[0];
+
       // Actualizar el estado con las coordenadas obtenidas
-      this.state.setUserLocation(coords);
+      this.state.setUserLocation({ latitude: first.latitude, longitude: first.longitude });
       this.state.setSearchRadius(20); // Radio por defecto: 20 km
-      this.state.setSearchLocation(locationQuery.trim()); // 🏙️ Guardar el nombre de la ciudad
+      this.state.setSearchLocation(`${first.city}, ${first.country}`); // 🏙️ Guardar el nombre de la ciudad
       
       // Ocultar sugerencias
       this.showSuggestions.set(false);
