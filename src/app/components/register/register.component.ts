@@ -55,7 +55,7 @@ export class RegisterComponent {
       Validators.minLength(30),
       Validators.maxLength(2400)
     ]),
-    town: new FormControl('', [
+    city: new FormControl('', [
       Validators.required,
       Validators.minLength(2)
     ]),
@@ -90,7 +90,8 @@ export class RegisterComponent {
 
   onLocationSelected(location: LocationData): void {
     this.registerForm.patchValue({
-      town: location.city,
+      city: location.city,
+      country: location.country,
       latitude: location.latitude,
       longitude: location.longitude
     });
@@ -172,8 +173,10 @@ export class RegisterComponent {
         password: this.registerForm.get('password')?.value || '',
         title: (this.registerForm.get('title')?.value || '').trim(),
         description: (this.registerForm.get('description')?.value || '').trim(),
-        town: (this.registerForm.get('town')?.value || '').trim(),
+        city: (this.registerForm.get('city')?.value || '').trim(),
         country: (this.registerForm.get('country')?.value || 'ES').trim(),
+        latitude: this.registerForm.get('latitude')?.value ?? 0,
+        longitude: this.registerForm.get('longitude')?.value ?? 0,
         can_move: this.registerForm.get('can_move')?.value || false,
         roles: ['user']
       };
