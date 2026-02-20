@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
 import { AuthService } from '../../services/authService/auth.service';
 import { UserService } from '../../services/userService/user.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -52,6 +54,8 @@ describe('RegisterComponent', () => {
         })
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
         { provide: UserService, useValue: userServiceMock },

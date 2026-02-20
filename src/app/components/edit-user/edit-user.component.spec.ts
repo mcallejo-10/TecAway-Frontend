@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditUserComponent } from './edit-user.component';
 import { UserService } from '../../services/userService/user.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -51,6 +53,8 @@ describe('EditUserComponent', () => {
         ToastrModule.forRoot()
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([]),
         { provide: UserService, useValue: userServiceMock }
       ]
