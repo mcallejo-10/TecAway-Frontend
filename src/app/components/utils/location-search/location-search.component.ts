@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, OnDestroy, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { LocationService, LocationSuggestion } from '../../../services/location/
 
 export interface LocationData {
   city: string;
+  country: string;   // Código ISO (ej: "ES", "AR")
   latitude: number;
   longitude: number;
 }
@@ -17,7 +18,7 @@ export interface LocationData {
   templateUrl: './location-search.component.html',
   styleUrl: './location-search.component.scss'
 })
-export class LocationSearchComponent implements OnDestroy {
+export class LocationSearchComponent implements OnInit, OnDestroy {
   private locationService = inject(LocationService);
   private inputSubject = new Subject<string>();
   
@@ -52,8 +53,10 @@ export class LocationSearchComponent implements OnDestroy {
         this.showSuggestions.set(false);
       }
     });
+  }
 
-    // Establecer valor inicial si existe
+  ngOnInit(): void {
+    // @Input() values are available here, not in the constructor
     if (this.initialValue) {
       this.inputValue.set(this.initialValue);
     }
@@ -71,52 +74,24 @@ export class LocationSearchComponent implements OnDestroy {
   selectSuggestion(suggestion: LocationSuggestion): void {
     const locationText = `${suggestion.city}, ${suggestion.country}`;
     this.inputValue.set(locationText);
-    
+
     // Ocultar dropdown
     this.showSuggestions.set(false);
     this.locationSuggestions.set([]);
-    
-    // Emitir datos de ubicación
+
+    // Emitir city y country separados para que el backend los reciba correctamente
     this.locationSelected.emit({
-      city: locationText,
+      city: suggestion.city,
+      country: suggestion.country,
       latitude: suggestion.latitude,
       longitude: suggestion.longitude
     });
   }
 
-  async searchLocation(): Promise<void> {
-    const query = this.inputValue();
-    
-    if (!query || query.trim() === '') {
-      return;
-    }
-
-    try {
-      const coords = await this.locationService.geocodeLocation(query);
-      
-      if (!coords) {
-        alert(`No se encontró la ubicación: "${query}".\nIntenta con otra ciudad o sé más específico.`);
-        return;
-      }
-
-      this.locationSelected.emit({
-        city: query.trim(),
-        latitude: coords.latitude,
-        longitude: coords.longitude
-      });
-      
-      this.showSuggestions.set(false);
-      
-    } catch (error) {
-      console.error('Error al buscar ubicación:', error);
-      alert('Hubo un error al buscar la ubicación. Por favor, inténtalo de nuevo.');
-    }
-  }
-
   onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.searchLocation();
+    // El usuario debe elegir del dropdown; Escape cierra las sugerencias
+    if (event.key === 'Escape') {
+      this.showSuggestions.set(false);
     }
   }
 }

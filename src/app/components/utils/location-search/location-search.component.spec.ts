@@ -5,13 +5,12 @@ import { LocationService } from '../../../services/location/location.service';
 describe('LocationSearchComponent', () => {
   let component: LocationSearchComponent;
   let fixture: ComponentFixture<LocationSearchComponent>;
-  let mockLocationService: jasmine.SpyObj<LocationService>;
+  let mockLocationService: jest.Mocked<Partial<LocationService>>;
 
   beforeEach(async () => {
-    mockLocationService = jasmine.createSpyObj('LocationService', [
-      'getLocationSuggestions',
-      'geocodeLocation'
-    ]);
+    mockLocationService = {
+      getLocationSuggestions: jest.fn().mockResolvedValue([])
+    };
 
     await TestBed.configureTestingModule({
       imports: [LocationSearchComponent],
@@ -34,28 +33,30 @@ describe('LocationSearchComponent', () => {
     expect(component.showSuggestions()).toBe(false);
   });
 
-  it('should set initial value if provided', () => {
-    component.initialValue = 'Madrid, España';
-    component.ngOnInit?.();
-    expect(component.inputValue()).toBe('Madrid, España');
+  it('should use initialValue if provided before creation', () => {
+    const localFixture = TestBed.createComponent(LocationSearchComponent);
+    localFixture.componentInstance.initialValue = 'Madrid, España';
+    localFixture.detectChanges(); // triggers ngOnInit with @Input already set
+    expect(localFixture.componentInstance.inputValue()).toBe('Madrid, España');
   });
 
   it('should emit location data when suggestion is selected', () => {
     const mockSuggestion = {
       city: 'Barcelona',
-      country: 'España',
+      country: 'ES',
       state: 'Cataluña',
       latitude: 41.3851,
       longitude: 2.1734,
-      display_name: 'Barcelona, España'
+      display_name: 'Barcelona, Cataluña, España'
     };
 
-    spyOn(component.locationSelected, 'emit');
+    const emitSpy = jest.spyOn(component.locationSelected, 'emit');
 
     component.selectSuggestion(mockSuggestion);
 
-    expect(component.locationSelected.emit).toHaveBeenCalledWith({
-      city: 'Barcelona, España',
+    expect(emitSpy).toHaveBeenCalledWith({
+      city: 'Barcelona',
+      country: 'ES',
       latitude: 41.3851,
       longitude: 2.1734
     });
@@ -65,11 +66,11 @@ describe('LocationSearchComponent', () => {
   it('should hide suggestions after selection', () => {
     const mockSuggestion = {
       city: 'Madrid',
-      country: 'España',
+      country: 'ES',
       state: 'Comunidad de Madrid',
       latitude: 40.4168,
       longitude: -3.7038,
-      display_name: 'Madrid, España'
+      display_name: 'Madrid, Comunidad de Madrid, España'
     };
 
     component.showSuggestions.set(true);
@@ -82,5 +83,11 @@ describe('LocationSearchComponent', () => {
   it('should update input value on input event', () => {
     component.onInput('Barcelona');
     expect(component.inputValue()).toBe('Barcelona');
+  });
+
+  it('should close suggestions on Escape key', () => {
+    component.showSuggestions.set(true);
+    component.onKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(component.showSuggestions()).toBe(false);
   });
 });
