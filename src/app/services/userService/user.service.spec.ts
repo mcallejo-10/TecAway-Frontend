@@ -60,7 +60,7 @@ describe('UserService', () => {
         }
       ];
 
-      service.getUserList().subscribe(users => {
+      service.getUserList().subscribe((users: any) => {
         expect(users).toEqual(mockUsers);
         expect(users.length).toBe(2);
       });
@@ -228,8 +228,11 @@ describe('UserService', () => {
           email: 'userinfo@test.com',
           title: 'Senior Developer',
           description: 'Usuario con información completa',
-          town: 'Madrid',
-          can_move: 1,
+          city: 'Madrid',
+          country: 'ES',
+          latitude: 40.4168,
+          longitude: -3.7038,
+          can_move: true,
           photo: 'user456.jpg',
           sections: [
             {
