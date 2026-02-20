@@ -17,7 +17,7 @@ export interface Coordinates {
 export interface Location {
   coordinates: Coordinates;
   address?: string;
-  town?: string;
+  city?: string;
   postalCode?: string;
 }
 
@@ -101,97 +101,6 @@ export class LocationService {
   }
 
   /**
-   * Geocodifica una dirección a coordenadas usando OpenStreetMap Nominatim
-   * GRATUITO - Límite: 1 request/segundo
-   * Funciona para cualquier país del mundo
-   * 
-   * @param address Dirección a geocodificar (ej: "Madrid, España" o "Buenos Aires, Argentina")
-   * @param country Código de país opcional para mejorar resultados (ej: "ES", "AR")
-   * @returns Promise con coordenadas o null si no se encuentra
-   */
-  async geocodeAddress(address: string, country?: string): Promise<Coordinates | null> {
-    try {
-      // Construir query con país si se proporciona
-      const query = country ? `${address}, ${country}` : address;
-      
-      // Nominatim API - OpenStreetMap
-      const url = `https://nominatim.openstreetmap.org/search?` +
-        `q=${encodeURIComponent(query)}` +
-        `&format=json` +
-        `&limit=1` +
-        `&addressdetails=1`;
-
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'TecAway-App/1.0' // Requerido por Nominatim
-        }
-      });
-
-      if (!response.ok) {
-        console.error('Geocoding failed:', response.statusText);
-        return null;
-      }
-
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        const result = data[0];
-        return {
-          latitude: parseFloat(result.lat),
-          longitude: parseFloat(result.lon)
-        };
-      }
-
-      console.warn('No results found for address:', address);
-      return null;
-
-    } catch (error) {
-      console.error('Error geocoding address:', error);
-      return null;
-    }
-  }
-
-  /**
-   * Geocodificación inversa: convierte coordenadas a dirección
-   * Usa Nominatim de OpenStreetMap
-   * 
-   * @param coordinates Coordenadas a convertir
-   * @returns Promise con dirección o null
-   */
-  async reverseGeocode(coordinates: Coordinates): Promise<string | null> {
-    try {
-      const url = `https://nominatim.openstreetmap.org/reverse?` +
-        `lat=${coordinates.latitude}` +
-        `&lon=${coordinates.longitude}` +
-        `&format=json` +
-        `&addressdetails=1`;
-
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'TecAway-App/1.0'
-        }
-      });
-
-      if (!response.ok) {
-        console.error('Reverse geocoding failed:', response.statusText);
-        return null;
-      }
-
-      const data = await response.json();
-
-      if (data && data.display_name) {
-        return data.display_name;
-      }
-
-      return null;
-
-    } catch (error) {
-      console.error('Error reverse geocoding:', error);
-      return null;
-    }
-  }
-
-  /**
    * Valida si unas coordenadas son válidas
    */
   isValidCoordinates(coords: Coordinates | null | undefined): coords is Coordinates {
@@ -205,47 +114,6 @@ export class LocationService {
       coords.longitude >= -180 &&
       coords.longitude <= 180
     );
-  }
-
-  /**
-   * 🆕 Geocodifica una ubicación usando el backend
-   * Convierte "Madrid, España" → { latitude: 40.4168, longitude: -3.7038 }
-   * 
-   * @param locationQuery Ciudad, país o dirección (ej: "Barcelona" o "Madrid, España")
-   * @returns Coordenadas o null si no se encuentra
-   */
-  async geocodeLocation(locationQuery: string): Promise<Coordinates | null> {
-    try {
-      // Validar que no esté vacío
-      if (!locationQuery || locationQuery.trim() === '') {
-        console.warn('⚠️ Query de ubicación vacía');
-        return null;
-      }
-
-      console.log('🌍 Geocodificando:', locationQuery);
-
-      const response = await firstValueFrom(
-        this.http.post<{ latitude: number; longitude: number }>(
-          `${this.apiUrl}/api/geocode`,
-          { location: locationQuery.trim() }
-        )
-      );
-
-      if (response && response.latitude && response.longitude) {
-        console.log('✅ Coordenadas obtenidas:', response);
-        return {
-          latitude: response.latitude,
-          longitude: response.longitude
-        };
-      }
-
-      console.warn('⚠️ No se encontraron coordenadas para:', locationQuery);
-      return null;
-
-    } catch (error) {
-      console.error('❌ Error geocodificando ubicación:', error);
-      return null;
-    }
   }
 
   /**
@@ -291,13 +159,13 @@ export class LocationService {
 }
 
 /**
- * 🌍 Interfaz para sugerencias de ubicación (autocomplete)
+ * Interfaz para sugerencias de ubicación (autocomplete)
  */
 export interface LocationSuggestion {
   display_name: string;  // "Barcelona, Cataluña, España"
   city: string;          // "Barcelona"
   state?: string;        // "Cataluña"
-  country: string;       // "España"
+  country: string;       // Código ISO (ej: "ES", "AR")
   latitude: number;
   longitude: number;
 }
