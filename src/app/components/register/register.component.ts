@@ -61,13 +61,11 @@ export class RegisterComponent {
     ]),
     latitude: new FormControl<number | null>(null, [Validators.required]),
     longitude: new FormControl<number | null>(null, [Validators.required]),
-    country: new FormControl('ES', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(2)
+    country: new FormControl('', [
+      Validators.required
     ]),
     can_move: new FormControl(false),
-    photo: new FormControl('', validateFile),
+    photo: new FormControl('', validateFile()),
     acceptPrivacyPolicy: new FormControl(false, [Validators.requiredTrue]),
     },
     {
@@ -95,6 +93,13 @@ export class RegisterComponent {
       latitude: location.latitude,
       longitude: location.longitude
     });
+    ['city', 'country', 'latitude', 'longitude'].forEach(field => {
+      this.registerForm.get(field)?.markAsDirty();
+      this.registerForm.get(field)?.markAsTouched();
+      this.registerForm.get(field)?.updateValueAndValidity();
+    });
+    this.registerForm.updateValueAndValidity();
+    this.cdr.detectChanges();
   }
 
   nextStep(): void {
@@ -174,7 +179,7 @@ export class RegisterComponent {
         title: (this.registerForm.get('title')?.value || '').trim(),
         description: (this.registerForm.get('description')?.value || '').trim(),
         city: (this.registerForm.get('city')?.value || '').trim(),
-        country: (this.registerForm.get('country')?.value || 'ES').trim(),
+        country: (this.registerForm.get('country')?.value || '').trim(),
         latitude: this.registerForm.get('latitude')?.value ?? 0,
         longitude: this.registerForm.get('longitude')?.value ?? 0,
         can_move: this.registerForm.get('can_move')?.value || false,
@@ -184,13 +189,13 @@ export class RegisterComponent {
       this.authService.registerUser(userData)
         .subscribe({
           next: () => {
-            if (this.selectedFile) { // Usamos selectedFile en lugar de registerForm.get('photo')
+            if (this.selectedFile) {
               this.uploadUserPhoto(this.selectedFile);
             } else {
               this.finishRegistration(userData.name);
             }
           },
-          error: (error: string) => {
+          error: (error: any) => {
             console.error('Error al registrar:', error);
             this.errorMessage = 'Error al registrar usuario';
             this.toastr.error('Error al registrar usuario', 'Error');

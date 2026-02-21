@@ -136,7 +136,8 @@ export class LocationService {
           { params: { query: query.trim(), limit: limit.toString() } }
         )
       );
-
+      console.log('‼️', query);
+      
       return response || [];
 
     } catch (error) {
@@ -162,10 +163,10 @@ export class LocationService {
  * Interfaz para sugerencias de ubicación (autocomplete)
  */
 export interface LocationSuggestion {
-  display_name: string;  // "Barcelona, Cataluña, España"
-  city: string;          // "Barcelona"
-  state?: string;        // "Cataluña"
-  country: string;       // Código ISO (ej: "ES", "AR")
+  display_name: string;
+  city: string;
+  state?: string;
+  country: string;
   latitude: number;
   longitude: number;
 }

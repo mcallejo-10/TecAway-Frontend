@@ -4,7 +4,7 @@ import { ValidatorFn } from '@angular/forms';
 export function validateFile(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const file = control.value as File;
-      if (!file) return null;
+      if (!file || !(file instanceof File)) return null;
   
       const maxSize = 5 * 1024 * 1024; // 5MB para archivos de iPhone
       if (file.size > maxSize) {

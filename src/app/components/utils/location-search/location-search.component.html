@@ -11,7 +11,7 @@
     
     @if(showSuggestions()) {
       <div class="suggestions-menu">
-        @for(suggestion of locationSuggestions(); track suggestion.display_name) {
+        @for(suggestion of locationSuggestions(); track $index) {
           <button 
             type="button"
             class="suggestion-item"

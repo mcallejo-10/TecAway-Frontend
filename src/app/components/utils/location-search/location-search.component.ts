@@ -6,7 +6,7 @@ import { LocationService, LocationSuggestion } from '../../../services/location/
 
 export interface LocationData {
   city: string;
-  country: string;   // Código ISO (ej: "ES", "AR")
+  country: string;
   latitude: number;
   longitude: number;
 }

@@ -51,7 +51,7 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
     country: new FormControl('', [Validators.required]),
     latitude: new FormControl<number | null>(null, [Validators.required]),
     longitude: new FormControl<number | null>(null, [Validators.required]),
-    photo: new FormControl('', validateFile),
+    photo: new FormControl('', validateFile()),
     can_move: new FormControl(false),
   });
 
