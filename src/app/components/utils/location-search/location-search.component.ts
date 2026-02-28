@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -18,12 +18,16 @@ export interface LocationData {
   templateUrl: './location-search.component.html',
   styleUrl: './location-search.component.scss'
 })
-export class LocationSearchComponent implements OnInit, OnDestroy {
+export class LocationSearchComponent implements OnDestroy {
   private locationService = inject(LocationService);
   private inputSubject = new Subject<string>();
   
   @Input() placeholder = 'Ej: Barcelona, España';
-  @Input() initialValue = '';
+  @Input() set initialValue(val: string) {
+    if (val) {
+      this.inputValue.set(val);
+    }
+  }
   @Input() required = false;
   
   @Output() locationSelected = new EventEmitter<LocationData>();
@@ -53,13 +57,6 @@ export class LocationSearchComponent implements OnInit, OnDestroy {
         this.showSuggestions.set(false);
       }
     });
-  }
-
-  ngOnInit(): void {
-    // @Input() values are available here, not in the constructor
-    if (this.initialValue) {
-      this.inputValue.set(this.initialValue);
-    }
   }
 
   ngOnDestroy(): void {

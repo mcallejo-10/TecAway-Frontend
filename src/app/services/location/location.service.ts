@@ -136,8 +136,7 @@ export class LocationService {
           { params: { query: query.trim(), limit: limit.toString() } }
         )
       );
-      console.log('‼️', query);
-      
+            
       return response || [];
 
     } catch (error) {
