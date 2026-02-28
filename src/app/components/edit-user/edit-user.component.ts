@@ -1,4 +1,3 @@
-/* eslint-disable */ 
 
 import { Component, inject, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -18,7 +17,7 @@ import { LocationSearchComponent, LocationData } from '../utils/location-search/
   styleUrl: './edit-user.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
+export class EditUserComponent implements OnInit {
   errorMessage = '';
   charCountTitle = 0;
   charCountDescription = 0;
@@ -78,7 +77,7 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
     this.userService.getUser()
       .subscribe({
         next: (response: UserResponse) => {
-          Promise.resolve().then(() => {  // Envolver en una Promise
+          Promise.resolve().then(() => {
             this.registerForm.patchValue({
               name: response.data.name,
               email: response.data.email,
@@ -93,7 +92,7 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
 
             this.updateCharCount('title');
             this.updateCharCount('description');
-            this.cdr.markForCheck();  // Usar markForCheck en lugar de detectChanges
+            this.cdr.markForCheck();
           });
         },
         error: (error: string) => {
@@ -120,23 +119,6 @@ updateCharCount(name: string): void {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log('=== ARCHIVO SELECCIONADO ===');
-      console.log('Nombre original:', file.name);
-      console.log('Tipo MIME:', file.type);
-      console.log('Tamaño:', file.size, 'bytes');
-      console.log('Última modificación:', new Date(file.lastModified));
-      console.log('===============================');
-      
-      // Manejo especial para archivos HEIC/HEIF
-      if (file.name.toLowerCase().includes('.heic') || file.name.toLowerCase().includes('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
-        console.log('🍎 Archivo HEIC detectado (formato iOS)');
-      }
-      
-      // Detectar si es una conversión automática de Safari
-      if (file.type === 'image/heic' && !file.name.toLowerCase().includes('.heic')) {
-        console.log('⚠️ Safari convirtió automáticamente a HEIC');
-      }
-      
       this.selectedFile = file;
       this.registerForm.get('photo')?.updateValueAndValidity();
     }
@@ -177,21 +159,11 @@ updateCharCount(name: string): void {
   }
 
   private uploadUserPhoto(photo: File): void {
-    console.log('Iniciando subida de foto:', {
-      name: photo.name,
-      type: photo.type,
-      size: photo.size
-    });
-    
     this.userService.uploadPhoto(photo).subscribe({
       next: () => {
-        console.log('Foto subida exitosamente');
-        this.finishUpdate(this.registerForm.get('inputName')?.value!);
+        this.finishUpdate(this.registerForm.get('name')?.value!);
       },
       error: (error) => {
-        console.error('Error detallado al subir la foto:', error);
-        
-        // Mensajes específicos según el tipo de error
         let errorMessage = 'Los datos se actualizaron pero hubo un error al subir la foto';
         
         if (error.status === 413) {

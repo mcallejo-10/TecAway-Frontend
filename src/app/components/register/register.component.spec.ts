@@ -19,7 +19,6 @@ describe('RegisterComponent', () => {
   let router: Router;
 
   beforeEach(async () => {
-    // PASO 1: Crear mocks con Jest
     authServiceMock = {
       registerUser: jest.fn(),
       checkAuthStatus: jest.fn(),
@@ -36,7 +35,6 @@ describe('RegisterComponent', () => {
       error: jest.fn()
     };
 
-    // Configurar retornos por defecto
     authServiceMock.registerUser.mockReturnValue(of({}));
     authServiceMock.checkAuthStatus.mockReturnValue(of(false));
     authServiceMock.loginUser.mockReturnValue(of(undefined));
@@ -46,7 +44,6 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RegisterComponent,
-        // Importar ToastrModule para que las notificaciones funcionen en tests
         ToastrModule.forRoot({
           timeOut: 2000,
           positionClass: 'toast-top-right',
@@ -74,7 +71,6 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // PASO 2: Tests de inicialización
   describe('Initialization', () => {
     it('should start at step 1', () => {
       expect(component.currentStep).toBe(1);
@@ -91,7 +87,6 @@ describe('RegisterComponent', () => {
     });
   });
 
-  // PASO 3: Tests de validación del formulario (Step 1)
   describe('Form validation - Step 1', () => {
     describe('name field', () => {
       it('should be invalid when empty', () => {
@@ -137,7 +132,6 @@ describe('RegisterComponent', () => {
           confirmPassword: TEST_CREDENTIALS.ALTERNATIVE_PASSWORD
         });
         
-        // El validador MustMatch añade error a confirmPassword, no al form group
         const confirmPasswordControl = component.registerForm.get('confirmPassword');
         expect(confirmPasswordControl?.errors?.['mustMatch']).toBe(true);
       });
@@ -168,11 +162,9 @@ describe('RegisterComponent', () => {
     });
   });
 
-  // PASO 4: Tests de navegación entre pasos
   describe('Step navigation', () => {
     describe('nextStep', () => {
       it('should show error if first step is invalid', () => {
-        // Formulario vacío = inválido
         component.nextStep();
         
         expect(component.errorMessage).toBe('Por favor, completa todos los campos requeridos y acepta la política de privacidad');
@@ -180,7 +172,6 @@ describe('RegisterComponent', () => {
       });
 
       it('should check email existence when first step is valid', () => {
-        // Llenar correctamente el paso 1
         component.registerForm.patchValue({
           name: TEST_USERS.JOHN_NAME,
           email: TEST_USERS.JOHN_EMAIL,
@@ -189,7 +180,6 @@ describe('RegisterComponent', () => {
           acceptPrivacyPolicy: true
         });
         
-        // Marcar como touched (requisito del validateFirstStep)
         ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy'].forEach(field => {
           component.registerForm.get(field)?.markAsTouched();
         });
@@ -260,33 +250,14 @@ describe('RegisterComponent', () => {
     });
   });
 
-  // PASO 5: Tests de selección de archivo
   describe('onFileSelected', () => {
     it('should store selected file', () => {
       const mockFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
       const event = { target: { files: [mockFile] } };
 
-      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-
       component.onFileSelected(event);
 
       expect(component.selectedFile).toBe(mockFile);
-      expect(consoleLogSpy).toHaveBeenCalledWith('=== ARCHIVO SELECCIONADO ===');
-      
-      consoleLogSpy.mockRestore();
-    });
-
-    it('should detect HEIC files', () => {
-      const mockFile = new File(['test'], 'photo.heic', { type: 'image/heic' });
-      const event = { target: { files: [mockFile] } };
-
-      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
-
-      component.onFileSelected(event);
-
-      expect(consoleLogSpy).toHaveBeenCalledWith('🍎 Archivo HEIC detectado (formato iOS)');
-      
-      consoleLogSpy.mockRestore();
     });
   });
 });
