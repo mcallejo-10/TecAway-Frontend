@@ -27,7 +27,6 @@ export class TechnicianDetailComponent implements OnInit {
     this.loading = true
     this.userService.getUserInfo(this.id).subscribe((res: UserInfoResponse) => {
       this.technician = res.data;
-      console.log(this.technician);
       this.loading = false
     });
   };
