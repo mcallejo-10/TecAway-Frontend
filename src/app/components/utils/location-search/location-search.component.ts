@@ -37,7 +37,6 @@ export class LocationSearchComponent implements OnDestroy {
   inputValue = signal<string>('');
 
   constructor() {
-    // Debounce para búsqueda
     this.inputSubject.pipe(
       debounceTime(500)
     ).subscribe(async (query) => {
@@ -71,12 +70,9 @@ export class LocationSearchComponent implements OnDestroy {
   selectSuggestion(suggestion: LocationSuggestion): void {
     const locationText = `${suggestion.city}, ${suggestion.country}`;
     this.inputValue.set(locationText);
-
-    // Ocultar dropdown
     this.showSuggestions.set(false);
     this.locationSuggestions.set([]);
 
-    // Emitir city y country separados para que el backend los reciba correctamente
     this.locationSelected.emit({
       city: suggestion.city,
       country: suggestion.country,
@@ -86,7 +82,6 @@ export class LocationSearchComponent implements OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    // El usuario debe elegir del dropdown; Escape cierra las sugerencias
     if (event.key === 'Escape') {
       this.showSuggestions.set(false);
     }

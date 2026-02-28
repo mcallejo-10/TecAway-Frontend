@@ -28,19 +28,12 @@ import { DropdownComponent, DropdownOption } from '../utils/dropdown/dropdown.co
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent implements OnInit {
-  // Referencias al DOM para el filtro móvil
   @ViewChild('filterCard') filterCard!: ElementRef<HTMLDivElement>;
   @ViewChild('filterOverlay') filterOverlay!: ElementRef<HTMLDivElement>;
 
-  // Subject para optimizar eventos de resize con debounce
   private resizeSubject = new Subject<void>();
   private radiusChangeSubject = new Subject<number>();
 
-  // 🎯 ESTADO CENTRALIZADO - Ahora viene del TechnicianStateService
-  // Ya NO necesitamos estas variables locales:
-  // ❌ loading, technicians, filteredTechnicians, selectedSections, selectedKnowledges
-  
-  // Inyección de servicios
   private fb = inject(FormBuilder);
   private renderer = inject(Renderer2);
   
@@ -52,32 +45,26 @@ export class TechniciansComponent implements OnInit {
   technicianSortService = inject(TechnicianSortService);
   locationService = inject(LocationService);
   
-  // ✨ NUEVO: Servicio de estado centralizado
   state = inject(TechnicianStateService);
 
-  // Variables locales que SÍ son específicas del componente
   filterForm!: FormGroup;
   sectionList: Section[] = [];
   knowledgeList: Knowledge[] = [];
   
-  // 🎨 Opciones para el dropdown de ordenamiento (reactivo)
   sortOptions = signal<DropdownOption[]>([
     { value: 'recent', label: 'Más recientes' },
     { value: 'name', label: 'Por nombre (A-Z)' }
   ]);
 
   isCheckedSection(id: number): boolean {
-    // 🔄 Ahora usamos el estado del servicio en lugar de variable local
     return this.state.selectedSections().some((section) => section.id_section === id);
   }
 
   isCheckedKnowledge(id: number): boolean {
-    // 🔄 Verificamos si el conocimiento está seleccionado
     return this.state.selectedKnowledges().some((knowledge) => knowledge.id_knowledge === id);
   }
 
   constructor() {
-    // 🎨 Effect para actualizar opciones de ordenamiento según filtro de ubicación
     effect(() => {
       const hasLocation = this.state.hasLocationFilter();
       const baseOptions: DropdownOption[] = [
@@ -92,30 +79,25 @@ export class TechniciansComponent implements OnInit {
       this.sortOptions.set(baseOptions);
     });
     
-    // Configurar debounce para resize - espera 300ms de inactividad antes de ejecutar
     this.resizeSubject.pipe(
       debounceTime(300),
-      takeUntilDestroyed() // Limpieza automática al destruir componente
+      takeUntilDestroyed()
     ).subscribe(() => {
-      // Solo se ejecuta UNA VEZ después de que el usuario termina de redimensionar
       if (window.innerWidth >= 768) {
         this.closeFilter();
       }
     });
 
-    // 🎯 Debounce para slider de radio (esperar 300ms después de que el usuario deja de mover)
     this.radiusChangeSubject.pipe(
       debounceTime(300),
       takeUntilDestroyed()
     ).subscribe((radius) => {
       this.state.setSearchRadius(radius);
-      // 🔄 Volver a aplicar todos los filtros para asegurar que parte de la lista correcta
       this.applyFilters();
     });
   }
 
 ngOnInit() {
-  // Inicializar estado de carga
   this.state.setLoading(true);
   this.filterForm = this.fb.group({});
   
@@ -130,19 +112,13 @@ ngOnInit() {
           this.knowledgeList = knowledgesRes.data;
           this.addKnowledgeControls();
           
-          // Añadir Conocimientos generales por defecto
           this.addConocimientosGenerales();
-          
-          // 🔄 Guardamos en el estado las secciones/conocimientos iniciales
           this.state.setSelectedSections(this.state.selectedSections());
           this.state.setSelectedKnowledges(this.state.selectedKnowledges());
 
           this.userService.getUserList().subscribe({
             next: (techRes: UserListResponse) => {
-              // ✅ Guardamos técnicos en el estado (se ordenan automáticamente)
               this.state.setAllTechnicians(techRes.data);
-              
-              // ✅ Finalizamos carga
               this.state.setLoading(false);
             }
           });
@@ -152,10 +128,6 @@ ngOnInit() {
   });
 }
 
-  // ========================================
-  // 🔧 MÉTODOS AUXILIARES PRIVADOS
-  // ========================================
-  
   private addSectionControls(): void {
     const sectionControls = this.sectionList.reduce((acc, section) => {
       acc[section.id_section!] = new FormControl(false);

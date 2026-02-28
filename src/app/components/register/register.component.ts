@@ -103,7 +103,6 @@ export class RegisterComponent {
   }
 
   nextStep(): void {
-    // Marcar todos los campos como touched para mostrar errores
     const controls = ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy'];
     controls.forEach(control => {
       this.registerForm.get(control)?.markAsTouched();
@@ -130,7 +129,6 @@ export class RegisterComponent {
           }
         });
     } else {
-      // Mensaje específico si no se han completado todos los campos
       this.errorMessage = 'Por favor, completa todos los campos requeridos y acepta la política de privacidad';
       this.cdr.detectChanges();
     }
@@ -145,29 +143,11 @@ export class RegisterComponent {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log('=== ARCHIVO SELECCIONADO ===');
-      console.log('Nombre original:', file.name);
-      console.log('Tipo MIME:', file.type);
-      console.log('Tamaño:', file.size, 'bytes');
-      console.log('Última modificación:', new Date(file.lastModified));
-      console.log('===============================');
-      
-      // Manejo especial para archivos HEIC/HEIF
-      if (file.name.toLowerCase().includes('.heic') || file.name.toLowerCase().includes('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
-        console.log('🍎 Archivo HEIC detectado (formato iOS)');
-      }
-      
-      // Detectar si es una conversión automática de Safari
-      if (file.type === 'image/heic' && !file.name.toLowerCase().includes('.heic')) {
-        console.log('⚠️ Safari convirtió automáticamente a HEIC');
-      }
-      
-      this.selectedFile = file; 
+      this.selectedFile = file;
       this.registerForm.get('photo')?.updateValueAndValidity();
     }
   }
 
-  // Modifica el método onRegister para usar selectedFile
   onRegister(): void {
     if (this.registerForm.valid) {
       this.errorMessage = '';
@@ -206,21 +186,11 @@ export class RegisterComponent {
 
   
   private uploadUserPhoto(photo: File): void {
-    console.log('Iniciando subida de foto:', {
-      name: photo.name,
-      type: photo.type,
-      size: photo.size
-    });
-    
     this.userService.uploadPhoto(photo).subscribe({
       next: () => {
-        console.log('Foto subida exitosamente');
         this.finishRegistration(this.registerForm.get('name')?.value!);
       },
       error: (error) => {
-        console.error('Error detallado al subir la foto:', error);
-        
-        // Mensajes específicos según el tipo de error
         let errorMessage = 'El usuario se creó pero hubo un error al subir la foto';
         
         if (error.status === 413) {
@@ -237,7 +207,6 @@ export class RegisterComponent {
     });
   }
 
-  // Método para finalizar el registro
   private finishRegistration(userName: string): void {
     this.toastr.success(`${userName} Registro exitoso`, 'El usuario se ha registrado con éxito!');
     this.router.navigate(['/agregar-conocimientos']);
