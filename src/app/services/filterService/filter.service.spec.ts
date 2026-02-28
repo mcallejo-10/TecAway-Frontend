@@ -48,7 +48,10 @@ describe('FilterService', () => {
       name: 'Usuario 1',
       title: 'Frontend Developer',
       description: 'Especialista en Angular',
-      town: 'Madrid',
+      city: 'Madrid',
+      country: 'ES',
+      latitude: 40.4168,
+      longitude: -3.7038,
       can_move: true,
       roles: ['user'],
       created_at: new Date('2025-01-01T10:00:00Z')
@@ -60,7 +63,10 @@ describe('FilterService', () => {
       name: 'Usuario 2',
       title: 'Fullstack Developer',
       description: 'Angular y Node.js',
-      town: 'Barcelona',
+      city: 'Barcelona',
+      country: 'ES',
+      latitude: 41.3851,
+      longitude: 2.1734,
       can_move: false,
       roles: ['user'],
       created_at: new Date('2025-01-02T10:00:00Z')

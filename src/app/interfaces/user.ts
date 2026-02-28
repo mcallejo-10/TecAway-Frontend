@@ -6,14 +6,12 @@ export interface User {
     title?: string;
     description?: string;
     
-    // 📍 Ubicación geográfica
-    town?: string;              // Ciudad específica (ej: "Barcelona") - OPCIONAL
-    country: string;            // Código ISO país (ej: "ES", "AR", "MX") - OBLIGATORIO
-    can_move?: boolean;
-    
-    // 📍 Coordenadas (generadas automáticamente desde backend si hay town)
+    // Ubicación geográfica (las coords son opcionales para usuarios históricos sin geocodificación)
+    city: string;
+    country: string;
     latitude?: number;
     longitude?: number;
+    can_move?: boolean;
     postal_code?: string;
     
     photo?: string;

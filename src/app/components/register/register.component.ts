@@ -10,10 +10,11 @@ import { MustMatch } from '../../validators/must-match.validator';
 import { UserService } from '../../services/userService/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { validateFile } from '../../validators/validate-file.validator';
+import { LocationSearchComponent, LocationData } from '../utils/location-search/location-search.component';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink, LocationSearchComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -54,17 +55,17 @@ export class RegisterComponent {
       Validators.minLength(30),
       Validators.maxLength(2400)
     ]),
-    town: new FormControl('', [
+    city: new FormControl('', [
       Validators.required,
       Validators.minLength(2)
     ]),
-    country: new FormControl('ES', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(2)
+    latitude: new FormControl<number | null>(null, [Validators.required]),
+    longitude: new FormControl<number | null>(null, [Validators.required]),
+    country: new FormControl('', [
+      Validators.required
     ]),
     can_move: new FormControl(false),
-    photo: new FormControl('', validateFile),
+    photo: new FormControl('', validateFile()),
     acceptPrivacyPolicy: new FormControl(false, [Validators.requiredTrue]),
     },
     {
@@ -83,6 +84,22 @@ export class RegisterComponent {
       this.registerForm.get(control)?.valid &&
       this.registerForm.get(control)?.touched
     );
+  }
+
+  onLocationSelected(location: LocationData): void {
+    this.registerForm.patchValue({
+      city: location.city,
+      country: location.country,
+      latitude: location.latitude,
+      longitude: location.longitude
+    });
+    ['city', 'country', 'latitude', 'longitude'].forEach(field => {
+      this.registerForm.get(field)?.markAsDirty();
+      this.registerForm.get(field)?.markAsTouched();
+      this.registerForm.get(field)?.updateValueAndValidity();
+    });
+    this.registerForm.updateValueAndValidity();
+    this.cdr.detectChanges();
   }
 
   nextStep(): void {
@@ -161,8 +178,10 @@ export class RegisterComponent {
         password: this.registerForm.get('password')?.value || '',
         title: (this.registerForm.get('title')?.value || '').trim(),
         description: (this.registerForm.get('description')?.value || '').trim(),
-        town: (this.registerForm.get('town')?.value || '').trim(),
-        country: (this.registerForm.get('country')?.value || 'ES').trim(),
+        city: (this.registerForm.get('city')?.value || '').trim(),
+        country: (this.registerForm.get('country')?.value || '').trim(),
+        latitude: this.registerForm.get('latitude')?.value ?? 0,
+        longitude: this.registerForm.get('longitude')?.value ?? 0,
         can_move: this.registerForm.get('can_move')?.value || false,
         roles: ['user']
       };
@@ -170,13 +189,13 @@ export class RegisterComponent {
       this.authService.registerUser(userData)
         .subscribe({
           next: () => {
-            if (this.selectedFile) { // Usamos selectedFile en lugar de registerForm.get('photo')
+            if (this.selectedFile) {
               this.uploadUserPhoto(this.selectedFile);
             } else {
               this.finishRegistration(userData.name);
             }
           },
-          error: (error: string) => {
+          error: (error: any) => {
             console.error('Error al registrar:', error);
             this.errorMessage = 'Error al registrar usuario';
             this.toastr.error('Error al registrar usuario', 'Error');

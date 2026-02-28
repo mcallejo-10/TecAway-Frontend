@@ -77,15 +77,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <span class="d-flex">
-                        <label htmlFor="inputTown" class="form-label">Ciudad o provincia</label>
-                    </span>
-                    <input type="text" class="form-control" id="inputTown" formControlName="town"
-                        [ngClass]="{'is-invalid': registerForm.get('town')?.invalid && registerForm.get('town')?.touched}" />
-                    @if(registerForm.get('town')?.invalid && registerForm.get('town')?.touched) {
+                    <span class="form-label d-block">Ciudad o provincia</span>
+                    <app-location-search
+                        [initialValue]="registerForm.get('city')?.value || ''"
+                        (locationSelected)="onLocationSelected($event)">
+                    </app-location-search>
+                    @if(registerForm.get('city')?.invalid && registerForm.get('city')?.touched) {
                     <div class="text-danger">
-                        @if(registerForm.get('town')?.errors?.['required']) { Ciudad obligatoria }
-                        @if(registerForm.get('town')?.errors?.['minlength']) { Mínimo 2 caracteres }
+                        @if(registerForm.get('city')?.errors?.['required']) { Ciudad obligatoria }
                     </div>
                     }
                 </div>

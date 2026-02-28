@@ -64,47 +64,16 @@
         <p class="filter-title">Buscar por distancia</p>
         
         <div class="mb-3">
-          <!-- Input para escribir ciudad/país manualmente -->
-          <!-- 🔍 Búsqueda por ubicación -->
-          <div class="input-group mb-2 position-relative">
-            <input 
-              #locationInput
-              type="text" 
-              class="form-control"
-              placeholder="Ej: Barcelona"
-              (input)="onLocationInput(locationInput.value)"
-              (keyup.enter)="searchByLocation(locationInput.value)">
-            <button 
-              class="btn btn-outline-secondary"
-              type="button"
-              (click)="searchByLocation(locationInput.value)">
-              🔍
-            </button>
-            
-            <!-- Dropdown de sugerencias -->
-            @if(showSuggestions()) {
-              <div class="dropdown-menu show w-100 position-absolute" style="top: 100%; z-index: 1000; max-height: 300px; overflow-y: auto;">
-                @for(suggestion of locationSuggestions(); track suggestion.display_name) {
-                  <button 
-                    type="button"
-                    class="dropdown-item"
-                    (click)="selectLocationSuggestion(suggestion, locationInput)">
-                    <div>
-                      <strong>{{ suggestion.city }}</strong>, {{ suggestion.country }}
-                    </div>
-                    @if(suggestion.state) {
-                      <small class="text-muted">{{ suggestion.state }}</small>
-                    }
-                  </button>
-                }
-              </div>
-            }
-          </div>
+          <app-location-search
+            placeholder="Ej: Barcelona"
+            [initialValue]="state.searchLocation() ?? ''"
+            (locationSelected)="onLocationSelected($event)">
+          </app-location-search>
           
           <!-- Botón alternativo para usar ubicación del navegador -->
           <button 
             type="button"
-            class="btn btn-outline-primary btn-sm w-100"
+            class="btn btn-outline-primary btn-sm w-100 mt-2"
             (click)="requestUserLocation()">
             📍 Usar mi ubicación actual
           </button>

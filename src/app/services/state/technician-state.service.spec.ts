@@ -18,7 +18,8 @@ describe('TechnicianStateService', () => {
       roles: ['user'],
       title: 'Frontend Developer',
       description: 'Expert in Angular',
-      town: 'Madrid',
+      city: 'Madrid',
+      country: 'ES',
       can_move: true
     },
     {
@@ -29,7 +30,8 @@ describe('TechnicianStateService', () => {
       roles: ['user'],
       title: 'Backend Developer',
       description: 'Expert in Node.js',
-      town: 'Barcelona',
+      city: 'Barcelona',
+      country: 'ES',
       can_move: false
     }
   ];

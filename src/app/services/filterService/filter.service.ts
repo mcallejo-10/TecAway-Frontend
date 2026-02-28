@@ -92,7 +92,7 @@ export class FilterService {
     const filteredUserIds = this.filteredBySections();
     return filteredUserIds.filter(userId => {
       const user = this.stateService.allTechnicians().find(t => t.id_user === userId);
-      return user?.town === town;
+      return user?.city === town;
     });
   }
 

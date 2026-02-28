@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditUserComponent } from './edit-user.component';
 import { UserService } from '../../services/userService/user.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -20,7 +22,7 @@ describe('EditUserComponent', () => {
       updateUser: jest.fn(),
       uploadPhoto: jest.fn()
     };
-    
+
     // Updated mock to match UserResponse type
     userServiceMock.getUser.mockReturnValue(of({
       code: 200,
@@ -33,7 +35,10 @@ describe('EditUserComponent', () => {
         roles: ['user'],
         title: 'Test Title',
         description: 'Test Description',
-        town: 'Test Town',
+        city: 'Test Town',
+        country: 'ES',
+        latitude: 40.4168,
+        longitude: -3.7038,
         can_move: false,
         photo: 'https://example.com/photo.jpg',
         created_at: new Date('2025-01-20T23:30:02.000Z'),
@@ -48,6 +53,8 @@ describe('EditUserComponent', () => {
         ToastrModule.forRoot()
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([]),
         { provide: UserService, useValue: userServiceMock }
       ]
@@ -57,7 +64,6 @@ describe('EditUserComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });

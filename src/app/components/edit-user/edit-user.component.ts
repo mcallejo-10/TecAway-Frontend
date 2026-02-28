@@ -8,11 +8,12 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { validateFile } from '../../validators/validate-file.validator';
 import { UserResponse } from '../../interfaces/user';
+import { LocationSearchComponent, LocationData } from '../utils/location-search/location-search.component';
 
 
 @Component({
   selector: 'app-edit-user',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, LocationSearchComponent],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,11 +44,14 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
       Validators.minLength(30),
       Validators.maxLength(2400)
     ]),
-    town: new FormControl('', [
+    city: new FormControl('', [
       Validators.required,
       Validators.minLength(2)
     ]),
-    photo: new FormControl('', validateFile),
+    country: new FormControl('', [Validators.required]),
+    latitude: new FormControl<number | null>(null),
+    longitude: new FormControl<number | null>(null),
+    photo: new FormControl('', validateFile()),
     can_move: new FormControl(false),
   });
 
@@ -61,6 +65,15 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
     this.getUser();
   }
 
+  onLocationSelected(location: LocationData): void {
+    this.registerForm.patchValue({
+      city: location.city,
+      country: location.country,
+      latitude: location.latitude,
+      longitude: location.longitude
+    });
+  }
+
   getUser(): void {
     this.userService.getUser()
       .subscribe({
@@ -71,7 +84,10 @@ export class EditUserComponent implements OnInit {  // Cambiamos a OnInit
               email: response.data.email,
               title: response.data.title,
               description: response.data.description,
-              town: response.data.town,
+              city: response.data.city,
+              country: response.data.country,
+              latitude: response.data.latitude,
+              longitude: response.data.longitude,
               can_move: response.data.can_move,
             });
 
@@ -134,7 +150,10 @@ updateCharCount(name: string): void {
         email: (this.registerForm.get('email')?.value || '').toLowerCase().trim(),
         title: (this.registerForm.get('title')?.value || '').trim(),
         description: (this.registerForm.get('description')?.value || '').trim(),
-        town: (this.registerForm.get('town')?.value || '').trim(),
+        city: (this.registerForm.get('city')?.value || '').trim(),
+        country: (this.registerForm.get('country')?.value || '').trim(),
+        latitude: this.registerForm.get('latitude')?.value ?? 0,
+        longitude: this.registerForm.get('longitude')?.value ?? 0,
         can_move: this.registerForm.get('can_move')?.value || false,
         roles: ['user']
       };

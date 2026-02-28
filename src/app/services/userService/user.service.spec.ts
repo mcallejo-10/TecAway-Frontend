@@ -41,7 +41,8 @@ describe('UserService', () => {
           name: 'Usuario 1',
           title: 'Developer',
           description: 'Test user 1',
-          town: 'Madrid',
+          city: 'Madrid',
+          country: 'ES',
           can_move: true,
           roles: ['user']
         },
@@ -52,13 +53,14 @@ describe('UserService', () => {
           name: 'Usuario 2',
           title: 'Designer',
           description: 'Test user 2',
-          town: 'Barcelona',
+          city: 'Barcelona',
+          country: 'ES',
           can_move: false,
           roles: ['user']
         }
       ];
 
-      service.getUserList().subscribe(users => {
+      service.getUserList().subscribe((users: any) => {
         expect(users).toEqual(mockUsers);
         expect(users.length).toBe(2);
       });
@@ -113,7 +115,8 @@ describe('UserService', () => {
         name: 'Usuario Actual',
         title: 'Senior Developer',
         description: 'Usuario logueado actualmente',
-        town: 'Madrid',
+        city: 'Madrid',
+        country: 'ES',
         can_move: true,
         roles: ['user', 'admin']
       };
@@ -167,7 +170,8 @@ describe('UserService', () => {
         name: 'Usuario 123',
         title: 'Frontend Developer',
         description: 'Usuario específico por ID',
-        town: 'Barcelona',
+        city: 'Barcelona',
+        country: 'ES',
         can_move: false,
         roles: ['user']
       };
@@ -224,8 +228,11 @@ describe('UserService', () => {
           email: 'userinfo@test.com',
           title: 'Senior Developer',
           description: 'Usuario con información completa',
-          town: 'Madrid',
-          can_move: 1,
+          city: 'Madrid',
+          country: 'ES',
+          latitude: 40.4168,
+          longitude: -3.7038,
+          can_move: true,
           photo: 'user456.jpg',
           sections: [
             {
@@ -301,7 +308,8 @@ describe('UserService', () => {
         name: 'Usuario Actualizado',
         title: 'Senior Frontend Developer',
         description: 'Descripción actualizada del usuario',
-        town: 'Valencia',
+        city: 'Valencia',
+        country: 'ES',
         can_move: true,
         roles: ['user', 'admin']
       };
@@ -334,7 +342,8 @@ describe('UserService', () => {
         name: '',
         title: '',
         description: '',
-        town: '',
+        city: '',
+        country: 'ES',
         can_move: false,
         roles: []
       };
