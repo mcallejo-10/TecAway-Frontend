@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, OnDestroy, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { LocationService, LocationSuggestion } from '../../../services/location/location.service';
@@ -15,6 +15,7 @@ export interface LocationData {
   standalone: true,
   imports: [],
   templateUrl: './location-search.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './location-search.component.scss'
 })
 export class LocationSearchComponent implements OnDestroy {

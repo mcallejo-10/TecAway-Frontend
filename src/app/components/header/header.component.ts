@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../services/authService/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-header',
   imports: [CommonModule],
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
@@ -30,12 +31,12 @@ export class HeaderComponent implements OnInit {
       next: () => {
         console.log('Logout exitoso');
         // Navegar al login después del logout
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error en logout:', error);
         // Aún así, podemos forzar la navegación al login
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       }
     });
   }

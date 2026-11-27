@@ -7,7 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { provideRouter, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { TEST_CREDENTIALS, TEST_USERS } from '../../../testing/test-constants';
 
 describe('RegisterComponent', () => {
@@ -260,8 +260,26 @@ describe('RegisterComponent', () => {
       expect(component.selectedFile).toBe(mockFile);
     });
   });
+
+  describe('after registration', () => {
+    it('should show a success toast and go to add knowledges', () => {
+      component['finishRegistration']('Ana');
+
+      expect(toastrMock.success).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['/agregar-conocimientos']);
+    });
+
+    it('should warn and still go to add knowledges when the photo upload fails', () => {
+      toastrMock.warning = jest.fn();
+      userServiceMock.uploadPhoto.mockReturnValue(throwError(() => ({ status: 413 })));
+
+      component['uploadUserPhoto'](new File(['x'], 'photo.jpg', { type: 'image/jpeg' }));
+
+      expect(toastrMock.warning).toHaveBeenCalledWith(
+        'El archivo es demasiado grande. El usuario se creó correctamente.',
+        'Advertencia'
+      );
+      expect(router.navigate).toHaveBeenCalledWith(['/agregar-conocimientos']);
+    });
+  });
 });
-
-
-
-

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CookieService } from '../../services/cookieService/cookie.service';
 
@@ -7,6 +7,7 @@ import { CookieService } from '../../services/cookieService/cookie.service';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './cookie-banner.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './cookie-banner.component.scss'
 })
 export class CookieBannerComponent implements OnInit {

@@ -181,7 +181,7 @@ updateCharCount(name: string): void {
 
   private finishUpdate(userName: string): void {
     this.toastr.success(`${userName} Actualización exitosa`, 'El usuario se ha actualizado con éxito!');
-    this.router.navigate(['/agregar-conocimientos']);
+    void this.router.navigate(['/agregar-conocimientos']);
   }
 
  
