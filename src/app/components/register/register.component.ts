@@ -1,7 +1,7 @@
 /* eslint-disable */ 
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
@@ -16,6 +16,7 @@ import { LocationSearchComponent, LocationData } from '../utils/location-search/
   selector: 'app-register',
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink, LocationSearchComponent],
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
