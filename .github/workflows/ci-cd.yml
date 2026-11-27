@@ -2,9 +2,9 @@ name: CI/CD Pipeline with Quality Gates
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 jobs:
   test:
@@ -26,15 +26,18 @@ jobs:
         
       - name: Lint check
         run: npm run lint
-        continue-on-error: true
+
+      - name: Security audit (production dependencies)
+        run: npm audit --omit=dev --audit-level=high
         
       - name: Run tests
         run: npm run test:jest:ci
         
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
-          file: ./coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
           
