@@ -3,9 +3,9 @@ import { EditUserComponent } from './edit-user.component';
 import { UserService } from '../../services/userService/user.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { UserResponse } from '../../interfaces/user';
 import { TEST_CREDENTIALS } from '../../../testing/test-constants';
@@ -66,5 +66,17 @@ describe('EditUserComponent', () => {
   });
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show a success toast and go to add knowledges after updating', () => {
+    const router = TestBed.inject(Router);
+    jest.spyOn(router, 'navigate').mockImplementation(() => Promise.resolve(true));
+    const toastr = TestBed.inject(ToastrService);
+    jest.spyOn(toastr, 'success');
+
+    component['finishUpdate']('Ana');
+
+    expect(toastr.success).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/agregar-conocimientos']);
   });
 });
