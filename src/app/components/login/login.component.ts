@@ -58,7 +58,7 @@ export class LoginComponent {
           } else if (exist === false) {
             this.userExist = false;
             this.isValidEmail = true;
-            this.router.navigate(["/registro"]);
+            void this.router.navigate(["/registro"]);
             console.log("Usuario no existe");
 
           }
@@ -70,7 +70,7 @@ export class LoginComponent {
         },
       });
     } else {
-      this.router.navigate(["/login"]);
+      void this.router.navigate(["/login"]);
     }
   }
 
@@ -82,7 +82,7 @@ export class LoginComponent {
 
     this.authService.loginUser(credentials).subscribe({
       next: () => {
-        this.router.navigate(["/tu-cuenta"]);
+        void this.router.navigate(["/tu-cuenta"]);
       },
       error: (error) => {
         this.errorMessage = error.error?.message || "Error en login";

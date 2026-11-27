@@ -80,7 +80,7 @@ export class ContactComponent implements OnInit {
         next: () => {
           this.toastr.success('Email enviado correctamente');
           this.registerForm.reset();
-          this.router.navigate(['/user', this.id]);
+          void this.router.navigate(['/user', this.id]);
         },
         error: (error) => {
           console.error('Error al enviar el email', error);

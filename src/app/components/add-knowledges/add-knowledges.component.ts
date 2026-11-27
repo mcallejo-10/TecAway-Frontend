@@ -173,7 +173,7 @@ private removeKnowledge(knowledgeId: number, sectionId?: number): void {
   
     if (operations.length === 0) {
       this.toastr.info('No hay cambios en los conocimientos');
-      this.router.navigate(["/tu-cuenta"]);
+      void this.router.navigate(["/tu-cuenta"]);
       return;
     }
       
@@ -186,7 +186,7 @@ private removeKnowledge(knowledgeId: number, sectionId?: number): void {
         this.toastr.error('Error al actualizar los conocimientos', 'Error');
       }
     });
-    this.router.navigate(["/tu-cuenta"]);
+    void this.router.navigate(["/tu-cuenta"]);
   }  
   
 }

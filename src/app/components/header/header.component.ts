@@ -31,12 +31,12 @@ export class HeaderComponent implements OnInit {
       next: () => {
         console.log('Logout exitoso');
         // Navegar al login después del logout
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error en logout:', error);
         // Aún así, podemos forzar la navegación al login
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       }
     });
   }

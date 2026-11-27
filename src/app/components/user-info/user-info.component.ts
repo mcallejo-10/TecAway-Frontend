@@ -48,7 +48,7 @@ export class UserInfoComponent implements OnInit {
     this.userService.deleteUser(this.id).subscribe({
       next: () => {
         this.authService.logoutUser();
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error deleting account:', error);

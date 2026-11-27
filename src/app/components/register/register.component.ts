@@ -203,14 +203,14 @@ export class RegisterComponent {
         }
         
         this.toastr.warning(errorMessage, 'Advertencia');
-        this.router.navigate(['/agregar-conocimientos']);
+        void this.router.navigate(['/agregar-conocimientos']);
       }
     });
   }
 
   private finishRegistration(userName: string): void {
     this.toastr.success(`${userName} Registro exitoso`, 'El usuario se ha registrado con éxito!');
-    this.router.navigate(['/agregar-conocimientos']);
+    void this.router.navigate(['/agregar-conocimientos']);
   }
   updateCharCount(name: string): void {
     const titleControl = this.registerForm.get(name);
