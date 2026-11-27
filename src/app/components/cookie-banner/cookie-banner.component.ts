@@ -1,12 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CookieService } from '../../services/cookieService/cookie.service';
 
 @Component({
   selector: 'app-cookie-banner',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './cookie-banner.component.html',
   styleUrl: './cookie-banner.component.scss'
 })

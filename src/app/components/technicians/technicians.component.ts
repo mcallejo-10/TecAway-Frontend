@@ -13,7 +13,6 @@ import { LocationSearchComponent, LocationData } from '../utils/location-search/
 import { SectionService } from '../../services/sectionService/section.service';
 import { Section, SectionListResponse } from '../../interfaces/section';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
 import { Knowledge, KnowledgeListResponse } from '../../interfaces/knowledge';
 import { RouterModule } from '@angular/router';
@@ -23,7 +22,7 @@ import { DropdownComponent, DropdownOption } from '../utils/dropdown/dropdown.co
 
 @Component({
   selector: 'app-technicians',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, CommonModule, LoadingBarComponent, UserAvatarComponent, DropdownComponent, LocationSearchComponent],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, LoadingBarComponent, UserAvatarComponent, DropdownComponent, LocationSearchComponent],
   templateUrl: './technicians.component.html',
   styleUrl: './technicians.component.scss'
 })

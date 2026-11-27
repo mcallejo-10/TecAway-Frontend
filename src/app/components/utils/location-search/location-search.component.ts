@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, signal, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { LocationService, LocationSuggestion } from '../../../services/location/location.service';
@@ -14,7 +13,7 @@ export interface LocationData {
 @Component({
   selector: 'app-location-search',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './location-search.component.html',
   styleUrl: './location-search.component.scss'
 })
