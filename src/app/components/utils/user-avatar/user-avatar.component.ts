@@ -1,11 +1,10 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CloudinaryTransformPipe } from '../../../pipes/cloudinary-transform.pipe';
 
 @Component({
   selector: 'app-user-avatar',
   standalone: true,
-  imports: [CommonModule, CloudinaryTransformPipe],
+  imports: [CloudinaryTransformPipe],
   templateUrl: './user-avatar.component.html',
   styleUrl: './user-avatar.component.scss'
 })

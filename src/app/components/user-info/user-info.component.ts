@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/authService/auth.service';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
 import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component';
@@ -10,7 +9,7 @@ import { UserInfoResponse } from '../../interfaces/user-info';
 
 @Component({
   selector: 'app-user-info',
-  imports: [CommonModule, RouterLink, UserAvatarComponent, LoadingBarComponent],
+  imports: [RouterLink, UserAvatarComponent, LoadingBarComponent],
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss'
 })
