@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2, signal, effect } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild, ElementRef, Renderer2, signal, effect, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -24,6 +24,7 @@ import { DropdownComponent, DropdownOption } from '../utils/dropdown/dropdown.co
   selector: 'app-technicians',
   imports: [RouterModule, ReactiveFormsModule, FormsModule, LoadingBarComponent, UserAvatarComponent, DropdownComponent, LocationSearchComponent],
   templateUrl: './technicians.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './technicians.component.scss'
 })
 export class TechniciansComponent implements OnInit {

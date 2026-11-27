@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CloudinaryTransformPipe } from '../../../pipes/cloudinary-transform.pipe';
 
 @Component({
@@ -6,6 +6,7 @@ import { CloudinaryTransformPipe } from '../../../pipes/cloudinary-transform.pip
   standalone: true,
   imports: [CloudinaryTransformPipe],
   templateUrl: './user-avatar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-avatar.component.scss'
 })
 export class UserAvatarComponent implements OnInit, OnChanges {

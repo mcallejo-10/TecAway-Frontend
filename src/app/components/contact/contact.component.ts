@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { UserService } from '../../services/userService/user.service';
@@ -13,6 +13,7 @@ import { ContactService } from '../../services/contactService/contact.service';
   selector: 'app-contact',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './contact.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent implements OnInit {
@@ -79,7 +80,7 @@ export class ContactComponent implements OnInit {
         next: () => {
           this.toastr.success('Email enviado correctamente');
           this.registerForm.reset();
-          this.router.navigate(['/user', this.id]);
+          void this.router.navigate(['/user', this.id]);
         },
         error: (error) => {
           console.error('Error al enviar el email', error);

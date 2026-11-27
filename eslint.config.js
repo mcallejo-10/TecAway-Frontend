@@ -34,6 +34,10 @@ module.exports = tseslint.config(
           style: "kebab-case",
         },
       ],
+      // Angular 22 made OnPush the default; the v22 migration pinned existing
+      // components to ChangeDetectionStrategy.Eager to keep their behaviour.
+      // TODO: migrate components to OnPush and re-enable this rule.
+      "@angular-eslint/prefer-on-push-component-change-detection": "off",
       // SonarJS Rules para mejorar la calidad del código
       "sonarjs/cognitive-complexity": ["error", 15],
       "sonarjs/no-duplicate-string": ["error", { "threshold": 3 }],

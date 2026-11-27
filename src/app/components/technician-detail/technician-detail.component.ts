@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserAvatarComponent } from '../utils/user-avatar/user-avatar.component';
@@ -9,6 +9,7 @@ import { UserInfoResponse } from '../../interfaces/user-info';
   selector: 'app-technician-detail',
   imports: [RouterLink, UserAvatarComponent, LoadingBarComponent],
   templateUrl: './technician-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './technician-detail.component.scss'
 })
 export class TechnicianDetailComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { SectionService } from '../../services/sectionService/section.service';
 import { KnowledgeService } from '../../services/knowledgeService/knowledge.service';
@@ -17,6 +17,7 @@ import { LoadingBarComponent } from '../utils/loading-bar/loading-bar.component'
   selector: 'app-add-knowledges',
   imports: [LoadingBarComponent],
   templateUrl: './add-knowledges.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './add-knowledges.component.scss',
 })
 export class AddKnowledgesComponent implements OnInit {
@@ -172,7 +173,7 @@ private removeKnowledge(knowledgeId: number, sectionId?: number): void {
   
     if (operations.length === 0) {
       this.toastr.info('No hay cambios en los conocimientos');
-      this.router.navigate(["/tu-cuenta"]);
+      void this.router.navigate(["/tu-cuenta"]);
       return;
     }
       
@@ -185,7 +186,7 @@ private removeKnowledge(knowledgeId: number, sectionId?: number): void {
         this.toastr.error('Error al actualizar los conocimientos', 'Error');
       }
     });
-    this.router.navigate(["/tu-cuenta"]);
+    void this.router.navigate(["/tu-cuenta"]);
   }  
   
 }

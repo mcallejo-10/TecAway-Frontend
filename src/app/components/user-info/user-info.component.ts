@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { UserService } from '../../services/userService/user.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/authService/auth.service';
@@ -11,6 +11,7 @@ import { UserInfoResponse } from '../../interfaces/user-info';
   selector: 'app-user-info',
   imports: [RouterLink, UserAvatarComponent, LoadingBarComponent],
   templateUrl: './user-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-info.component.scss'
 })
 export class UserInfoComponent implements OnInit {
@@ -47,7 +48,7 @@ export class UserInfoComponent implements OnInit {
     this.userService.deleteUser(this.id).subscribe({
       next: () => {
         this.authService.logoutUser();
-        this.router.navigate(['/']);
+        void this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error deleting account:', error);

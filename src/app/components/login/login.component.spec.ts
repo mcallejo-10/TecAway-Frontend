@@ -186,4 +186,15 @@ describe('LoginComponent', () => {
       expect(component.errorMessage).toBe('Error en login');
     });
   });
+
+  describe('checkEmailLogin when already logged in', () => {
+    it('should redirect to login without checking the email', () => {
+      component.isLogged = true;
+
+      component.checkEmailLogin();
+
+      expect(userServiceMock.checkEmailExists).not.toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
+  });
 });

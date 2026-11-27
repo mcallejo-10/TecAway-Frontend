@@ -14,12 +14,12 @@ export const authGuard: CanActivateFn = () => {
       if (response.authenticated) {
         return true;
       }
-      router.navigate(['/login']);
+      void router.navigate(['/login']);
       return false;
     }),
     catchError(() => {
       // En caso de error (incluyendo cuando no hay token)
-        router.navigate(['/login']);
+        void router.navigate(['/login']);
         return of(false);
     })
   );
